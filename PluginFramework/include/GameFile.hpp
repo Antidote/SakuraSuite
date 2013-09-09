@@ -3,14 +3,13 @@
 
 #include <QWidget>
 
-class GameFile : public QObject
+class GameFile
 {
-    Q_OBJECT
 public:
-    GameFile(const QString& file);
-    ~GameFile();
+    GameFile(const QString& file = QString());
+    virtual ~GameFile();
 
-    QWidget* widget();
+    QWidget* widget() const;
 
     /// \brief Name of file without path.
     QString fileName() const;
@@ -21,9 +20,12 @@ public:
 
     virtual bool isDirty();
 
+    virtual QString game() const;
+
+    virtual bool save(const QString& filename = QString());
 protected:
-    QString m_file;
-    QString m_path;
+    QString  m_file;
+    QString  m_path;
     QWidget* m_widget;
 };
 

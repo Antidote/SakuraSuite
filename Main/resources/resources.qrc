@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/about">
+        <file>Bomb64x64.png</file>
+    </qresource>
+</RCC>

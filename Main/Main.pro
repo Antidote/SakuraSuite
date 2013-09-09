@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui network
 
 TARGET = Wiiking2Editor
 TEMPLATE = app
@@ -28,3 +28,11 @@ FORMS += \
     ui/MainWindow.ui \
     ui/PluginsDialog.ui \
     ui/AboutDialog.ui
+
+RESOURCES += \
+    resources/resources.qrc
+*-64 {
+    CONFIG += WIIKING2_PLATFORM_X64
+}
+
+message($$QMAKE_HOST.arch)

@@ -6,12 +6,6 @@
 GameFile::GameFile(const QString &file)
     : m_widget(NULL)
 {
-    m_widget = new QTabWidget;
-    QTabWidget* tab = (QTabWidget*)m_widget;
-    tab->addTab(new QWidget(m_widget), "Test1");
-    tab->addTab(new QWidget(m_widget), "Test2");
-    tab->addTab(new QWidget(m_widget), "Test3");
-
     QFileInfo fInfo(file);
     m_file = fInfo.fileName();
     m_path = fInfo.absolutePath();
@@ -24,9 +18,9 @@ GameFile::~GameFile()
 }
 
 
-QWidget* GameFile::widget()
+QWidget* GameFile::widget() const
 {
-    return m_widget;
+    return (QWidget*)m_widget;
 }
 
 QString GameFile::fileName() const
@@ -47,4 +41,15 @@ QString GameFile::filePath() const
 bool GameFile::isDirty()
 {
     return true;
+}
+
+QString GameFile::game() const
+{
+    return "UNKNOWN";
+}
+
+bool GameFile::save(const QString &filename)
+{
+    Q_UNUSED(filename);
+    return false;
 }

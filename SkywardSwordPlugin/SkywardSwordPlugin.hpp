@@ -3,6 +3,7 @@
 
 #include "skywardswordplugin_global.hpp"
 #include <QObject>
+#include <QIcon>
 #include "PluginInterface.hpp"
 
 class SKYWARDSWORDPLUGGIN_EXPORT SkywardSwordPlugin : public QObject, public PluginInterface
@@ -30,6 +31,7 @@ public:
 
     QObject* object();
 
+    QIcon icon() const;
 signals:
     void enabledChanged();
 public slots:
@@ -37,6 +39,7 @@ public slots:
 private:
     bool m_enabled;
     QString m_path;
+    QIcon m_icon;
 
 };
 

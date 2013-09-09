@@ -3,7 +3,10 @@
 
 #include <QMainWindow>
 #include <QMap>
+#include <QNetworkAccessManager>
+#include <QUrl>
 
+class QNetworkReply;
 class GameFile;
 class PluginsManager;
 class AboutDialog;
@@ -17,7 +20,12 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    enum {FILENAME, FILEPATH, MAXRECENT = 10};
+    enum
+    {
+        FILENAME = Qt::UserRole + 1,
+        FILEPATH = FILENAME + 1,
+        MAXRECENT = 10
+    };
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
@@ -27,17 +35,24 @@ public:
 protected slots:
     void onDocumentChanged();
     void onClose();
+    void onCloseAll();
     void onOpen();
+    void onSave();
+    void onSaveAs();
     void onAbout();
     void onAboutQt();
     void onPlugins();
     void onClearRecent();
+    void onRestoreDefault();
+    void onCheckUpdate();
+    void onNetworkFinished(QNetworkReply*);
 
     void updateMRU(const QString& file);
     void openRecentFile();
 protected:
     void showEvent(QShowEvent *se);
 private:
+    QUrl redirectUrl(const QUrl& possibleRedirect, const QUrl& oldRedirect) const;
     void openFile(const QString& currentFile);
     QString strippedName(const QString& fullFileName) const;
     QString mostRecentDirectory();
@@ -51,7 +66,11 @@ private:
     QMap<QString, GameFile*> m_documents;
     QStringList              m_fileFilters;
     PluginsManager*          m_pluginsManager;
+    QByteArray               m_defaultWindowGeometry;
+    QByteArray               m_defaultWindowState;
     AboutDialog*             m_aboutDialog;
+
+    QNetworkAccessManager    m_updateAccess;
 };
 
 #endif // MAINWINDOW_HPP

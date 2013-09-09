@@ -22,6 +22,14 @@ const char WIIKING2_APP_VERSION[]            = "0.1 DEBUG";
 const char WIIKING2_APP_VERSION[]            = "0.1";
 #endif
 
+const char WIIKING2_LATEST_VERSION[]         = "At latest version...";
+const char WIIKING2_LATEST_VERSION_MSG[]     = "The application is up to date.";
+const char WIIKING2_NOT_LATEST_VERSION[]     = "%1 is out of date...";
+const char WIIKING2_NOT_LATEST_VERSION_MSG[] = "An update is available for %1<br />"
+                                               "You may download the update at <a href=\"%2\">%2</a><br />"
+                                               "The changelog is available at <a href=\"%3\">%3</a>";
+
+const char WIIKING2_BUILD_DATE[]             = __DATE__ " " __TIME__;
 const char WIIKING2_NO_PLUGINS_ERROR[]       = "Error Loading Plugins...";
 const char WIIKING2_NO_PLUGINS_ERROR_MSG[]   = "No plugins were loaded.\n"
                                                "Please check the plugins directory in the application's root";

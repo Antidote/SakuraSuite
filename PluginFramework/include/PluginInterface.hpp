@@ -28,6 +28,8 @@ public:
     virtual GameFile* loadFile(const QString& file) const=0;
 
     virtual QObject* object()=0;
+
+    virtual QIcon icon() const=0;
 protected:
     virtual void enabledChanged(){};
 };

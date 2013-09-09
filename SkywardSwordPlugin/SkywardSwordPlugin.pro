@@ -17,16 +17,39 @@ INSTALLS += target
 DEFINES += SKYWARDSWORDPLUGGIN_LIBRARY
 
 SOURCES += \
-    SkywardSwordPlugin.cpp
+    SkywardSwordPlugin.cpp \
+    SkywardSwordEditorForm.cpp \
+    SkywardSwordGameFile.cpp
 
 INCLUDEPATH += \
-    ../PluginFramework/include
+    ../PluginFramework/include \
+    ../libzelda/include
 
-LIBS += -L../PluginFramework -lPluginFramework
+LIBS += \
+    -L../PluginFramework -lPluginFramework
+
+CONFIG(release, release|debug){
+    warning("building in release mode")
+    LIBS += -L../libzelda/lib -lzelda
+}
+
+CONFIG(debug, debug|release){
+    LIBS += -L../libzelda/lib -lzelda-d
+}
+
 
 HEADERS +=\
-    ../Main/include/PluginInterface.hpp \
-    ../Main/include/GameFile.hpp \
+    ../PluginFramework/include/PluginInterface.hpp \
+    ../PluginFramework/include/GameFile.hpp \
+    ../PluginFramework/include/EditorForm.hpp \
     SkywardSwordPlugin.hpp \
-    skywardswordplugin_global.hpp
+    skywardswordplugin_global.hpp \
+    SkywardSwordEditorForm.hpp \
+    SkywardSwordGameFile.hpp
+
+RESOURCES += \
+    resources/resources.qrc
+
+FORMS += \
+    SkywardSwordEditorForm.ui
 

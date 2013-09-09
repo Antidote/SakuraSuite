@@ -1,16 +1,19 @@
 #include "SkywardSwordPlugin.hpp"
+#include "SkywardSwordGameFile.hpp"
 #include "GameFile.hpp"
 #include <QFileInfo>
+#include <QIcon>
 #include <QDebug>
+#include <BinaryReader.hpp>
 
 SkywardSwordPlugin::SkywardSwordPlugin()
+    : m_icon(QIcon(":/icon/Bomb64x64.png"))
 {
     qDebug() << name() << "initialized";
 }
 
 SkywardSwordPlugin::~SkywardSwordPlugin()
 {
-
 }
 
 QString SkywardSwordPlugin::filter() const
@@ -85,17 +88,37 @@ void SkywardSwordPlugin::setEnabled(const bool enable)
 
 GameFile* SkywardSwordPlugin::loadFile(const QString& file) const
 {
-    return new GameFile(file);
+    return new SkywardSwordGameFile(file);
 }
 
 bool SkywardSwordPlugin::canLoad(const QString& filename)
 {
-    return (!QString::compare(QFileInfo(filename).suffix(), extension(), Qt::CaseInsensitive));
+    try
+    {
+        zelda::io::BinaryReader reader(filename.toStdString());
+        reader.setEndianess(zelda::BigEndian);
+        Uint32 magic = reader.readUInt32() & 0xFFFFFF00;
+        qDebug() << hex << magic;
+
+        if (magic == 0x534F5500)
+            return true;
+    }
+    catch(...)
+    {
+        // hide errors
+    }
+
+    return false;
 }
 
 QObject* SkywardSwordPlugin::object()
 {
     return this;
+}
+
+QIcon SkywardSwordPlugin::icon() const
+{
+    return m_icon;
 }
 
 Q_EXPORT_PLUGIN(SkywardSwordPlugin)
