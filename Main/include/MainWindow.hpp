@@ -49,6 +49,8 @@ protected slots:
 
     void updateMRU(const QString& file);
     void openRecentFile();
+
+    void updateWindowTitle();
 protected:
     void showEvent(QShowEvent *se);
 private:

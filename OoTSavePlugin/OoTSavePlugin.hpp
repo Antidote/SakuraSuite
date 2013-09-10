@@ -30,6 +30,7 @@ public:
     GameFile* loadFile(const QString& file) const;
     bool canLoad(const QString& filename);
 
+    QDialog* settingsDialog();
     QObject* object();
 
     QIcon icon() const;

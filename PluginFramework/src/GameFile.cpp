@@ -3,8 +3,10 @@
 #include <QFileInfo>
 #include <QDir>
 
-GameFile::GameFile(const QString &file)
-    : m_widget(NULL)
+GameFile::GameFile(const PluginInterface* loader, const QString &file)
+    : m_loader((PluginInterface*)loader),
+      m_dirty(false),
+      m_widget(NULL)
 {
     QFileInfo fInfo(file);
     m_file = fInfo.fileName();
@@ -38,9 +40,19 @@ QString GameFile::filePath() const
     return m_path + QDir::separator() + m_file;
 }
 
+PluginInterface* GameFile::loadedBy()
+{
+    return m_loader;
+}
+
+void GameFile::setDirty(bool dirty)
+{
+    m_dirty = dirty;
+}
+
 bool GameFile::isDirty()
 {
-    return true;
+    return m_dirty;
 }
 
 QString GameFile::game() const

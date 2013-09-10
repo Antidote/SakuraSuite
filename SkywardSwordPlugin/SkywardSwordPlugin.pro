@@ -17,11 +17,14 @@ INSTALLS += target
 DEFINES += SKYWARDSWORDPLUGGIN_LIBRARY
 
 SOURCES += \
-    SkywardSwordPlugin.cpp \
-    SkywardSwordEditorForm.cpp \
-    SkywardSwordGameFile.cpp
+    src/SkywardSwordPlugin.cpp \
+    src/SkywardSwordEditorForm.cpp \
+    src/SkywardSwordGameFile.cpp \
+    src/SettingsManager.cpp \
+    src/SettingsDialog.cpp
 
 INCLUDEPATH += \
+    include \
     ../PluginFramework/include \
     ../libzelda/include
 
@@ -42,14 +45,17 @@ HEADERS +=\
     ../PluginFramework/include/PluginInterface.hpp \
     ../PluginFramework/include/GameFile.hpp \
     ../PluginFramework/include/EditorForm.hpp \
-    SkywardSwordPlugin.hpp \
-    skywardswordplugin_global.hpp \
-    SkywardSwordEditorForm.hpp \
-    SkywardSwordGameFile.hpp
+    include/SkywardSwordPlugin.hpp \
+    include/skywardswordplugin_global.hpp \
+    include/SkywardSwordEditorForm.hpp \
+    include/SkywardSwordGameFile.hpp \
+    include/SettingsManager.hpp \
+    include/SettingsDialog.hpp
 
 RESOURCES += \
     resources/resources.qrc
 
 FORMS += \
-    SkywardSwordEditorForm.ui
+    ui/SkywardSwordEditorForm.ui \
+    ui/SettingsDialog.ui
 

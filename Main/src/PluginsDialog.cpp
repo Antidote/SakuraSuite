@@ -33,6 +33,7 @@ void PluginsDialog::showEvent(QShowEvent* se)
         item->setCheckState(EnabledColumn, (plugin->enabled() ? Qt::Checked : Qt::Unchecked));
         tw->addTopLevelItem(item);
     }
+    ui->groupBox->hide();
 }
 
 void PluginsDialog::onItemSelectionChanged()
@@ -43,7 +44,6 @@ void PluginsDialog::onItemSelectionChanged()
         return;
     }
 
-    qDebug() << ui->treeWidget->currentItem()->text(0);
     PluginInterface* plugin = m_pluginsManager->pluginByName(ui->treeWidget->currentItem()->text(0));
     if (!plugin)
         return;
@@ -52,6 +52,7 @@ void PluginsDialog::onItemSelectionChanged()
     ui->pathValue->setText(plugin->path());
     ui->licenseValue->setText(plugin->license());
     ui->descriptionTextEdit->setHtml(plugin->description());
+    ui->settingsPushButton->setEnabled(plugin->settingsDialog() != NULL);
     ui->groupBox->show();
 }
 
@@ -73,6 +74,39 @@ void PluginsDialog::onItemClicked(QTreeWidgetItem* item, int column)
             qDebug() << (isChecked ? "Enabled" : "Disabled") <<  plugin->name();
             plugin->setEnabled(isChecked);
         }
+    }
+}
+
+void PluginsDialog::onSettingsClicked()
+{
+    if (!ui->treeWidget->currentItem())
+        return;
+
+    PluginInterface* plugin = m_pluginsManager->pluginByName(ui->treeWidget->currentItem()->text(0));
+    if (!plugin)
+        return;
+
+    if (plugin->settingsDialog())
+    {
+        plugin->settingsDialog()->setWindowFlags(Qt::WindowStaysOnTopHint);
+        plugin->settingsDialog()->exec();
+    }
+}
+
+void PluginsDialog::onReloadPlugin()
+{
+    if (!ui->treeWidget->currentItem())
+        return;
+
+    if (m_pluginsManager->reloadByName(ui->treeWidget->currentItem()->text(0)))
+    {
+        this->hide();
+        this->show();
+        this->setStatusTip("Reloaded plugin");
+    }
+    else
+    {
+        this->setStatusTip("Failed to reload plugin");
     }
 }
 

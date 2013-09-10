@@ -22,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     move(320, 240);
+    setWindowIcon(QIcon(":/icon/Bomb64x64.png"));
     m_defaultWindowGeometry = this->saveGeometry();
     m_defaultWindowState = this->saveState();
 
@@ -73,6 +74,7 @@ MainWindow::~MainWindow()
     QSettings settings;
     settings.setValue("mainWindowGeometry", saveGeometry());
     settings.setValue("mainWindowState", saveState());
+    onCloseAll();
     delete ui;
 }
 
@@ -80,7 +82,7 @@ void MainWindow::addFileFilter(const QString& filter)
 {
     if (m_fileFilters.contains(filter))
         return;
-    qDebug() << "Adding filter" << filter;
+
     m_fileFilters << filter;
 }
 
@@ -89,7 +91,6 @@ void MainWindow::removeFileFilter(const QString& filter)
     if (!m_fileFilters.contains(filter))
         return;
 
-    qDebug() << "Removing filter" << filter;
     m_fileFilters.removeOne(filter);
 }
 
@@ -114,7 +115,7 @@ void MainWindow::openFile(const QString& currentFile)
     // TODO: Show message upon failure
     if (!file)
         return;
-
+    connect(file, SIGNAL(modified()), this, SLOT(updateWindowTitle()));
     m_documents[currentFile] = file;
     QListWidgetItem* item = new QListWidgetItem();
     item->setData(FILENAME, m_documents[currentFile]->fileName());
@@ -147,7 +148,7 @@ void MainWindow::onDocumentChanged()
     if (!m_currentFile)
         return;
 
-    setWindowTitle(tr(Constants::WIIKING2_TITLE_FILE).arg(m_currentFile->fileName()).arg(m_currentFile->isDirty() ? Constants::WIIKING2_TITLE_DIRTY : '\0'));
+    updateWindowTitle();
     if (oldFile)
     {
         if (oldFile->widget())
@@ -208,6 +209,8 @@ void MainWindow::onSave()
         qDebug() << "saved";
     else
         qDebug() << "something happened";
+
+    updateWindowTitle();
 }
 
 void MainWindow::onSaveAs()
@@ -220,14 +223,20 @@ void MainWindow::onSaveAs()
     QString file = QFileDialog::getSaveFileName(this, "Save file as...", MRD, m_fileFilters.join(";;").trimmed());
     if (m_currentFile->filePath() != file)
     {
+        m_documents.remove(m_currentFile->filePath());
         m_currentFile->save(file);
-        onClose();
-        openFile(file);
+        m_documents[m_currentFile->filePath()] = m_currentFile;
+        QListWidgetItem* item = ui->documentList->currentItem();
+        item->setData(FILENAME, m_currentFile->fileName());
+        item->setData(FILEPATH, m_currentFile->filePath());
+        item->setText(item->data(FILENAME).toString());
     }
     else
     {
         m_currentFile->save();
     }
+
+    updateWindowTitle();
 }
 
 void MainWindow::onAbout()
@@ -292,6 +301,11 @@ void MainWindow::openRecentFile()
 
     if (action)
         openFile(action->data().toString());
+}
+
+void MainWindow::updateWindowTitle()
+{
+    setWindowTitle(tr(Constants::WIIKING2_TITLE_FILE).arg(m_currentFile->fileName()).arg(m_currentFile->isDirty() ? Constants::WIIKING2_TITLE_DIRTY : '\0'));
 }
 
 void MainWindow::showEvent(QShowEvent* se)

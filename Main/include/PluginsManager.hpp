@@ -12,6 +12,7 @@ class PluginsManager : public QObject
     Q_OBJECT
 public:
     explicit PluginsManager(MainWindow* parent);
+    ~PluginsManager();
 
     void dialog();
 
@@ -20,6 +21,7 @@ public:
     QList<PluginInterface*> plugins();
 
     PluginInterface* preferredPlugin(const QString& file);
+    bool reloadByName(const QString& name);
 signals:
 
 public slots:

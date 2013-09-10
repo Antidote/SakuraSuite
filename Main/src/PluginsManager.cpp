@@ -13,6 +13,13 @@ PluginsManager::PluginsManager(MainWindow* parent)
 {
 }
 
+PluginsManager::~PluginsManager()
+{
+    foreach (PluginInterface* plugin, m_plugins)
+        delete plugin;
+    m_plugins.clear();
+}
+
 void PluginsManager::dialog()
 {
     m_pluginsDialog->exec();
@@ -37,6 +44,49 @@ PluginInterface* PluginsManager::pluginByName(const QString& name)
     return NULL;
 }
 
+bool PluginsManager::reloadByName(const QString& name)
+{
+    PluginInterface* plugin = pluginByName(name);
+
+    if (!plugin)
+        return false;
+
+    QString pluginPath = plugin->path();
+
+    m_plugins.removeOne(plugin);
+    delete plugin;
+
+    QPluginLoader pluginLoader(pluginPath);
+    QObject *object = pluginLoader.instance();
+
+    if (object)
+    {
+        plugin = qobject_cast<PluginInterface *>(object);
+        if (plugin)
+        {
+            m_plugins.append(plugin);
+            connect(plugin->object(), SIGNAL(enabledChanged()), this, SLOT(onEnabledChanged()));
+            QSettings settings;
+            settings.beginGroup(plugin->name());
+            plugin->setPath(pluginPath);
+            plugin->setEnabled(settings.value("enabled", true).toBool());
+            return true;
+        }
+        else
+        {
+            qDebug() << "Failed to load plugin" << pluginPath;
+            qDebug() << pluginLoader.errorString();
+        }
+    }
+    else
+    {
+        qDebug() << "Failed to load plugin" << pluginPath;
+        qDebug() << pluginLoader.errorString();
+    }
+
+    return false;
+}
+
 QList<PluginInterface*> PluginsManager::plugins()
 {
     return m_plugins;
@@ -46,7 +96,7 @@ PluginInterface*PluginsManager::preferredPlugin(const QString& file)
 {
     foreach (PluginInterface* plugin, m_plugins)
     {
-        if (plugin->canLoad(file))
+        if (plugin->enabled() && plugin->canLoad(file))
             return plugin;
     }
 

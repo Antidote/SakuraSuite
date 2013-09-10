@@ -32,6 +32,8 @@ protected:
 private slots:
     void onItemSelectionChanged();
     void onItemClicked(QTreeWidgetItem* item, int column);
+    void onSettingsClicked();
+    void onReloadPlugin();
 private:
     Ui::PluginsDialog *ui;
 

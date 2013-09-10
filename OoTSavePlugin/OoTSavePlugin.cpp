@@ -84,12 +84,17 @@ void OoTSavePlugin::setEnabled(const bool enable)
 
 GameFile* OoTSavePlugin::loadFile(const QString& file) const
 {
-    return new GameFile(file);
+    return NULL;
 }
 
 bool OoTSavePlugin::canLoad(const QString& filename)
 {
     return (!QString::compare(QFileInfo(filename).suffix(), extension(), Qt::CaseInsensitive));
+}
+
+QDialog* OoTSavePlugin::settingsDialog()
+{
+    return NULL;
 }
 
 QObject* OoTSavePlugin::object()
