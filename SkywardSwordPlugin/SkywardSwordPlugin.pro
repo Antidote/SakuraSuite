@@ -41,8 +41,6 @@ CONFIG(debug, debug|release){
 
 message(Project Path: $$PWD)
 HEADERS +=\
-    $$PWD/../PluginFramework/include/PluginInterface.hpp \
-    $$PWD/../PluginFramework/include/GameFile.hpp \
     $$PWD/include/SkywardSwordPlugin.hpp \
     $$PWD/include/skywardswordplugin_global.hpp \
     $$PWD/include/SkywardSwordEditorForm.hpp \

@@ -25,8 +25,6 @@ INCLUDEPATH += \
 LIBS += -L../PluginFramework -lPluginFramework
 
 HEADERS +=\
-    $$PWD/../PluginFramework/include/PluginInterface.hpp \
-    $$PWD/../PluginFramework/include/GameFile.hpp \
     $$PWD/OoTSavePlugin.hpp \
     $$PWD/ootsaveplugin_global.hpp
 
