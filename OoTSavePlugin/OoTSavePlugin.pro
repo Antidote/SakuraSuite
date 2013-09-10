@@ -17,19 +17,19 @@ INSTALLS += target
 DEFINES += OOTSAVEPLUGIN_LIBRARY
 
 SOURCES += \
-    OoTSavePlugin.cpp
+    $$PWD/OoTSavePlugin.cpp
 
 INCLUDEPATH += \
-    ../PluginFramework/include
+    $$PWD/../PluginFramework/include
 
 LIBS += -L../PluginFramework -lPluginFramework
 
 HEADERS +=\
-    ../PluginFramework/include/PluginInterface.hpp \
-    ../PluginFramework/include/GameFile.hpp \
-    OoTSavePlugin.hpp \
-    ootsaveplugin_global.hpp
+    $$PWD/../PluginFramework/include/PluginInterface.hpp \
+    $$PWD/../PluginFramework/include/GameFile.hpp \
+    $$PWD/OoTSavePlugin.hpp \
+    $$PWD/ootsaveplugin_global.hpp
 
 RESOURCES += \
-    resources/resources.qrc
+    $$PWD/resources/resources.qrc
 

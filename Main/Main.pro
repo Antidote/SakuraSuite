@@ -4,33 +4,33 @@ TARGET = Wiiking2Editor
 TEMPLATE = app
 INCLUDEPATH += \
     include \
-    ../PluginFramework/include
+    $$PWD/../PluginFramework/include
 
 target.path = ../
 INSTALLS += target
 
-LIBS += -L../PluginFramework -lPluginFramework
+LIBS += -L$$PWD/../PluginFramework -lPluginFramework
 SOURCES += \
-    src/MainWindow.cpp \
-    src/PluginsDialog.cpp \
-    src/PluginsManager.cpp \
-    src/main.cpp \
-    src/AboutDialog.cpp
+    $$PWD/src/MainWindow.cpp \
+    $$PWD/src/PluginsDialog.cpp \
+    $$PWD/src/PluginsManager.cpp \
+    $$PWD/src/main.cpp \
+    $$PWD/src/AboutDialog.cpp
 
 HEADERS += \
-    include/Constants.hpp \
-    include/MainWindow.hpp \
-    include/PluginsDialog.hpp \
-    include/PluginsManager.hpp \
-    include/AboutDialog.hpp
+    $$PWD/include/Constants.hpp \
+    $$PWD/include/MainWindow.hpp \
+    $$PWD/include/PluginsDialog.hpp \
+    $$PWD/include/PluginsManager.hpp \
+    $$PWD/include/AboutDialog.hpp
 
 FORMS += \
-    ui/MainWindow.ui \
-    ui/PluginsDialog.ui \
-    ui/AboutDialog.ui
+    $$PWD/ui/MainWindow.ui \
+    $$PWD/ui/PluginsDialog.ui \
+    $$PWD/ui/AboutDialog.ui
 
 RESOURCES += \
-    resources/resources.qrc
+    $$PWD/resources/resources.qrc
 *-64 {
     CONFIG += WIIKING2_PLATFORM_X64
 }

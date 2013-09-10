@@ -17,45 +17,43 @@ INSTALLS += target
 DEFINES += SKYWARDSWORDPLUGGIN_LIBRARY
 
 SOURCES += \
-    src/SkywardSwordPlugin.cpp \
-    src/SkywardSwordEditorForm.cpp \
-    src/SkywardSwordGameFile.cpp \
-    src/SettingsManager.cpp \
-    src/SettingsDialog.cpp
+    $$PWD/src/SkywardSwordPlugin.cpp \
+    $$PWD/src/SkywardSwordEditorForm.cpp \
+    $$PWD/src/SkywardSwordGameFile.cpp \
+    $$PWD/src/SettingsManager.cpp \
+    $$PWD/src/SettingsDialog.cpp
 
 INCLUDEPATH += \
     include \
-    ../PluginFramework/include \
-    ../libzelda/include
+    $$PWD/../PluginFramework/include \
+    $$PWD/../libzelda/include
 
 LIBS += \
-    -L../PluginFramework -lPluginFramework
+    -L$$PWD/../PluginFramework -lPluginFramework
 
 CONFIG(release, release|debug){
-    warning("building in release mode")
-    LIBS += -L../libzelda/lib -lzelda
+    LIBS += -L$$PWD/../libzelda/lib -lzelda
 }
 
 CONFIG(debug, debug|release){
-    LIBS += -L../libzelda/lib -lzelda-d
+    LIBS += -L$$PWD/../libzelda/lib -lzelda-d
 }
 
-
+message(Project Path: $$PWD)
 HEADERS +=\
-    ../PluginFramework/include/PluginInterface.hpp \
-    ../PluginFramework/include/GameFile.hpp \
-    ../PluginFramework/include/EditorForm.hpp \
-    include/SkywardSwordPlugin.hpp \
-    include/skywardswordplugin_global.hpp \
-    include/SkywardSwordEditorForm.hpp \
-    include/SkywardSwordGameFile.hpp \
-    include/SettingsManager.hpp \
-    include/SettingsDialog.hpp
+    $$PWD/../PluginFramework/include/PluginInterface.hpp \
+    $$PWD/../PluginFramework/include/GameFile.hpp \
+    $$PWD/include/SkywardSwordPlugin.hpp \
+    $$PWD/include/skywardswordplugin_global.hpp \
+    $$PWD/include/SkywardSwordEditorForm.hpp \
+    $$PWD/include/SkywardSwordGameFile.hpp \
+    $$PWD/include/SettingsManager.hpp \
+    $$PWD/include/SettingsDialog.hpp
 
 RESOURCES += \
-    resources/resources.qrc
+    $$PWD/resources/resources.qrc
 
 FORMS += \
-    ui/SkywardSwordEditorForm.ui \
-    ui/SettingsDialog.ui
+    $$PWD/ui/SkywardSwordEditorForm.ui \
+    $$PWD/ui/SettingsDialog.ui
 

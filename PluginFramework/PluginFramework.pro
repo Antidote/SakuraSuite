@@ -11,9 +11,9 @@ TEMPLATE = lib
 CONFIG += staticlib
 
 SOURCES += \
-    src/GameFile.cpp
+    $$PWD/src/GameFile.cpp
 
 INCLUDEPATH += include
 HEADERS += \
-    include/GameFile.hpp \
-    include/PluginInterface.hpp
+    $$PWD/include/GameFile.hpp \
+    $$PWD/include/PluginInterface.hpp
