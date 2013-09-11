@@ -2,6 +2,8 @@
 #include "ui_PluginsDialog.h"
 #include "PluginInterface.hpp"
 #include "PluginsManager.hpp"
+#include "Constants.hpp"
+#include <QMessageBox>
 #include <QDebug>
 
 PluginsDialog::PluginsDialog(QWidget *parent, PluginsManager* pluginsManager) :
@@ -10,7 +12,7 @@ PluginsDialog::PluginsDialog(QWidget *parent, PluginsManager* pluginsManager) :
     m_pluginsManager(pluginsManager)
 {
     ui->setupUi(this);
-    ui->groupBox->hide();
+    ui->groupBox->setEnabled(false);
 }
 
 PluginsDialog::~PluginsDialog()
@@ -24,8 +26,17 @@ void PluginsDialog::showEvent(QShowEvent* se)
 
     QTreeWidget* tw = ui->treeWidget;
     tw->clear();
+    ui->authorValue->clear();
+    ui->descriptionTextEdit->clear();
+    ui->websiteValue->clear();
+    ui->pathValue->clear();
+    ui->licenseValue->clear();
+    ui->descriptionTextEdit->clear();
     foreach(PluginInterface* plugin, m_pluginsManager->plugins())
     {
+        if (!plugin)
+            continue;
+
         QTreeWidgetItem* item = new QTreeWidgetItem;
         item->setText(NameColumn, plugin->name());
         item->setText(VersionColumn, plugin->version());
@@ -33,18 +44,18 @@ void PluginsDialog::showEvent(QShowEvent* se)
         item->setCheckState(EnabledColumn, (plugin->enabled() ? Qt::Checked : Qt::Unchecked));
         tw->addTopLevelItem(item);
     }
-    ui->groupBox->hide();
+    ui->groupBox->setEnabled(false);
 }
 
 void PluginsDialog::onItemSelectionChanged()
 {
     if (!ui->treeWidget->currentItem())
     {
-        ui->groupBox->hide();
+        ui->groupBox->setEnabled(false);
         return;
     }
 
-    PluginInterface* plugin = m_pluginsManager->pluginByName(ui->treeWidget->currentItem()->text(0));
+    PluginInterface* plugin = m_pluginsManager->plugin(ui->treeWidget->currentItem()->text(0));
     if (!plugin)
         return;
     ui->authorValue->setText(plugin->author());
@@ -53,7 +64,7 @@ void PluginsDialog::onItemSelectionChanged()
     ui->licenseValue->setText(plugin->license());
     ui->descriptionTextEdit->setHtml(plugin->description());
     ui->settingsPushButton->setEnabled(plugin->settingsDialog() != NULL);
-    ui->groupBox->show();
+    ui->groupBox->setEnabled(true);
 }
 
 void PluginsDialog::onItemClicked(QTreeWidgetItem* item, int column)
@@ -63,7 +74,7 @@ void PluginsDialog::onItemClicked(QTreeWidgetItem* item, int column)
 
     if (column == EnabledColumn)
     {
-        PluginInterface* plugin = m_pluginsManager->pluginByName(item->text(0));
+        PluginInterface* plugin = m_pluginsManager->plugin(item->text(0));
         if (!plugin)
             return;
 
@@ -82,7 +93,7 @@ void PluginsDialog::onSettingsClicked()
     if (!ui->treeWidget->currentItem())
         return;
 
-    PluginInterface* plugin = m_pluginsManager->pluginByName(ui->treeWidget->currentItem()->text(0));
+    PluginInterface* plugin = m_pluginsManager->plugin(ui->treeWidget->currentItem()->text(0));
     if (!plugin)
         return;
 
@@ -98,15 +109,23 @@ void PluginsDialog::onReloadPlugin()
     if (!ui->treeWidget->currentItem())
         return;
 
+    QMessageBox mbox;
+    mbox.setWindowTitle(Constants::WIIKING2_PLUGIN_RELOAD_WARNING);
+    mbox.setText(Constants::WIIKING2_PLUGIN_RELOAD_WARNING_MSG);
+    mbox.setStandardButtons(QMessageBox::Cancel | QMessageBox::Ok);
+
+    if (mbox.result() == QMessageBox::Cancel)
+        return;
+
     if (m_pluginsManager->reloadByName(ui->treeWidget->currentItem()->text(0)))
     {
-        this->hide();
-        this->show();
         this->setStatusTip("Reloaded plugin");
     }
     else
     {
         this->setStatusTip("Failed to reload plugin");
     }
+    this->hide();
+    this->show();
 }
 

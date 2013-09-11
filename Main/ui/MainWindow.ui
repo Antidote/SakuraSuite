@@ -14,7 +14,7 @@
    <bool>true</bool>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string notr="true"/>
   </property>
   <property name="documentMode">
    <bool>true</bool>
@@ -46,7 +46,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>608</width>
+         <width>500</width>
          <height>615</height>
         </rect>
        </property>
@@ -194,16 +194,37 @@
    </widget>
   </widget>
   <action name="actionClose">
+   <property name="icon">
+    <iconset theme="close">
+     <normaloff/>
+    </iconset>
+   </property>
    <property name="text">
     <string>&amp;Close</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+W</string>
+   </property>
   </action>
   <action name="actionOpen">
+   <property name="icon">
+    <iconset theme="fileopen">
+     <normaloff/>
+    </iconset>
+   </property>
    <property name="text">
     <string>&amp;Open</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
   </action>
   <action name="actionNew">
+   <property name="icon">
+    <iconset theme="file_new">
+     <normaloff/>
+    </iconset>
+   </property>
    <property name="text">
     <string>&amp;New</string>
    </property>
@@ -212,18 +233,32 @@
    <property name="text">
     <string>&amp;Save</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
   </action>
   <action name="actionSaveAs">
    <property name="text">
     <string>Save &amp;As</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
+   </property>
   </action>
   <action name="actionExit">
+   <property name="icon">
+    <iconset theme="exit">
+     <normaloff/>
+    </iconset>
+   </property>
    <property name="text">
     <string>&amp;Exit</string>
    </property>
   </action>
   <action name="actionClearRecent">
+   <property name="icon">
+    <iconset theme="editclear"/>
+   </property>
    <property name="text">
     <string>&amp;Clear</string>
    </property>
@@ -234,6 +269,11 @@
    </property>
   </action>
   <action name="actionAbout">
+   <property name="icon">
+    <iconset theme="stock_about">
+     <normaloff/>
+    </iconset>
+   </property>
    <property name="text">
     <string>&amp;About</string>
    </property>
@@ -433,6 +473,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionExit</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onExit()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>382</x>
+     <y>340</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>onDocumentChanged()</slot>
@@ -446,5 +502,6 @@
   <slot>onCheckUpdate()</slot>
   <slot>onSave()</slot>
   <slot>onSaveAs()</slot>
+  <slot>onExit()</slot>
  </slots>
 </ui>

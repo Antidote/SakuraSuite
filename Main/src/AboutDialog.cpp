@@ -7,10 +7,10 @@ AboutDialog::AboutDialog(QWidget *parent) :
     ui(new Ui::AboutDialog)
 {
     ui->setupUi(this);
-    this->setWindowTitle(tr(Constants::WIIKING2_ABOUT_TITLE).arg(Constants::WIIKING2_TITLE));
-    ui->applicationNameLbl->setText(tr(Constants::WIIKING2_APP_NAME));
-    ui->applicationVersionLbl->setText(tr(Constants::WIIKING2_APP_VERSION));
-    ui->buildDateLbl->setText(tr(Constants::WIIKING2_BUILD_DATE));
+    this->setWindowTitle(Constants::WIIKING2_ABOUT_TITLE.arg(Constants::WIIKING2_TITLE));
+    ui->applicationNameLbl->setText(Constants::WIIKING2_APP_NAME);
+    ui->applicationVersionLbl->setText(Constants::WIIKING2_APP_VERSION);
+    ui->buildDateLbl->setText(Constants::WIIKING2_BUILD_DATE);
 }
 
 AboutDialog::~AboutDialog()

@@ -1,33 +1,33 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2013-09-06T02:05:41
+# Project created by Creator 2013-09-06T02:05:41
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT    += core gui
 
 TARGET = OoTSavePlugin
 TEMPLATE = lib
 CONFIG += plugin
+DESTDIR = ../plugins
 
-target.path = ../plugins
-
-INSTALLS += target
+TRANSLATIONS += \
+    lang/en_ES.ts
 
 DEFINES += OOTSAVEPLUGIN_LIBRARY
 
 SOURCES += \
-    $$PWD/OoTSavePlugin.cpp
+    OoTSavePlugin.cpp
 
 INCLUDEPATH += \
-    $$PWD/../PluginFramework/include
+    ../PluginFramework/include
 
 LIBS += -L../PluginFramework -lPluginFramework
 
 HEADERS +=\
-    $$PWD/OoTSavePlugin.hpp \
-    $$PWD/ootsaveplugin_global.hpp
+    OoTSavePlugin.hpp \
+    ootsaveplugin_global.hpp
 
 RESOURCES += \
-    $$PWD/resources/resources.qrc
+    resources/resources.qrc
 

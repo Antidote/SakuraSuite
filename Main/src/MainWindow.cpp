@@ -6,6 +6,7 @@
 #include "PluginInterface.hpp"
 #include "AboutDialog.hpp"
 #include <QNetworkReply>
+#include <QLabel>
 #include <QMenu>
 
 #include <QDebug>
@@ -21,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
     m_aboutDialog(NULL)
 {
     ui->setupUi(this);
+
     move(320, 240);
     setWindowIcon(QIcon(":/icon/Bomb64x64.png"));
     m_defaultWindowGeometry = this->saveGeometry();
@@ -37,7 +39,7 @@ MainWindow::MainWindow(QWidget *parent) :
     separator->setSeparator(true);
     ui->documentList->addAction(separator);
     ui->documentList->addAction(ui->actionClose);
-    this->setWindowTitle(tr(Constants::WIIKING2_TITLE));
+    this->setWindowTitle(Constants::WIIKING2_TITLE);
 
 
     // Add default filter
@@ -58,6 +60,16 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->menuRecentFiles->insertAction(m_recentFileSeparator, m_recentFileActions[i]);
     }
 
+#ifdef WK2_PREVIEW
+    QWidget* bar = this->menuBar();
+    QHBoxLayout* hbLay = new QHBoxLayout;
+    hbLay->addStretch();
+    QLabel* label  = new QLabel(bar);
+    label->setText("PREVIEW BUILD");
+    label->setMinimumSize(0, 12);
+    hbLay->addWidget(label);
+    bar->setLayout(hbLay);
+#endif
     // Now load the MRU
     updateRecentFileActions();
 
@@ -94,13 +106,44 @@ void MainWindow::removeFileFilter(const QString& filter)
     m_fileFilters.removeOne(filter);
 }
 
+void MainWindow::closeFilesFromLoader(PluginInterface* loader)
+{
+    QList<GameFile*> targets;
+    QList<QListWidgetItem*> items;
+    foreach(GameFile* file, m_documents.values())
+    {
+        if (file->loadedBy() == loader)
+        {
+            targets.append(file);
+            for (int i = 0; i < ui->documentList->count(); i++)
+            {
+                if (ui->documentList->item(i)->data(FILEPATH).toString() == file->filePath())
+                    items.append(ui->documentList->item(i));
+            }
+        }
+    }
+
+    foreach(GameFile* file, targets)
+    {
+        m_documents.remove(file->filePath());
+        delete file;
+    }
+    targets.clear();
+
+    foreach (QListWidgetItem* item, items)
+    {
+        delete item;
+    }
+    items.clear();
+}
+
 void MainWindow::openFile(const QString& currentFile)
 {
     if (m_documents.contains(currentFile))
     {
         QMessageBox msgBox(this);
-        msgBox.setWindowTitle(tr(Constants::WIIKING2_ALREADY_OPENED_NAG));
-        msgBox.setText(tr(Constants::WIIKING2_ALREADY_OPENED_NAG_MSG).arg(strippedName(currentFile)));
+        msgBox.setWindowTitle(Constants::WIIKING2_ALREADY_OPENED_NAG);
+        msgBox.setText(Constants::WIIKING2_ALREADY_OPENED_NAG_MSG.arg(strippedName(currentFile)));
         msgBox.setStandardButtons(QMessageBox::Ok);
         msgBox.setIcon(QMessageBox::Warning);
         msgBox.exec();
@@ -126,9 +169,11 @@ void MainWindow::openFile(const QString& currentFile)
 
     ui->documentList->addItem(item);
     ui->documentList->setCurrentItem(item);
+    m_currentFile = file;
     updateMRU(currentFile);
     QSettings settings;
-    settings.setValue(tr(Constants::Settings::WIIKING2_RECENT_DIRECTORY), QFileInfo(currentFile).absolutePath());
+    settings.setValue(Constants::Settings::WIIKING2_RECENT_DIRECTORY, QFileInfo(currentFile).absolutePath());
+    updateWindowTitle();
 }
 
 void MainWindow::onDocumentChanged()
@@ -148,7 +193,6 @@ void MainWindow::onDocumentChanged()
     if (!m_currentFile)
         return;
 
-    updateWindowTitle();
     if (oldFile)
     {
         if (oldFile->widget())
@@ -163,6 +207,8 @@ void MainWindow::onDocumentChanged()
         ui->mainLayout->addWidget(m_currentFile->widget());
         m_currentFile->widget()->show();
     }
+
+    updateWindowTitle();
 }
 
 
@@ -176,6 +222,9 @@ void MainWindow::onClose()
     delete m_currentFile;
     m_currentFile = NULL;
     delete ui->documentList->currentItem();
+
+    if (ui->documentList->count() <= 0)
+        this->setWindowTitle(Constants::WIIKING2_TITLE);
 }
 
 void MainWindow::onCloseAll()
@@ -197,24 +246,52 @@ void MainWindow::onOpen()
 
 void MainWindow::onSave()
 {
+
+#ifdef WK2_PREVIEW
+    QMessageBox mbox(this);
+    mbox.setWindowTitle("Saving disabled");
+    mbox.setText("<center>Saving has been disabled in this preview build.<br />"
+                 "The application is far too unstable for everyday use.<br />"
+                 "<br />"
+                 "But your interest and support are much appreciated. <br />"
+                 "<br />"
+                 "<strong>Thank you for checking out this preview build.<strong></center>");
+    mbox.setStandardButtons(QMessageBox::Ok);
+    mbox.exec();
+    return;
+#endif
+
     if (m_documents.count() <= 0)
         return;
-    if (!m_currentFile)
+    if (!m_currentFile || !m_currentFile->isDirty())
         return;
 
     if (m_currentFile->filePath().isEmpty())
         onSaveAs();
 
     if (m_currentFile->save())
-        qDebug() << "saved";
+        statusBar()->showMessage(tr("Save successful"), 2000);
     else
-        qDebug() << "something happened";
+        statusBar()->showMessage(tr("Save failed"), 2000);
 
     updateWindowTitle();
 }
 
 void MainWindow::onSaveAs()
 {
+#ifdef WK2_PREVIEW
+    QMessageBox mbox;
+    mbox.setWindowTitle("Saving disabled");
+    mbox.setText("<center>Saving has been disabled in this preview build.<br />"
+                 "The application is far too unstable for everyday use.<br />"
+                 "<br />"
+                 "But your interest and support are much appreciated. <br />"
+                 "<br />"
+                 "<strong>Thank you for checking out this preview build.<strong></center>");
+    mbox.setStandardButtons(QMessageBox::Ok);
+    mbox.exec();
+    return;
+#endif
     if (m_documents.count() <= 0)
         return;
     if (!m_currentFile)
@@ -237,6 +314,11 @@ void MainWindow::onSaveAs()
     }
 
     updateWindowTitle();
+}
+
+void MainWindow::onExit()
+{
+    qApp->quit();
 }
 
 void MainWindow::onAbout()
@@ -305,7 +387,14 @@ void MainWindow::openRecentFile()
 
 void MainWindow::updateWindowTitle()
 {
-    setWindowTitle(tr(Constants::WIIKING2_TITLE_FILE).arg(m_currentFile->fileName()).arg(m_currentFile->isDirty() ? Constants::WIIKING2_TITLE_DIRTY : '\0'));
+    if (m_currentFile->isDirty() && !ui->documentList->currentItem()->text().contains("*"))
+        ui->documentList->currentItem()->setText(ui->documentList->currentItem()->text() + "*");
+    else if (!m_currentFile->isDirty() && ui->documentList->currentItem()->text().contains("*"))
+    {
+        ui->documentList->currentItem()->setText(ui->documentList->currentItem()->data(FILENAME).toString());
+    }
+
+    setWindowTitle(Constants::WIIKING2_TITLE_FILE.arg(m_currentFile->fileName()).arg(m_currentFile->isDirty() ? Constants::WIIKING2_TITLE_DIRTY : ""));
 }
 
 void MainWindow::showEvent(QShowEvent* se)
@@ -315,8 +404,8 @@ void MainWindow::showEvent(QShowEvent* se)
     if (m_pluginsManager->plugins().count() <= 0)
     {
         QMessageBox mbox;
-        mbox.setWindowTitle(tr(Constants::WIIKING2_NO_PLUGINS_ERROR));
-        mbox.setText(tr(Constants::WIIKING2_NO_PLUGINS_ERROR_MSG));
+        mbox.setWindowTitle(Constants::WIIKING2_NO_PLUGINS_ERROR);
+        mbox.setText(Constants::WIIKING2_NO_PLUGINS_ERROR_MSG);
         mbox.setStandardButtons(QMessageBox::Ok);
         mbox.exec();
         exit(1);
@@ -369,10 +458,10 @@ void MainWindow::onNetworkFinished(QNetworkReply* nr)
         if (data[0].contains("version"))
         {
             QString serverVersion = data[0].split("=")[1];
-            if (!QString::compare(serverVersion, Constants::WIIKING2_APP_VERSION))
+            if (!QString::compare(serverVersion, Constants::WIIKING2_APP_VERSION, Qt::CaseInsensitive))
             {
-                msgBox.setWindowTitle(tr(Constants::WIIKING2_LATEST_VERSION));
-                msgBox.setText(tr(Constants::WIIKING2_LATEST_VERSION_MSG));
+                msgBox.setWindowTitle(Constants::WIIKING2_LATEST_VERSION);
+                msgBox.setText(Constants::WIIKING2_LATEST_VERSION_MSG);
                 msgBox.exec();
             }
             else
@@ -410,10 +499,16 @@ void MainWindow::onNetworkFinished(QNetworkReply* nr)
                         changeLog = rawString.split("=")[1];
                 }
 
-                msgBox.setWindowTitle(tr(Constants::WIIKING2_NOT_LATEST_VERSION).arg(Constants::WIIKING2_TITLE));
-                msgBox.setText(tr(Constants::WIIKING2_NOT_LATEST_VERSION_MSG).arg(Constants::WIIKING2_TITLE).arg(url).arg(changeLog));
+                msgBox.setWindowTitle(Constants::WIIKING2_NOT_LATEST_VERSION.arg(Constants::WIIKING2_TITLE));
+                msgBox.setText(Constants::WIIKING2_NOT_LATEST_VERSION_MSG.arg(Constants::WIIKING2_TITLE).arg(url).arg(changeLog));
                 msgBox.exec();
             }
+        }
+        else
+        {
+            msgBox.setWindowTitle(Constants::WIIKING2_UPDATE_ERROR);
+            msgBox.setText(Constants::WIIKING2_UPDATE_ERROR_MSG.arg(Constants::WIIKING2_TITLE));
+            msgBox.exec();
         }
         qDebug() << data;
     }

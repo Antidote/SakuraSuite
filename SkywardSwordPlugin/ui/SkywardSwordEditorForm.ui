@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>756</width>
-    <height>577</height>
+    <height>583</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout_18">
@@ -47,8 +47,13 @@
    </item>
    <item row="0" column="4">
     <widget class="QLabel" name="checksumValueLbl">
+     <property name="font">
+      <font>
+       <family>Courier New</family>
+      </font>
+     </property>
      <property name="text">
-      <string/>
+      <string notr="true"/>
      </property>
     </widget>
    </item>
@@ -64,7 +69,7 @@
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>3</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="playerTab">
       <attribute name="title">
@@ -86,7 +91,7 @@
        <property name="spacing">
         <number>4</number>
        </property>
-       <item row="2" column="0">
+       <item row="3" column="0">
         <spacer name="verticalSpacer_2">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -99,145 +104,7 @@
          </property>
         </spacer>
        </item>
-       <item row="0" column="1">
-        <widget class="QGroupBox" name="cameraGroupBox">
-         <property name="title">
-          <string>Camera Location</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_15">
-          <item row="5" column="0">
-           <widget class="QLabel" name="camYawLabel">
-            <property name="text">
-             <string>Yaw:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0">
-           <widget class="QLabel" name="camPitchLabel">
-            <property name="text">
-             <string>Pitch:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="camRollLabel">
-            <property name="text">
-             <string>Roll:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="camZLabel">
-            <property name="text">
-             <string>Z:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="camYLabel">
-            <property name="text">
-             <string>Y:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="camXLabel">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>X:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="1">
-           <widget class="QDoubleSpinBox" name="cameraYawSpinBox">
-            <property name="decimals">
-             <number>6</number>
-            </property>
-            <property name="minimum">
-             <double>-1000000.000000000000000</double>
-            </property>
-            <property name="maximum">
-             <double>1000000.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="1">
-           <widget class="QDoubleSpinBox" name="cameraPitchSpinBox">
-            <property name="decimals">
-             <number>6</number>
-            </property>
-            <property name="minimum">
-             <double>-1000000.000000000000000</double>
-            </property>
-            <property name="maximum">
-             <double>1000000.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1">
-           <widget class="QDoubleSpinBox" name="cameraRollSpinBox">
-            <property name="decimals">
-             <number>6</number>
-            </property>
-            <property name="minimum">
-             <double>-1000000.000000000000000</double>
-            </property>
-            <property name="maximum">
-             <double>1000000.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QDoubleSpinBox" name="cameraZSpinBox">
-            <property name="decimals">
-             <number>6</number>
-            </property>
-            <property name="minimum">
-             <double>-1000000.000000000000000</double>
-            </property>
-            <property name="maximum">
-             <double>1000000.000000000000000</double>
-            </property>
-            <property name="value">
-             <double>0.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QDoubleSpinBox" name="cameraYSpinBox">
-            <property name="decimals">
-             <number>6</number>
-            </property>
-            <property name="minimum">
-             <double>-1000000.000000000000000</double>
-            </property>
-            <property name="maximum">
-             <double>1000000.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QDoubleSpinBox" name="cameraXSpinBox">
-            <property name="decimals">
-             <number>6</number>
-            </property>
-            <property name="minimum">
-             <double>-1000000.000000000000000</double>
-            </property>
-            <property name="maximum">
-             <double>1000000.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="1" column="0">
+       <item row="2" column="0">
         <widget class="QGroupBox" name="playerGroup">
          <property name="title">
           <string>Player</string>
@@ -328,7 +195,168 @@
          </layout>
         </widget>
        </item>
-       <item row="1" column="1">
+       <item row="0" column="0">
+        <widget class="QGroupBox" name="playInfoGroup">
+         <property name="title">
+          <string>Play Stats</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_5">
+          <item row="1" column="2" colspan="6">
+           <widget class="QDateTimeEdit" name="saveTimeEdit">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="readOnly">
+             <bool>false</bool>
+            </property>
+            <property name="buttonSymbols">
+             <enum>QAbstractSpinBox::NoButtons</enum>
+            </property>
+            <property name="dateTime">
+             <datetime>
+              <hour>0</hour>
+              <minute>0</minute>
+              <second>0</second>
+              <year>2000</year>
+              <month>1</month>
+              <day>1</day>
+             </datetime>
+            </property>
+            <property name="minimumDate">
+             <date>
+              <year>2000</year>
+              <month>1</month>
+              <day>1</day>
+             </date>
+            </property>
+            <property name="calendarPopup">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="2">
+           <widget class="QLabel" name="saveTimeLabel">
+            <property name="text">
+             <string>Save Time:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0" colspan="2">
+           <widget class="QLabel" name="curMapLabel">
+            <property name="text">
+             <string>Current Map</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0" colspan="2">
+           <widget class="QLabel" name="curRoomLabel">
+            <property name="text">
+             <string>Current Room(?):</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>Room ID</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0" colspan="2">
+           <widget class="QLabel" name="curAreaLabel">
+            <property name="text">
+             <string>Current Area:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="2" colspan="5">
+           <widget class="QLineEdit" name="curRoomLineEdit">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="2" colspan="5">
+           <widget class="QSpinBox" name="roomIDSpinBox">
+            <property name="buttonSymbols">
+             <enum>QAbstractSpinBox::NoButtons</enum>
+            </property>
+            <property name="maximum">
+             <number>255</number>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2" colspan="4">
+           <widget class="QLineEdit" name="curMapLineEdit">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="4" colspan="3">
+           <widget class="QCheckBox" name="heroModeChkBox">
+            <property name="text">
+             <string>Hero Mode</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="2" colspan="4">
+           <widget class="QLineEdit" name="curAreaLineEdit">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="2" colspan="2">
+           <widget class="QCheckBox" name="nightChkbox">
+            <property name="text">
+             <string>Night</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="0" colspan="2">
+           <widget class="QCheckBox" name="introViewedChkBox">
+            <property name="text">
+             <string>Watched Intro</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" colspan="7">
+           <widget class="PlaytimeWidget" name="playtime" native="true">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>25</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="0" column="1">
         <widget class="QGroupBox" name="playerLocationGroupBox">
          <property name="title">
           <string>Player Location</string>
@@ -472,248 +500,143 @@
          </layout>
         </widget>
        </item>
-       <item row="0" column="0">
-        <widget class="QGroupBox" name="playInfoGroup">
+       <item row="2" column="1">
+        <widget class="QGroupBox" name="cameraGroupBox">
          <property name="title">
-          <string>Play Stats</string>
+          <string>Camera Location</string>
          </property>
-         <layout class="QGridLayout" name="gridLayout_5">
-          <item row="0" column="8">
-           <widget class="QSpinBox" name="secsSpinBox">
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-            <property name="buttonSymbols">
-             <enum>QAbstractSpinBox::NoButtons</enum>
-            </property>
-            <property name="accelerated">
-             <bool>false</bool>
-            </property>
-            <property name="maximum">
-             <number>60</number>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="2" colspan="7">
-           <widget class="QDateTimeEdit" name="saveTimeEdit">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="readOnly">
-             <bool>false</bool>
-            </property>
-            <property name="buttonSymbols">
-             <enum>QAbstractSpinBox::NoButtons</enum>
-            </property>
-            <property name="dateTime">
-             <datetime>
-              <hour>0</hour>
-              <minute>0</minute>
-              <second>0</second>
-              <year>2000</year>
-              <month>1</month>
-              <day>1</day>
-             </datetime>
-            </property>
-            <property name="minimumDate">
-             <date>
-              <year>2000</year>
-              <month>1</month>
-              <day>1</day>
-             </date>
-            </property>
-            <property name="calendarPopup">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="6">
-           <widget class="QSpinBox" name="minsSpinBox">
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-            <property name="buttonSymbols">
-             <enum>QAbstractSpinBox::NoButtons</enum>
-            </property>
-            <property name="accelerated">
-             <bool>false</bool>
-            </property>
-            <property name="maximum">
-             <number>60</number>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0" colspan="2">
-           <widget class="QLabel" name="saveTimeLabel">
-            <property name="text">
-             <string>Save Time:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0" colspan="2">
-           <widget class="QLabel" name="curMapLabel">
-            <property name="text">
-             <string>Current Map</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="7">
-           <widget class="QLabel" name="secSepLbl">
-            <property name="text">
-             <string>:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="QSpinBox" name="daysSpinBox">
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-            <property name="buttonSymbols">
-             <enum>QAbstractSpinBox::NoButtons</enum>
-            </property>
-            <property name="accelerated">
-             <bool>false</bool>
-            </property>
-            <property name="maximum">
-             <number>99</number>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0" colspan="2">
-           <widget class="QLabel" name="playTimeLbl">
-            <property name="text">
-             <string>Play Time:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="3">
-           <widget class="QLabel" name="hourSepLbl">
-            <property name="text">
-             <string>:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="5">
-           <widget class="QLabel" name="minSepLbl">
-            <property name="text">
-             <string>:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0" colspan="2">
-           <widget class="QLabel" name="curRoomLabel">
-            <property name="text">
-             <string>Current Room(?):</string>
-            </property>
-           </widget>
-          </item>
+         <layout class="QGridLayout" name="gridLayout_15">
           <item row="5" column="0">
-           <widget class="QLabel" name="label_2">
+           <widget class="QLabel" name="camYawLabel">
             <property name="text">
-             <string>Room ID</string>
+             <string>Yaw:</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="4">
-           <widget class="QSpinBox" name="hoursSpinBox">
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          <item row="4" column="0">
+           <widget class="QLabel" name="camPitchLabel">
+            <property name="text">
+             <string>Pitch:</string>
             </property>
-            <property name="buttonSymbols">
-             <enum>QAbstractSpinBox::NoButtons</enum>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="camRollLabel">
+            <property name="text">
+             <string>Roll:</string>
             </property>
-            <property name="accelerated">
-             <bool>false</bool>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="camZLabel">
+            <property name="text">
+             <string>Z:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="camYLabel">
+            <property name="text">
+             <string>Y:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="camXLabel">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>X:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="QDoubleSpinBox" name="cameraYawSpinBox">
+            <property name="decimals">
+             <number>6</number>
+            </property>
+            <property name="minimum">
+             <double>-1000000.000000000000000</double>
             </property>
             <property name="maximum">
-             <number>24</number>
+             <double>1000000.000000000000000</double>
             </property>
            </widget>
           </item>
-          <item row="3" column="0" colspan="2">
-           <widget class="QLabel" name="curAreaLabel">
-            <property name="text">
-             <string>Current Area:</string>
+          <item row="4" column="1">
+           <widget class="QDoubleSpinBox" name="cameraPitchSpinBox">
+            <property name="decimals">
+             <number>6</number>
             </property>
-           </widget>
-          </item>
-          <item row="5" column="2" colspan="6">
-           <widget class="QSpinBox" name="roomIDSpinBox">
-            <property name="buttonSymbols">
-             <enum>QAbstractSpinBox::NoButtons</enum>
+            <property name="minimum">
+             <double>-1000000.000000000000000</double>
             </property>
             <property name="maximum">
-             <number>255</number>
+             <double>1000000.000000000000000</double>
             </property>
            </widget>
           </item>
-          <item row="4" column="2" colspan="6">
-           <widget class="QLineEdit" name="curRoomLineEdit">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
+          <item row="3" column="1">
+           <widget class="QDoubleSpinBox" name="cameraRollSpinBox">
+            <property name="decimals">
+             <number>6</number>
+            </property>
+            <property name="minimum">
+             <double>-1000000.000000000000000</double>
+            </property>
+            <property name="maximum">
+             <double>1000000.000000000000000</double>
             </property>
            </widget>
           </item>
-          <item row="3" column="2" colspan="5">
-           <widget class="QLineEdit" name="curAreaLineEdit">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
+          <item row="2" column="1">
+           <widget class="QDoubleSpinBox" name="cameraZSpinBox">
+            <property name="decimals">
+             <number>6</number>
+            </property>
+            <property name="minimum">
+             <double>-1000000.000000000000000</double>
+            </property>
+            <property name="maximum">
+             <double>1000000.000000000000000</double>
+            </property>
+            <property name="value">
+             <double>0.000000000000000</double>
             </property>
            </widget>
           </item>
-          <item row="2" column="2" colspan="5">
-           <widget class="QLineEdit" name="curMapLineEdit">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
+          <item row="1" column="1">
+           <widget class="QDoubleSpinBox" name="cameraYSpinBox">
+            <property name="decimals">
+             <number>6</number>
+            </property>
+            <property name="minimum">
+             <double>-1000000.000000000000000</double>
+            </property>
+            <property name="maximum">
+             <double>1000000.000000000000000</double>
             </property>
            </widget>
           </item>
-          <item row="6" column="4" colspan="4">
-           <widget class="QCheckBox" name="heroModeChkBox">
-            <property name="text">
-             <string>Hero Mode</string>
+          <item row="0" column="1">
+           <widget class="QDoubleSpinBox" name="cameraXSpinBox">
+            <property name="decimals">
+             <number>6</number>
             </property>
-           </widget>
-          </item>
-          <item row="6" column="2" colspan="2">
-           <widget class="QCheckBox" name="nightChkbox">
-            <property name="text">
-             <string>Night</string>
+            <property name="minimum">
+             <double>-1000000.000000000000000</double>
             </property>
-           </widget>
-          </item>
-          <item row="6" column="0" colspan="2">
-           <widget class="QCheckBox" name="introViewedChkBox">
-            <property name="text">
-             <string>Watched Intro</string>
+            <property name="maximum">
+             <double>1000000.000000000000000</double>
             </property>
            </widget>
           </item>
          </layout>
         </widget>
-       </item>
-       <item row="0" column="2">
-        <spacer name="horizontalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
        </item>
       </layout>
      </widget>
@@ -2790,10 +2713,322 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PlaytimeWidget</class>
+   <extends>QWidget</extends>
+   <header>PlaytimeWidget.hpp</header>
+   <container>1</container>
+   <slots>
+    <signal>playtimeChanged(Playtime)</signal>
+   </slots>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>deletePushButton</tabstop>
+  <tabstop>createPushButton</tabstop>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>saveTimeEdit</tabstop>
+  <tabstop>curMapLineEdit</tabstop>
+  <tabstop>curAreaLineEdit</tabstop>
+  <tabstop>curRoomLineEdit</tabstop>
+  <tabstop>roomIDSpinBox</tabstop>
+  <tabstop>introViewedChkBox</tabstop>
+  <tabstop>nightChkbox</tabstop>
+  <tabstop>heroModeChkBox</tabstop>
+  <tabstop>nameLineEdit</tabstop>
+  <tabstop>rupeeSpinBox</tabstop>
+  <tabstop>totalHPSpinBox</tabstop>
+  <tabstop>unkHPSpinBox</tabstop>
+  <tabstop>curHPSpinBox</tabstop>
+  <tabstop>playerXSpinBox</tabstop>
+  <tabstop>playerYSpinBox</tabstop>
+  <tabstop>playerZSpinBox</tabstop>
+  <tabstop>playerRollSpinBox</tabstop>
+  <tabstop>playerPitchSpinBox</tabstop>
+  <tabstop>playerYawSpinBox</tabstop>
+  <tabstop>cameraXSpinBox</tabstop>
+  <tabstop>cameraYSpinBox</tabstop>
+  <tabstop>cameraZSpinBox</tabstop>
+  <tabstop>cameraRollSpinBox</tabstop>
+  <tabstop>cameraPitchSpinBox</tabstop>
+  <tabstop>cameraYawSpinBox</tabstop>
+  <tabstop>beetleChkBox</tabstop>
+  <tabstop>hookBeetleChkBox</tabstop>
+  <tabstop>quickBeetleChkBox</tabstop>
+  <tabstop>toughBeetleChkBox</tabstop>
+  <tabstop>bowChkBox</tabstop>
+  <tabstop>ironBowChkBox</tabstop>
+  <tabstop>sacredBowChkBox</tabstop>
+  <tabstop>arrowAmmoSpinBox</tabstop>
+  <tabstop>bugNetChkBox</tabstop>
+  <tabstop>bigBugNetChkBox</tabstop>
+  <tabstop>gustBellowsChkBox</tabstop>
+  <tabstop>harpChkBox</tabstop>
+  <tabstop>whipChkBox</tabstop>
+  <tabstop>clawShotChkBox</tabstop>
+  <tabstop>diggingMittsChkBox</tabstop>
+  <tabstop>sailClothChkBox</tabstop>
+  <tabstop>moleMittsChkBox</tabstop>
+  <tabstop>dragonScaleChkBox</tabstop>
+  <tabstop>fireEaringsChkBox</tabstop>
+  <tabstop>bombChkBox</tabstop>
+  <tabstop>bombAmmoSpinBox</tabstop>
+  <tabstop>slingShotChkBox</tabstop>
+  <tabstop>scatterShotChkBox</tabstop>
+  <tabstop>seedAmmoSpinBox</tabstop>
+  <tabstop>practiceSwdChkBox</tabstop>
+  <tabstop>goddessSwdChkBox</tabstop>
+  <tabstop>longSwdChkBox</tabstop>
+  <tabstop>whiteSwdChkBox</tabstop>
+  <tabstop>masterSwdChkBox</tabstop>
+  <tabstop>trueMasterSwdChkBox</tabstop>
+  <tabstop>smallWalletChkBox</tabstop>
+  <tabstop>mediumWalletChkBox</tabstop>
+  <tabstop>bigWalletChkBox</tabstop>
+  <tabstop>giantWalletChkBox</tabstop>
+  <tabstop>tycoonWalletChkBox</tabstop>
+  <tabstop>hornetChkBox</tabstop>
+  <tabstop>hornetSpinBox</tabstop>
+  <tabstop>butterflyChkBox</tabstop>
+  <tabstop>butterflySpinBox</tabstop>
+  <tabstop>dragonflyChkBox</tabstop>
+  <tabstop>dragonflySpinBox</tabstop>
+  <tabstop>fireflyChkBox</tabstop>
+  <tabstop>fireflySpinBox</tabstop>
+  <tabstop>rhinoBeetleChkBox</tabstop>
+  <tabstop>rhinoBeetleSpinBox</tabstop>
+  <tabstop>ladybugChkBox</tabstop>
+  <tabstop>ladybugSpinBox</tabstop>
+  <tabstop>sandCicadaChkBox</tabstop>
+  <tabstop>sandCicadaSpinBox</tabstop>
+  <tabstop>stagBeetleChkBox</tabstop>
+  <tabstop>stagBeetleSpinBox</tabstop>
+  <tabstop>grasshopperChkBox</tabstop>
+  <tabstop>grasshopperSpinBox</tabstop>
+  <tabstop>mantisChkBox</tabstop>
+  <tabstop>mantisSpinBox</tabstop>
+  <tabstop>antChkBox</tabstop>
+  <tabstop>antSpinBox</tabstop>
+  <tabstop>eldinRollerChkBox</tabstop>
+  <tabstop>eldinRollerSpinBox</tabstop>
+  <tabstop>hornetLarvaeChkBox</tabstop>
+  <tabstop>hornetLarvaeSpinBox</tabstop>
+  <tabstop>birdFeatherChkBox</tabstop>
+  <tabstop>birdFeatherSpinBox</tabstop>
+  <tabstop>tumbleWeedChkBox</tabstop>
+  <tabstop>tumbleWeedSpinBox</tabstop>
+  <tabstop>lizardTailChkBox</tabstop>
+  <tabstop>lizardTailSpinBox</tabstop>
+  <tabstop>eldinOreChkBox</tabstop>
+  <tabstop>eldinOreSpinBox</tabstop>
+  <tabstop>ancientFlowerChkBox</tabstop>
+  <tabstop>ancientFlowerSpinBox</tabstop>
+  <tabstop>amberRelicChkBox</tabstop>
+  <tabstop>amberRelicSpinBox</tabstop>
+  <tabstop>duskRelicChkBox</tabstop>
+  <tabstop>duskRelicSpinBox</tabstop>
+  <tabstop>jellyBlobChkBox</tabstop>
+  <tabstop>jellyBlobSpinBox</tabstop>
+  <tabstop>monsterClawChkBox</tabstop>
+  <tabstop>monsterClawSpinBox</tabstop>
+  <tabstop>monsterHornChkBox</tabstop>
+  <tabstop>monsterHornSpinBox</tabstop>
+  <tabstop>decoSkullChkBox</tabstop>
+  <tabstop>decoSkullSpinBox</tabstop>
+  <tabstop>evilCrystalChkBox</tabstop>
+  <tabstop>evilCrystalSpinBox</tabstop>
+  <tabstop>blueBirdFeatherChkBox</tabstop>
+  <tabstop>blueBirdFeatherSpinBox</tabstop>
+  <tabstop>goldenSkullChkBox</tabstop>
+  <tabstop>goldenSkullSpinBox</tabstop>
+  <tabstop>goddessPlumeChkBox</tabstop>
+  <tabstop>goddessPlumeSpinBox</tabstop>
+  <tabstop>letterChkBox</tabstop>
+  <tabstop>bugCageChkBox</tabstop>
+  <tabstop>rattleChkBox</tabstop>
+  <tabstop>gratitudeCrystalSpinBox</tabstop>
+ </tabstops>
  <resources>
   <include location="../resources/resources.qrc"/>
  </resources>
  <connections>
+  <connection>
+   <sender>deletePushButton</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>onDelete()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>58</x>
+     <y>23</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>239</x>
+     <y>4</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>createPushButton</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>onCreate()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>153</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>336</x>
+     <y>7</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>playtime</sender>
+   <signal>playtimeChanged(Playtime)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setPlaytime(Playtime)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>97</x>
+     <y>112</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>357</x>
+     <y>36</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>saveTimeEdit</sender>
+   <signal>dateTimeChanged(QDateTime)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setSavetime(QDateTime)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>275</x>
+     <y>141</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>802</x>
+     <y>39</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>curMapLineEdit</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setCurrentMap(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>183</x>
+     <y>172</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>440</x>
+     <y>7</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>curAreaLineEdit</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setCurrentArea(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>221</x>
+     <y>204</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>654</x>
+     <y>5</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>curRoomLineEdit</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setCurrentRoom(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>166</x>
+     <y>232</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>206</x>
+     <y>-26</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>roomIDSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setRoomID(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>306</x>
+     <y>265</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>390</x>
+     <y>-40</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>introViewedChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setIntroWatched(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>83</x>
+     <y>296</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>90</x>
+     <y>-24</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>nightChkbox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setNight(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>200</x>
+     <y>299</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>240</x>
+     <y>-49</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>heroModeChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setHeroMode(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>254</x>
+     <y>292</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>253</x>
+     <y>-11</y>
+    </hint>
+   </hints>
+  </connection>
   <connection>
    <sender>nameLineEdit</sender>
    <signal>textChanged(QString)</signal>
@@ -2801,51 +3036,334 @@
    <slot>setPlayerName(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>181</x>
-     <y>321</y>
+     <x>139</x>
+     <y>354</y>
     </hint>
     <hint type="destinationlabel">
-     <x>368</x>
-     <y>272</y>
+     <x>104</x>
+     <y>-66</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>createPushButton</sender>
-   <signal>clicked()</signal>
+   <sender>rupeeSpinBox</sender>
+   <signal>valueChanged(int)</signal>
    <receiver>SkywardSwordEditorForm</receiver>
-   <slot>onCreate()</slot>
+   <slot>setRupees(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>142</x>
-     <y>22</y>
+     <x>289</x>
+     <y>397</y>
     </hint>
     <hint type="destinationlabel">
-     <x>377</x>
-     <y>288</y>
+     <x>345</x>
+     <y>-68</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>deletePushButton</sender>
-   <signal>clicked()</signal>
+   <sender>totalHPSpinBox</sender>
+   <signal>valueChanged(int)</signal>
    <receiver>SkywardSwordEditorForm</receiver>
-   <slot>onDelete()</slot>
+   <slot>setTotalHP(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>51</x>
-     <y>22</y>
+     <x>228</x>
+     <y>434</y>
     </hint>
     <hint type="destinationlabel">
-     <x>377</x>
+     <x>229</x>
+     <y>-41</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>unkHPSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setUnkHP(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>147</x>
+     <y>468</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>185</x>
+     <y>-33</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>curHPSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setCurrentHP(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>198</x>
+     <y>504</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>243</x>
+     <y>-61</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>playerXSpinBox</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setPlayerX(double)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>515</x>
+     <y>103</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>527</x>
+     <y>-44</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>playerYSpinBox</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setPlayerY(double)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>486</x>
+     <y>153</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>514</x>
+     <y>-114</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>playerZSpinBox</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setPlayerZ(double)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>476</x>
+     <y>182</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>482</x>
+     <y>-22</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>playerRollSpinBox</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setPlayerRoll(double)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>441</x>
+     <y>218</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>455</x>
+     <y>-76</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>playerPitchSpinBox</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setPlayerPitch(double)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>529</x>
+     <y>250</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>506</x>
+     <y>-47</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>playerYawSpinBox</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setPlayerYaw(double)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>499</x>
      <y>288</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>498</x>
+     <y>-66</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cameraXSpinBox</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setCameraX(double)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>465</x>
+     <y>356</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>465</x>
+     <y>-27</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cameraYSpinBox</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setCameraY(double)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>554</x>
+     <y>391</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>543</x>
+     <y>-11</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cameraZSpinBox</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setCameraZ(double)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>515</x>
+     <y>421</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>615</x>
+     <y>-11</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cameraRollSpinBox</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setCameraRoll(double)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>500</x>
+     <y>443</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>838</x>
+     <y>13</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cameraPitchSpinBox</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setCameraPitch(double)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>487</x>
+     <y>480</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>941</x>
+     <y>24</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cameraYawSpinBox</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setCameraYaw(double)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>454</x>
+     <y>518</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>805</x>
+     <y>19</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>beetleChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setBeetle(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>71</x>
+     <y>140</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>435</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>hookBeetleChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setHookBeetle(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>160</x>
+     <y>145</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>177</x>
+     <y>-59</y>
     </hint>
    </hints>
   </connection>
  </connections>
  <slots>
-  <slot>setPlayerName(QString)</slot>
   <slot>onDelete()</slot>
   <slot>onCreate()</slot>
+  <slot>setPlaytime(Playtime)</slot>
+  <slot>setSavetime(QDateTime)</slot>
+  <slot>setCurrentMap(QString)</slot>
+  <slot>setCurrentArea(QString)</slot>
+  <slot>setCurrentRoom(QString)</slot>
+  <slot>setRoomID(int)</slot>
+  <slot>setIntroWatched(bool)</slot>
+  <slot>setNight(bool)</slot>
+  <slot>setHeroMode(bool)</slot>
+  <slot>setPlayerName(QString)</slot>
+  <slot>setRupees(int)</slot>
+  <slot>setTotalHP(int)</slot>
+  <slot>setUnkHP(int)</slot>
+  <slot>setCurrentHP(int)</slot>
+  <slot>setPlayerX(double)</slot>
+  <slot>setPlayerY(double)</slot>
+  <slot>setPlayerZ(double)</slot>
+  <slot>setPlayerRoll(double)</slot>
+  <slot>setPlayerPitch(double)</slot>
+  <slot>setPlayerYaw(double)</slot>
+  <slot>setCameraX(double)</slot>
+  <slot>setCameraY(double)</slot>
+  <slot>setCameraZ(double)</slot>
+  <slot>setCameraRoll(double)</slot>
+  <slot>setCameraPitch(double)</slot>
+  <slot>setCameraYaw(double)</slot>
+  <slot>setBeetle(bool)</slot>
+  <slot>setHookBeetle(bool)</slot>
  </slots>
 </ui>

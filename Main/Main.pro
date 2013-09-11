@@ -4,35 +4,40 @@ TARGET = Wiiking2Editor
 TEMPLATE = app
 INCLUDEPATH += \
     include \
-    $$PWD/../PluginFramework/include
+    ../PluginFramework/include
 
-target.path = ../
-INSTALLS += target
-
-LIBS += -L$$PWD/../PluginFramework -lPluginFramework
-SOURCES += \
-    $$PWD/src/MainWindow.cpp \
-    $$PWD/src/PluginsDialog.cpp \
-    $$PWD/src/PluginsManager.cpp \
-    $$PWD/src/main.cpp \
-    $$PWD/src/AboutDialog.cpp
-
-HEADERS += \
-    $$PWD/include/Constants.hpp \
-    $$PWD/include/MainWindow.hpp \
-    $$PWD/include/PluginsDialog.hpp \
-    $$PWD/include/PluginsManager.hpp \
-    $$PWD/include/AboutDialog.hpp
-
-FORMS += \
-    $$PWD/ui/MainWindow.ui \
-    $$PWD/ui/PluginsDialog.ui \
-    $$PWD/ui/AboutDialog.ui
-
-RESOURCES += \
-    $$PWD/resources/resources.qrc
-*-64 {
-    CONFIG += WIIKING2_PLATFORM_X64
+CONFIG(release, release|debug){
+    DEFINES -= WK2_DEBUG
 }
 
-message($$QMAKE_HOST.arch)
+CONFIG(debug, debug|release){
+    DEFINES += WK2_DEBUG
+}
+
+DESTDIR = ../
+LIBS += -L../PluginFramework -lPluginFramework
+
+TRANSLATIONS += \
+    lang/en_ES.ts
+
+SOURCES += \
+    src/MainWindow.cpp \
+    src/PluginsDialog.cpp \
+    src/PluginsManager.cpp \
+    src/main.cpp \
+    src/AboutDialog.cpp
+
+HEADERS += \
+    include/Constants.hpp \
+    include/MainWindow.hpp \
+    include/PluginsDialog.hpp \
+    include/PluginsManager.hpp \
+    include/AboutDialog.hpp
+
+FORMS += \
+    ui/MainWindow.ui \
+    ui/PluginsDialog.ui \
+    ui/AboutDialog.ui
+
+RESOURCES += \
+    resources/resources.qrc

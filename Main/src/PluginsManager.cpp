@@ -9,7 +9,8 @@
 
 PluginsManager::PluginsManager(MainWindow* parent)
     : QObject(parent),
-      m_pluginsDialog(new PluginsDialog(parent, this))
+      m_pluginsDialog(new PluginsDialog(parent, this)),
+      m_mainWindow(parent)
 {
 }
 
@@ -25,15 +26,7 @@ void PluginsManager::dialog()
     m_pluginsDialog->exec();
 }
 
-PluginInterface* PluginsManager::pluginById(const int id)
-{
-    if (id < 0 || id > m_plugins.count())
-        return NULL;
-
-    return m_plugins[id];
-}
-
-PluginInterface* PluginsManager::pluginByName(const QString& name)
+PluginInterface* PluginsManager::plugin(const QString& name)
 {
     foreach(PluginInterface* plugin, m_plugins)
     {
@@ -46,48 +39,65 @@ PluginInterface* PluginsManager::pluginByName(const QString& name)
 
 bool PluginsManager::reloadByName(const QString& name)
 {
-    PluginInterface* plugin = pluginByName(name);
+//    return false;
+    PluginInterface* plugin = this->plugin(name);
 
     if (!plugin)
         return false;
 
     QString pluginPath = plugin->path();
 
-    m_plugins.removeOne(plugin);
-    delete plugin;
+    m_mainWindow->closeFilesFromLoader(plugin);
+    QPluginLoader* loader = m_pluginLoaders.take(pluginPath);
 
-    QPluginLoader pluginLoader(pluginPath);
-    QObject *object = pluginLoader.instance();
+    m_plugins.remove(pluginPath);
 
-    if (object)
+    if (!loader)
+        return false;
+
+
+    if(loader->unload())
     {
-        plugin = qobject_cast<PluginInterface *>(object);
-        if (plugin)
+
+        delete loader;
+        loader = NULL;
+        loader = new QPluginLoader(pluginPath);
+
+        m_pluginLoaders[pluginPath] = loader;
+
+        if (loader->load())
         {
-            m_plugins.append(plugin);
-            connect(plugin->object(), SIGNAL(enabledChanged()), this, SLOT(onEnabledChanged()));
-            QSettings settings;
-            settings.beginGroup(plugin->name());
-            plugin->setPath(pluginPath);
-            plugin->setEnabled(settings.value("enabled", true).toBool());
-            return true;
+            QObject* object = loader->instance();
+            PluginInterface* newPlugin = qobject_cast<PluginInterface *>(object);
+            if (newPlugin)
+            {
+                newPlugin->setPath(pluginPath);
+                QSettings settings;
+                settings.beginGroup(newPlugin->name());
+                newPlugin->setEnabled(settings.value("enabled", true).toBool());
+                m_plugins[pluginPath] = newPlugin;
+                return true;
+            }
+            else
+            {
+                qDebug() << loader->errorString();
+                return false;
+            }
         }
         else
         {
-            qDebug() << "Failed to load plugin" << pluginPath;
-            qDebug() << pluginLoader.errorString();
+            qDebug() << loader->errorString();
         }
     }
-    else
-    {
-        qDebug() << "Failed to load plugin" << pluginPath;
-        qDebug() << pluginLoader.errorString();
-    }
+
+    m_pluginLoaders[pluginPath] = loader;
+    m_plugins[pluginPath] = plugin;
+    qDebug() << loader->errorString();
 
     return false;
 }
 
-QList<PluginInterface*> PluginsManager::plugins()
+QMap<QString, PluginInterface*> PluginsManager::plugins()
 {
     return m_plugins;
 }
@@ -126,31 +136,38 @@ void PluginsManager::loadPlugins()
 
     foreach (QString fileName, pluginsDir.entryList(QDir::Files)) {
         qDebug() << fileName;
-        QPluginLoader pluginLoader(pluginsDir.absoluteFilePath(fileName));
-        QObject *object = pluginLoader.instance();
+        QPluginLoader* pluginLoader = new QPluginLoader(pluginsDir.absoluteFilePath(fileName));
+        QObject *object = pluginLoader->instance();
 
         if (object)
         {
             PluginInterface* plugin = qobject_cast<PluginInterface *>(object);
             if (plugin)
             {
-                m_plugins.append(plugin);
+                m_plugins[pluginsDir.absoluteFilePath(fileName)] = plugin;
                 connect(plugin->object(), SIGNAL(enabledChanged()), this, SLOT(onEnabledChanged()));
                 QSettings settings;
                 settings.beginGroup(plugin->name());
                 plugin->setPath(pluginsDir.absoluteFilePath(fileName));
                 plugin->setEnabled(settings.value("enabled", true).toBool());
+                m_pluginLoaders[pluginsDir.absoluteFilePath(fileName)] = pluginLoader;
             }
             else
             {
                 qDebug() << "Failed to load plugin" << fileName;
-                qDebug() << pluginLoader.errorString();
+                qDebug() << pluginLoader->errorString();
+                delete pluginLoader;
+                pluginLoader = NULL;
             }
         }
         else
         {
             qDebug() << "Failed to load plugin" << fileName;
-            qDebug() << pluginLoader.errorString();
+            qDebug() << pluginLoader->errorString();
+            delete pluginLoader;
+            pluginLoader = NULL;
+            delete pluginLoader;
+            pluginLoader = NULL;
         }
     }
 }

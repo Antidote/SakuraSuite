@@ -84,7 +84,7 @@ void OoTSavePlugin::setEnabled(const bool enable)
 
 GameFile* OoTSavePlugin::loadFile(const QString& file) const
 {
-    return NULL;
+    return new GameFile(this, file);
 }
 
 bool OoTSavePlugin::canLoad(const QString& filename)

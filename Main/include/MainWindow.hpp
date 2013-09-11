@@ -15,6 +15,8 @@ namespace Ui {
 class MainWindow;
 }
 
+class PluginInterface;
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -32,6 +34,7 @@ public:
     void addFileFilter(const QString& filter);
     void removeFileFilter(const QString& filter);
 
+    void closeFilesFromLoader(PluginInterface* loader);
 protected slots:
     void onDocumentChanged();
     void onClose();
@@ -39,6 +42,7 @@ protected slots:
     void onOpen();
     void onSave();
     void onSaveAs();
+    void onExit();
     void onAbout();
     void onAboutQt();
     void onPlugins();

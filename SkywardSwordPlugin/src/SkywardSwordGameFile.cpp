@@ -27,7 +27,7 @@ SkywardSwordGameFile::SkywardSwordGameFile(const PluginInterface *loader, const 
             SkywardSwordEditorForm* sw = new SkywardSwordEditorForm(this, data);
             sw->setNew(true);
             tw->addTab(sw, QIcon(QString(":/icon/Game%1").arg(i+1)), QString() /*QObject::tr("Game %1").arg(i + 1)*/);
-            connect(sw, SIGNAL(modified()), this, SLOT(onModified()));
+            connect(sw, SIGNAL(modified()), this, SIGNAL(modified()));
         }
         return;
     }
@@ -56,7 +56,9 @@ SkywardSwordGameFile::SkywardSwordGameFile(const PluginInterface *loader, const 
         for (int i = 0; i < 3; i++)
         {
             char* data = (char*)reader.readBytes(0x53C0);
-            tw->addTab(new SkywardSwordEditorForm(this, data), QIcon(QString(":/icon/Game%1").arg(i+1)), QString()/*QObject::tr("Game %1").arg(i + 1)*/);
+            SkywardSwordEditorForm* sw = new SkywardSwordEditorForm(this, data);
+            connect(sw, SIGNAL(modified()), this, SIGNAL(modified()));
+            tw->addTab(sw, QIcon(QString(":/icon/Game%1").arg(i+1)), QString()/*QObject::tr("Game %1").arg(i + 1)*/);
         }
         m_skipData = (char*)reader.readBytes(0x80);
     }
@@ -87,7 +89,6 @@ QString SkywardSwordGameFile::game() const
 
 bool SkywardSwordGameFile::save(const QString& filename)
 {
-    return false;
     if (!filename.isEmpty())
     {
         m_file = QFileInfo(filename).fileName();
@@ -98,6 +99,7 @@ bool SkywardSwordGameFile::save(const QString& filename)
     {
         QTabWidget* tw = (QTabWidget*)m_widget;
         zelda::io::BinaryWriter writer(filePath().toStdString());
+        qDebug() << writer.filepath().c_str();
         writer.setEndianess(zelda::BigEndian);
         writer.writeUInt32(0x534F5500);
         writer.seek(-1);
@@ -112,6 +114,8 @@ bool SkywardSwordGameFile::save(const QString& filename)
                 return false;
             else
             {
+                // Let's be sure we have a proper checksum
+                ef->updateChecksum();
                 writer.writeBytes((Int8*)ef->gameData(), 0x53C0);
             }
         }

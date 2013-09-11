@@ -2,9 +2,10 @@
 #define PLUGINSMANAGER_HPP
 
 #include <QObject>
-
+#include <QMap>
 class PluginsDialog;
 class PluginInterface;
+class QPluginLoader;
 class MainWindow;
 
 class PluginsManager : public QObject
@@ -16,9 +17,8 @@ public:
 
     void dialog();
 
-    PluginInterface* pluginById(const int id);
-    PluginInterface* pluginByName(const QString& name);
-    QList<PluginInterface*> plugins();
+    PluginInterface* plugin(const QString& name);
+    QMap<QString, PluginInterface*> plugins();
 
     PluginInterface* preferredPlugin(const QString& file);
     bool reloadByName(const QString& name);
@@ -32,7 +32,9 @@ public slots:
 private:
     PluginsDialog*  m_pluginsDialog;
 
-    QList<PluginInterface*> m_plugins;
+    MainWindow*             m_mainWindow;
+    QMap<QString, QPluginLoader*> m_pluginLoaders;
+    QMap<QString, PluginInterface*> m_plugins;
 };
 
 #endif // PLUGINSMANAGER_HPP

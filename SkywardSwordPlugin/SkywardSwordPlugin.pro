@@ -1,57 +1,61 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2013-09-06T02:05:41
+# Project created by Creator 2013-09-06T02:05:41
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT    += core gui
 
 TARGET = SkywardSwordPlugin
 TEMPLATE = lib
 CONFIG += plugin
+TRANSLATIONS += \
+    lang/en_ES.ts
 
-target.path = ../plugins
-
-INSTALLS += target
+DESTDIR = ../plugins
 
 DEFINES += SKYWARDSWORDPLUGGIN_LIBRARY
 
 SOURCES += \
-    $$PWD/src/SkywardSwordPlugin.cpp \
-    $$PWD/src/SkywardSwordEditorForm.cpp \
-    $$PWD/src/SkywardSwordGameFile.cpp \
-    $$PWD/src/SettingsManager.cpp \
-    $$PWD/src/SettingsDialog.cpp
+    src/SkywardSwordPlugin.cpp \
+    src/SkywardSwordEditorForm.cpp \
+    src/SkywardSwordGameFile.cpp \
+    src/SettingsManager.cpp \
+    src/SettingsDialog.cpp \
+    src/PlaytimeWidget.cpp \
+    src/Common.cpp
 
 INCLUDEPATH += \
     include \
-    $$PWD/../PluginFramework/include \
-    $$PWD/../libzelda/include
+    ../PluginFramework/include \
+    ../libzelda/include
 
 LIBS += \
-    -L$$PWD/../PluginFramework -lPluginFramework
+    -L../PluginFramework -lPluginFramework
 
 CONFIG(release, release|debug){
-    LIBS += -L$$PWD/../libzelda/lib -lzelda
+    LIBS += -L../libzelda/lib -lzelda
 }
 
 CONFIG(debug, debug|release){
-    LIBS += -L$$PWD/../libzelda/lib -lzelda-d
+    LIBS += -L../libzelda/lib -lzelda-d
 }
 
-message(Project Path: $$PWD)
 HEADERS +=\
-    $$PWD/include/SkywardSwordPlugin.hpp \
-    $$PWD/include/skywardswordplugin_global.hpp \
-    $$PWD/include/SkywardSwordEditorForm.hpp \
-    $$PWD/include/SkywardSwordGameFile.hpp \
-    $$PWD/include/SettingsManager.hpp \
-    $$PWD/include/SettingsDialog.hpp
+    include/SkywardSwordPlugin.hpp \
+    include/skywardswordplugin_global.hpp \
+    include/SkywardSwordEditorForm.hpp \
+    include/SkywardSwordGameFile.hpp \
+    include/SettingsManager.hpp \
+    include/SettingsDialog.hpp \
+    include/PlaytimeWidget.hpp \
+    include/Common.hpp
 
 RESOURCES += \
-    $$PWD/resources/resources.qrc
+    resources/resources.qrc
 
 FORMS += \
-    $$PWD/ui/SkywardSwordEditorForm.ui \
-    $$PWD/ui/SettingsDialog.ui
+    ui/SkywardSwordEditorForm.ui \
+    ui/SettingsDialog.ui \
+    ui/PlaytimeWidget.ui
 
