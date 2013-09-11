@@ -4,7 +4,7 @@
 #include <QSettings>
 
 // #define WK2_INTERNAL
-#define WK2_PREVIEW
+// #define WK2_PREVIEW
 namespace Constants
 {
 #define tr QObject::tr
