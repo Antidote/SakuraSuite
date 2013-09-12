@@ -6,9 +6,10 @@
 
 QT    += core gui
 
-TARGET = PluginFramework
+TARGET = pluginframework
 TEMPLATE = lib
 CONFIG += staticlib
+DESTDIR = $$PWD
 
 SOURCES += \
     src/GameFile.cpp

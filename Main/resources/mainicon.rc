@@ -1,0 +1,47 @@
+// This file is part of WiiKing2 Editor.
+//
+// WiiKing2 Editor is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Wiiking2 Editor is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with WiiKing2 Editor.  If not, see <http://www.gnu.org/licenses/>
+
+#include "winver.h"
+
+IDI_ICON1  ICON DISCARDABLE "mainicon.ico"
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 0,1,0,0
+ PRODUCTVERSION 0,1,0,0
+ FILEFLAGS 0x0L
+ FILEFLAGSMASK 0x3fL
+ FILEOS 0x00040004L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "000004b0"
+        BEGIN
+            VALUE "CompanyName", "Wiiking2.com"
+            VALUE "FileDescription", "Wiiking2 Editor"
+            VALUE "FileVersion", "0.1.0.0"
+            VALUE "LegalCopyright", "Copyright (C) 2013 Wiiking2.com"
+            VALUE "InternalName", "wiiking2editor"
+            VALUE "OriginalFilename", "wiiking2editor.exe"
+            VALUE "ProductName", "Wiiking2 Editor"
+            VALUE "ProductVersion", "0.1.0.0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0, 1200
+    END
+END

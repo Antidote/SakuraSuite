@@ -22,7 +22,7 @@ SOURCES += \
 INCLUDEPATH += \
     ../PluginFramework/include
 
-LIBS += -L../PluginFramework -lPluginFramework
+LIBS += -L../PluginFramework -lpluginframework
 
 HEADERS +=\
     OoTSavePlugin.hpp \

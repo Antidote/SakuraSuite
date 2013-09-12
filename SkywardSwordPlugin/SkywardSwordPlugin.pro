@@ -6,7 +6,7 @@
 
 QT    += core gui
 
-TARGET = SkywardSwordPlugin
+TARGET = skywardswordplugin
 TEMPLATE = lib
 CONFIG += plugin
 TRANSLATIONS += \
@@ -31,7 +31,7 @@ INCLUDEPATH += \
     ../libzelda/include
 
 LIBS += \
-    -L../PluginFramework -lPluginFramework
+    -L../PluginFramework -lpluginframework
 
 CONFIG(release, release|debug){
     LIBS += -L../libzelda/lib -lzelda
@@ -53,9 +53,12 @@ HEADERS +=\
 
 RESOURCES += \
     resources/resources.qrc
+OTHER_FILES += \
+    resources/resource.rc
 
 FORMS += \
     ui/SkywardSwordEditorForm.ui \
     ui/SettingsDialog.ui \
     ui/PlaytimeWidget.ui
 
+win32:RC_FILE += resources/resource.rc

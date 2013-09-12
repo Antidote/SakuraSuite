@@ -1,5 +1,22 @@
+// This file is part of WiiKing2 Editor.
+//
+// WiiKing2 Editor is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Wiiking2 Editor is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with WiiKing2 Editor.  If not, see <http://www.gnu.org/licenses/>
+
 #ifndef MAINWINDOW_HPP
 #define MAINWINDOW_HPP
+
+#include "Constants.hpp"
 
 #include <QMainWindow>
 #include <QMap>
@@ -7,6 +24,8 @@
 #include <QUrl>
 
 class QNetworkReply;
+class QLabel;
+class QHBoxLayout;
 class GameFile;
 class PluginsManager;
 class AboutDialog;
@@ -35,6 +54,8 @@ public:
     void removeFileFilter(const QString& filter);
 
     void closeFilesFromLoader(PluginInterface* loader);
+    QString cleanPath(const QString& currentFile);
+
 protected slots:
     void onDocumentChanged();
     void onClose();
@@ -51,6 +72,7 @@ protected slots:
     void onCheckUpdate();
     void onNetworkFinished(QNetworkReply*);
 
+    void onStyleChanged();
     void updateMRU(const QString& file);
     void openRecentFile();
 
@@ -63,6 +85,7 @@ private:
     QString strippedName(const QString& fullFileName) const;
     QString mostRecentDirectory();
     void updateRecentFileActions();
+    void setupStyleActions();
 
     Ui::MainWindow *ui;
     GameFile*                m_currentFile;
@@ -75,8 +98,11 @@ private:
     QByteArray               m_defaultWindowGeometry;
     QByteArray               m_defaultWindowState;
     AboutDialog*             m_aboutDialog;
-
     QNetworkAccessManager    m_updateAccess;
+#if defined(WK2_PREVIEW) || defined(WK2_INTERNAL)
+    QHBoxLayout*             m_previewLayout;
+    QLabel*                  m_previewLabel;
+#endif
 };
 
 #endif // MAINWINDOW_HPP

@@ -1,6 +1,7 @@
 QT       += core gui network
+CONFIG  += embed_manifest_exe
 
-TARGET = Wiiking2Editor
+TARGET = wiiking2editor
 TEMPLATE = app
 INCLUDEPATH += \
     include \
@@ -13,9 +14,10 @@ CONFIG(release, release|debug){
 CONFIG(debug, debug|release){
     DEFINES += WK2_DEBUG
 }
+win32:RC_FILE = resources/mainicon.rc
 
 DESTDIR = ../
-LIBS += -L../PluginFramework -lPluginFramework
+LIBS += -L../PluginFramework -lpluginframework
 
 TRANSLATIONS += \
     lang/en_ES.ts
@@ -41,3 +43,7 @@ FORMS += \
 
 RESOURCES += \
     resources/resources.qrc
+
+OTHER_FILES += \
+    resources/mainicon.rc \
+    resources/mainicon.ico
