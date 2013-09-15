@@ -27,6 +27,7 @@ int main(int argc, char *argv[])
     // This is unnecessary on any platform but Windows
     QSettings::setDefaultFormat(QSettings::IniFormat);
 #endif
+    a.setLibraryPaths(QStringList() << a.libraryPaths() << "plugins");
     a.setOrganizationName("org.wiiking2.com");
     a.setOrganizationDomain("http://wiiking2.com");
     a.setApplicationName(Constants::WIIKING2_APP_NAME);

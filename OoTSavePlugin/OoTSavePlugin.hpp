@@ -45,6 +45,7 @@ public:
     GameFile* loadFile(const QString& file) const;
     bool canLoad(const QString& filename);
 
+    Updater* updater() const;
     QDialog* settingsDialog();
     QObject* object();
 

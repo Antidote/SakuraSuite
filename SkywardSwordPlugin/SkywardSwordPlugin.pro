@@ -35,10 +35,23 @@ LIBS += \
 
 CONFIG(release, release|debug){
     LIBS += -L../libzelda/lib -lzelda
+    DEFINES -= WK2_DEBUG
+    # We don't want the objects, or MOC sources
+    # in the project directory, so tell qmake
+    # where to put them
+    OBJECTS_DIR = obj/release
+    MOC_DIR = moc/release
 }
+
 
 CONFIG(debug, debug|release){
     LIBS += -L../libzelda/lib -lzelda-d
+    DEFINES += WK2_DEBUG
+    # We don't want the objects, or MOC sources
+    # in the project directory, so tell qmake
+    # where to put them
+    OBJECTS_DIR = obj/debug
+    MOC_DIR = moc/debug
 }
 
 HEADERS +=\

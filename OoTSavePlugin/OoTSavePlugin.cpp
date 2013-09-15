@@ -107,6 +107,11 @@ bool OoTSavePlugin::canLoad(const QString& filename)
     return (!QString::compare(QFileInfo(filename).suffix(), extension(), Qt::CaseInsensitive));
 }
 
+Updater* OoTSavePlugin::updater() const
+{
+    return NULL;
+}
+
 QDialog* OoTSavePlugin::settingsDialog()
 {
     return NULL;

@@ -38,8 +38,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>500</width>
-         <height>622</height>
+         <width>577</width>
+         <height>615</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout_3">
@@ -61,7 +61,7 @@
      <x>0</x>
      <y>0</y>
      <width>765</width>
-     <height>21</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -149,9 +149,6 @@
    <widget class="QWidget" name="dockWidgetContents">
     <layout class="QGridLayout" name="gridLayout">
      <property name="margin">
-      <number>1</number>
-     </property>
-     <property name="spacing">
       <number>2</number>
      </property>
      <item row="0" column="0">

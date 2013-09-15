@@ -39,6 +39,11 @@ void PluginsDialog::showEvent(QShowEvent* se)
 {
     QDialog::showEvent(se);
 
+    updatePluginData();
+}
+
+void PluginsDialog::updatePluginData()
+{
     QTreeWidget* tw = ui->treeWidget;
     tw->clear();
     ui->authorValue->clear();
@@ -79,6 +84,7 @@ void PluginsDialog::onItemSelectionChanged()
     ui->licenseValue->setText(plugin->license());
     ui->descriptionTextEdit->setHtml(plugin->description());
     ui->settingsPushButton->setEnabled(plugin->settingsDialog() != NULL);
+    ui->updatePushButton->setEnabled(plugin->updater() != NULL);
     ui->groupBox->setEnabled(true);
 }
 
@@ -114,7 +120,6 @@ void PluginsDialog::onSettingsClicked()
 
     if (plugin->settingsDialog())
     {
-        plugin->settingsDialog()->setWindowFlags(Qt::WindowStaysOnTopHint);
         plugin->settingsDialog()->exec();
     }
 }
@@ -141,7 +146,7 @@ void PluginsDialog::onReloadPlugin()
     {
         this->setStatusTip("Failed to reload plugin");
     }
-    this->hide();
-    this->show();
+
+    updatePluginData();
 }
 

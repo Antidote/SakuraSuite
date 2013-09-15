@@ -19,6 +19,7 @@
 #include <QtCore>
 #include <QString>
 
+class Updater;
 class GameFile;
 class QDialog;
 
@@ -47,7 +48,8 @@ public:
     virtual QObject* object()=0;
 
     virtual QIcon icon() const=0;
+    virtual Updater* updater() const=0;
 };
 
-Q_DECLARE_INTERFACE(PluginInterface, "org.wiiking2.PluginInterface/1.0")
+Q_DECLARE_INTERFACE(PluginInterface, "org.wiiking2.PluginInterface/1.1")
 #endif // PLUGIN_HPP

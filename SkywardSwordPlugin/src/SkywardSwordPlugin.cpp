@@ -21,6 +21,7 @@
 #include <QFileInfo>
 #include <QIcon>
 #include <QDebug>
+#include <QApplication>
 #include <BinaryReader.hpp>
 
 SkywardSwordPlugin* SkywardSwordPlugin::m_instance = NULL;
@@ -28,12 +29,13 @@ SkywardSwordPlugin::SkywardSwordPlugin()
     : m_icon(QIcon(":/icon/Bomb64x64.png"))
 {
     m_instance = this;
-    m_settingsDialog = new SettingsDialog;
+    m_settingsDialog = new SettingsDialog(qApp->topLevelWidgets()[0]);
     qDebug() << name() << "initialized";
 }
 
 SkywardSwordPlugin::~SkywardSwordPlugin()
 {
+    delete m_settingsDialog;
     delete settings();
 }
 
@@ -130,6 +132,11 @@ bool SkywardSwordPlugin::canLoad(const QString& filename)
     }
 
     return false;
+}
+
+Updater* SkywardSwordPlugin::updater() const
+{
+    return NULL;
 }
 
 QDialog* SkywardSwordPlugin::settingsDialog()

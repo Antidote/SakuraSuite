@@ -41,6 +41,7 @@ public:
     explicit PluginsDialog(QWidget *parent, PluginsManager* pluginsManager);
     ~PluginsDialog();
 
+    void updatePluginData();
 protected:
     void showEvent(QShowEvent *se);
 

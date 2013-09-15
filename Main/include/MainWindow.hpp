@@ -20,10 +20,11 @@
 
 #include <QMainWindow>
 #include <QMap>
-#include <QNetworkAccessManager>
+#include <QMessageBox>
 #include <QUrl>
 
-class QNetworkReply;
+#include <Updater.hpp>
+
 class QLabel;
 class QHBoxLayout;
 class GameFile;
@@ -56,6 +57,8 @@ public:
     void closeFilesFromLoader(PluginInterface* loader);
     QString cleanPath(const QString& currentFile);
 
+    bool isInternalBuild();
+    bool isPreviewBuild();
 protected slots:
     void onDocumentChanged();
     void onClose();
@@ -70,17 +73,21 @@ protected slots:
     void onClearRecent();
     void onRestoreDefault();
     void onCheckUpdate();
-    void onNetworkFinished(QNetworkReply*);
 
     void onStyleChanged();
     void updateMRU(const QString& file);
     void openRecentFile();
 
     void updateWindowTitle();
+
+    // Updater
+    void onUpdateDone();
+    void onUpdateError(Updater::ErrorType);
+    void onUpdateWarning(QString message);
+    void onNoUpdate();
 protected:
     void showEvent(QShowEvent *se);
 private:
-    QUrl redirectUrl(const QUrl& possibleRedirect, const QUrl& oldRedirect) const;
     void openFile(const QString& currentFile);
     QString strippedName(const QString& fullFileName) const;
     QString mostRecentDirectory();
@@ -98,7 +105,8 @@ private:
     QByteArray               m_defaultWindowGeometry;
     QByteArray               m_defaultWindowState;
     AboutDialog*             m_aboutDialog;
-    QNetworkAccessManager    m_updateAccess;
+    Updater*                 m_updater;
+    QMessageBox              m_updateMBox;
 #if defined(WK2_PREVIEW) || defined(WK2_INTERNAL)
     QHBoxLayout*             m_previewLayout;
     QLabel*                  m_previewLabel;

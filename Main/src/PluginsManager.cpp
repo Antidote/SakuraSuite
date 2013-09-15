@@ -130,7 +130,6 @@ PluginInterface*PluginsManager::preferredPlugin(const QString& file)
 
 void PluginsManager::unloadPlugins()
 {
-
 }
 
 void PluginsManager::loadPlugins()
@@ -161,6 +160,7 @@ void PluginsManager::loadPlugins()
             {
                 m_plugins[pluginsDir.absoluteFilePath(fileName)] = plugin;
                 connect(plugin->object(), SIGNAL(enabledChanged()), this, SLOT(onEnabledChanged()));
+                plugin->object()->setParent(this->parent());
                 QSettings settings;
                 settings.beginGroup(plugin->name());
                 plugin->setPath(pluginsDir.absoluteFilePath(fileName));

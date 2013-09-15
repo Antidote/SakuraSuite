@@ -19,10 +19,10 @@
 #include "PluginsManager.hpp"
 #include "PluginInterface.hpp"
 #include "AboutDialog.hpp"
-#include <QNetworkReply>
+#include <Updater.hpp>
+
 #include <QLabel>
 #include <QMenu>
-
 #include <QDebug>
 #include <QFileInfo>
 #include <QMessageBox>
@@ -35,7 +35,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow),
     m_currentFile(NULL),
     m_pluginsManager(new PluginsManager(this)),
-    m_aboutDialog(NULL)
+    m_aboutDialog(NULL),
+    m_updater(new Updater(this))
   #ifdef WK2_PREVIEW
   ,m_previewLayout(NULL),
     m_previewLabel(NULL)
@@ -62,14 +63,15 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->documentList->addAction(ui->actionClose);
     this->setWindowTitle(Constants::WIIKING2_TITLE);
 
+
+    // lets load the plugins
+    m_pluginsManager->loadPlugins();
+
     // Setup "Styles" menu
     setupStyleActions();
 
     // Add default filter
     m_fileFilters << "All Files *.* (*.*)";
-
-    // lets load the plugins
-    m_pluginsManager->loadPlugins();
 
     // Setup the MRU list
     m_recentFileSeparator = ui->menuRecentFiles->insertSeparator(ui->actionClearRecent);
@@ -94,7 +96,7 @@ MainWindow::MainWindow(QWidget *parent) :
 #ifdef WK2_PREVIEW
     m_previewLabel->setText("PREVIEW BUILD");
 #elif defined(WK2_INTERNAL)
-    m_previewLabel->setText("INTENAL BUILD");
+    m_previewLabel->setText("INTERNAL BUILD");
 #endif
     m_previewLayout->setContentsMargins(150, 0, 6, 0);
     m_previewLayout->addWidget(m_previewLabel);
@@ -108,7 +110,11 @@ MainWindow::MainWindow(QWidget *parent) :
     restoreGeometry(settings.value("mainWindowGeometry").toByteArray());
     restoreState(settings.value("mainWindowState").toByteArray());
 
-    connect(&m_updateAccess, SIGNAL(finished(QNetworkReply*)), this, SLOT(onNetworkFinished(QNetworkReply*)));
+
+    connect(m_updater, SIGNAL(done()), this, SLOT(onUpdateDone()));
+    connect(m_updater, SIGNAL(error(Updater::ErrorType)), this, SLOT(onUpdateError(Updater::ErrorType)));
+    connect(m_updater, SIGNAL(warning(QString)), this, SLOT(onUpdateWarning(QString)));
+    connect(m_updater, SIGNAL(noUpdate()), this, SLOT(onNoUpdate()));
 
     // Hide the toolbar if it has no actions
     ui->mainToolBar->setVisible((ui->mainToolBar->actions().count() > 0 ? true : false));
@@ -194,6 +200,24 @@ QString MainWindow::cleanPath(const QString& currentFile)
     return filePath;
 }
 
+bool MainWindow::isInternalBuild()
+{
+#ifdef WK2_INTERNAL
+    return true;
+#else
+    return false;
+#endif
+}
+
+bool MainWindow::isPreviewBuild()
+{
+#ifdef WK2_PREVIEW
+    return true;
+#else
+    return false;
+#endif
+}
+
 void MainWindow::openFile(const QString& currentFile)
 {
     // Change any '\' to '/' for maximum compatibility
@@ -202,8 +226,8 @@ void MainWindow::openFile(const QString& currentFile)
     if (m_documents.contains(filePath))
     {
         QMessageBox msgBox(this);
-        msgBox.setWindowTitle(Constants::WIIKING2_ALREADY_OPENED_NAG);
-        msgBox.setText(Constants::WIIKING2_ALREADY_OPENED_NAG_MSG.arg(strippedName(filePath)));
+        msgBox.setWindowTitle(Constants::WIIKING2_ALREADY_OPENED);
+        msgBox.setText(Constants::WIIKING2_ALREADY_OPENED_MSG.arg(strippedName(filePath)));
         msgBox.setStandardButtons(QMessageBox::Ok);
         msgBox.setIcon(QMessageBox::Warning);
         msgBox.exec();
@@ -215,9 +239,16 @@ void MainWindow::openFile(const QString& currentFile)
 
     GameFile* file = loader->loadFile(filePath);
 
-    // TODO: Show message upon failure
     if (!file)
+    {
+        QMessageBox msgBox(this);
+        msgBox.setWindowTitle(Constants::WIIKING2_OPEN_FAILED);
+        msgBox.setText(Constants::WIIKING2_OPEN_FAILED_MSG.arg(strippedName(filePath)).arg(loader->name()));
+        msgBox.setStandardButtons(QMessageBox::Ok);
+        msgBox.setIcon(QMessageBox::Warning);
+        msgBox.exec();
         return;
+    }
     connect(file, SIGNAL(modified()), this, SLOT(updateWindowTitle()));
     m_documents[filePath] = file;
 
@@ -489,6 +520,57 @@ void MainWindow::updateWindowTitle()
     setWindowTitle(Constants::WIIKING2_TITLE_FILE.arg(m_currentFile->fileName()).arg(m_currentFile->isDirty() ? Constants::WIIKING2_TITLE_DIRTY : ""));
 }
 
+void MainWindow::onUpdateDone()
+{
+    this->setEnabled(true);
+    m_updateMBox.hide();
+    m_updateMBox.setWindowTitle(Constants::WIIKING2_NOT_LATEST_VERSION);
+    m_updateMBox.setText(Constants::WIIKING2_NOT_LATEST_VERSION_MSG.arg(Constants::WIIKING2_APP_NAME).arg(m_updater->updateUrl()).arg(m_updater->changelogUrl()));
+    m_updateMBox.setStandardButtons(QMessageBox::Ok);
+    m_updateMBox.exec();
+}
+
+void MainWindow::onUpdateError(Updater::ErrorType et)
+{
+    this->setEnabled(true);
+    m_updateMBox.hide();
+    m_updateMBox.setStandardButtons(QMessageBox::Ok);
+    m_updateMBox.setWindowModality(Qt::NonModal);
+
+    switch(et)
+    {
+        case Updater::UnableToConnect:
+            m_updateMBox.setWindowTitle(Constants::WIIKING2_UPDATE_CONTACT_ERROR);
+            m_updateMBox.setText(Constants::WIIKING2_UPDATE_CONTACT_ERROR_MSG);
+            break;
+        case Updater::ParseError:
+            m_updateMBox.setWindowTitle(Constants::WIIKING2_UPDATE_PARSE_ERROR);
+            m_updateMBox.setText(Constants::WIIKING2_UPDATE_PARSE_ERROR_MSG.arg(m_updater->errorString()));
+            break;
+        case Updater::NoPlatform:
+            m_updateMBox.setWindowTitle(Constants::WIIKING2_UPDATE_PLATFORM);
+            m_updateMBox.setText(Constants::WIIKING2_UPDATE_PLATFORM_MSG);
+            break;
+    }
+    m_updateMBox.exec();
+}
+
+void MainWindow::onUpdateWarning(QString message)
+{
+    ui->statusBar->showMessage(message, 2000);
+}
+
+void MainWindow::onNoUpdate()
+{
+    this->setEnabled(true);
+    m_updateMBox.hide();
+    m_updateMBox.setWindowTitle(Constants::WIIKING2_LATEST_VERSION);
+    m_updateMBox.setText(Constants::WIIKING2_LATEST_VERSION_MSG.arg(Constants::WIIKING2_APP_NAME).arg(m_updater->updateUrl()).arg(m_updater->changelogUrl()));
+    m_updateMBox.setStandardButtons(QMessageBox::Ok);
+    m_updateMBox.setWindowModality(Qt::NonModal);
+    m_updateMBox.exec();
+}
+
 void MainWindow::showEvent(QShowEvent* se)
 {
     QMainWindow::showEvent(se);
@@ -502,15 +584,6 @@ void MainWindow::showEvent(QShowEvent* se)
         mbox.exec();
         exit(1);
     }
-}
-
-QUrl MainWindow::redirectUrl(const QUrl& possibleRedirect, const QUrl& oldRedirect) const
-{
-    if (!possibleRedirect.isEmpty() && possibleRedirect != oldRedirect)
-        return possibleRedirect;
-
-    return QUrl();
-
 }
 
 void MainWindow::onPlugins()
@@ -534,80 +607,24 @@ void MainWindow::onRestoreDefault()
 
 void MainWindow::onCheckUpdate()
 {
-    m_updateAccess.get(QNetworkRequest(QUrl("http://update.wiiking2.com/wiiking2_editorv2/latest.update")));
-}
+    QSettings settings;
+    if (!settings.value(Constants::Settings::WIIKING2_UPDATE_URL).isValid())
+        settings.setValue(Constants::Settings::WIIKING2_UPDATE_URL, Constants::Settings::WIIKING2_UPDATE_URL_DEFAULT);
 
-void MainWindow::onNetworkFinished(QNetworkReply* nr)
-{
-    QMessageBox msgBox(this);
-    QUrl possibleRedirect = nr->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
+    m_updateMBox.setWindowTitle("Please wait...");
+    m_updateMBox.setText("Checking for updates, please wait.");
+    m_updateMBox.setStandardButtons(QMessageBox::NoButton);
+    m_updateMBox.setWindowModality(Qt::WindowModal);
 
-    QUrl redirect = redirectUrl(possibleRedirect, nr->url());
-    qDebug() << redirect;
-    if (redirect.isEmpty() && nr->isReadable())
-    {
-        QStringList data = QString(nr->readAll()).split("\n");
-        if (data[0].contains("version"))
-        {
-            QString serverVersion = data[0].split("=")[1];
-            if (!QString::compare(serverVersion, Constants::WIIKING2_APP_VERSION, Qt::CaseInsensitive))
-            {
-                msgBox.setWindowTitle(Constants::WIIKING2_LATEST_VERSION);
-                msgBox.setText(Constants::WIIKING2_LATEST_VERSION_MSG);
-                msgBox.exec();
-            }
-            else
-            {
-                QString url;
-                QString platform;
-#ifdef QT_ARCH_X86_64
-#ifdef Q_OS_LINUX
-                platform = "unix-x64";
-#elif Q_OS_WIN32
-                platform = "win32";
-#endif
+    this->setEnabled(false);
+    // Using exec blocks everything, is there a work around?
+    m_updateMBox.show();
+
+#ifdef WK2_INTERNAL
+    m_updater->checkForUpdate(Constants::Settings::WIIKING2_UPDATE_URL_DEFAULT, Constants::WIIKING2_APP_VERSION);
 #else
-#ifdef Q_OS_LINUX
-                platform = "unix-x86";
-#elif defined(Q_OS_WIN32)
-                platform = "win32";
+    m_updater->checkForUpdate(settings.value(Constants::Settings::WIIKING2_UPDATE_URL).toString(), Constants::WIIKING2_APP_VERSION);
 #endif
-#endif
-                if (platform.isEmpty())
-                    return;
-
-                if (data.filter(platform).count() <= 0)
-                    return;
-
-                url = data.filter(platform)[0];
-                if (url.contains("="))
-                    url = url.split("=")[1];
-
-                QString changeLog;
-                if (data.filter("changelog").count() > 0)
-                {
-                    QString rawString = data.filter("changelog")[0];
-                    if (rawString.contains("="))
-                        changeLog = rawString.split("=")[1];
-                }
-
-                msgBox.setWindowTitle(Constants::WIIKING2_NOT_LATEST_VERSION.arg(Constants::WIIKING2_TITLE));
-                msgBox.setText(Constants::WIIKING2_NOT_LATEST_VERSION_MSG.arg(Constants::WIIKING2_TITLE).arg(url).arg(changeLog));
-                msgBox.exec();
-            }
-        }
-        else
-        {
-            msgBox.setWindowTitle(Constants::WIIKING2_UPDATE_ERROR);
-            msgBox.setText(Constants::WIIKING2_UPDATE_ERROR_MSG.arg(Constants::WIIKING2_TITLE));
-            msgBox.exec();
-        }
-        qDebug() << data;
-    }
-    else
-    {
-        m_updateAccess.get(QNetworkRequest(redirect));
-    }
 }
 
 void MainWindow::onStyleChanged()

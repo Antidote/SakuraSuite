@@ -1,12 +1,12 @@
 #-------------------------------------------------
 #
-# Project created by Creator 2013-09-06T08:30:53
+# Project created by QtCreator 2013-09-14T13:57:34
 #
 #-------------------------------------------------
 
-QT    += core gui
+QT       += network gui
 
-TARGET = pluginframework
+TARGET = updater
 TEMPLATE = lib
 CONFIG += staticlib
 
@@ -27,14 +27,7 @@ CONFIG(debug, debug|release) {
     OBJECTS_DIR = obj/debug
     MOC_DIR = moc/debug
 }
-
-SOURCES += \
-    src/GameFile.cpp
-
 INCLUDEPATH += include
+SOURCES += src/Updater.cpp
 
-HEADERS += \
-    include/GameFile.hpp \
-    include/PluginInterface.hpp
-
-
+HEADERS += include/Updater.hpp
