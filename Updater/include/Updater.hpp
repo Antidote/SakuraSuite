@@ -40,6 +40,7 @@ public:
     QString updateUrl() const;
     QString changelogUrl() const;
     QString errorString() const;
+    QString md5Sum() const;
 
 public slots:
     void checkForUpdate(QString url, QString currentVersion);
@@ -64,6 +65,7 @@ private:
     QString                m_changelogUrl;
     QString                m_currentVersion;
     QString                m_errorString;
+    QString                m_md5Sum;
 };
 
 #endif // UPDATER_HPP

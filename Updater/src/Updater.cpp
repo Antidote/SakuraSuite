@@ -33,6 +33,11 @@ QString Updater::errorString() const
     return m_errorString;
 }
 
+QString Updater::md5Sum() const
+{
+    return m_md5Sum;
+}
+
 void Updater::checkForUpdate(QString url, QString currentVersion)
 {
     qApp->setOverrideCursor(Qt::WaitCursor);
@@ -136,6 +141,10 @@ void Updater::onNetworkFinished(QNetworkReply* nr)
                 {
                     m_errorString = "Declaration for this paltform's md5 sum (" + platform + ") is malformed";
                     emit error(ParseError);
+                }
+                else
+                {
+                    m_md5Sum = md5.split("=")[1];
                 }
 
                 QString changeLog;

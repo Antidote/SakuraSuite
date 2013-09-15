@@ -525,7 +525,9 @@ void MainWindow::onUpdateDone()
     this->setEnabled(true);
     m_updateMBox.hide();
     m_updateMBox.setWindowTitle(Constants::WIIKING2_NOT_LATEST_VERSION);
-    m_updateMBox.setText(Constants::WIIKING2_NOT_LATEST_VERSION_MSG.arg(Constants::WIIKING2_APP_NAME).arg(m_updater->updateUrl()).arg(m_updater->changelogUrl()));
+    m_updateMBox.setText(Constants::WIIKING2_NOT_LATEST_VERSION_MSG.arg(Constants::WIIKING2_APP_NAME).arg(m_updater->updateUrl())
+                         .arg(m_updater->md5Sum())
+                         .arg(m_updater->changelogUrl()));
     m_updateMBox.setStandardButtons(QMessageBox::Ok);
     m_updateMBox.exec();
 }

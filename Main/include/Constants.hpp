@@ -62,6 +62,7 @@ const QString WIIKING2_LATEST_VERSION_MSG        = tr("The application is up to 
 const QString WIIKING2_NOT_LATEST_VERSION        = tr("%1 is out of date...").arg(WIIKING2_TITLE);
 const QString WIIKING2_NOT_LATEST_VERSION_MSG    = tr("An update is available for %1<br />"
                                                      "You may download the update at <a href=\"%2\">%2</a><br />"
+                                                     "MD5 %3<br />"
                                                      "The changelog is available at <a href=\"%3\">%3</a>");
 
 const QString WIIKING2_BUILD_DATE                = tr(__DATE__ " " __TIME__);
