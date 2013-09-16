@@ -13,6 +13,7 @@ TRANSLATIONS += \
     lang/en_ES.ts
 
 DESTDIR = ../plugins
+UI_DIR = ui
 
 DEFINES += SKYWARDSWORDPLUGGIN_LIBRARY
 
@@ -28,10 +29,12 @@ SOURCES += \
 INCLUDEPATH += \
     include \
     ../PluginFramework/include \
-    ../libzelda/include
+    ../libzelda/include \
+    ../Updater/include
 
 LIBS += \
-    -L../PluginFramework -lpluginframework
+    -L../PluginFramework -lpluginframework \
+    -L../Updater -lupdater
 
 CONFIG(release, release|debug){
     LIBS += -L../libzelda/lib -lzelda
@@ -62,7 +65,8 @@ HEADERS +=\
     include/SettingsManager.hpp \
     include/SettingsDialog.hpp \
     include/PlaytimeWidget.hpp \
-    include/Common.hpp
+    include/Common.hpp \
+    include/Constants.hpp
 
 RESOURCES += \
     resources/resources.qrc

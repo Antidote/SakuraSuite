@@ -15,7 +15,10 @@
 
 #include "SettingsDialog.hpp"
 #include "SettingsManager.hpp"
+#include "Constants.hpp"
 #include "ui_SettingsDialog.h"
+
+#include <QSettings>
 
 SettingsDialog::SettingsDialog(QWidget *parent) :
     QDialog(parent),
@@ -44,8 +47,35 @@ void SettingsDialog::accept()
         settings->setDefaultPlayerNameForRegion(SettingsManager::NTSCJ, ui->ntscJNameLE->text());
     if (ui->palNameLE->isModified() && !ui->palNameLE->text().isEmpty())
         settings->setDefaultPlayerNameForRegion(SettingsManager::PAL, ui->palNameLE->text());
-
+    if (ui->updateUrlLineEdit->isModified() && !ui->updateUrlLineEdit->text().isEmpty())
+        settings->setUpdateUrl(ui->updateUrlLineEdit->text());
+    settings->setUpdateCheckOnStart(ui->checkOnStart->isChecked());
     QDialog::accept();
+}
+
+void SettingsDialog::onTextChanged(QString text)
+{
+    QRegExp http("^(http|https)://", Qt::CaseInsensitive);
+    if (sender() == ui->updateUrlLineEdit)
+    {
+        if (text.isEmpty() || !text.contains(http))
+        {
+            ui->updateUrlLineEdit->setProperty("valid", false);
+            ui->statusLabel->setText("Invalid url");
+        }
+        else
+        {
+            ui->updateUrlLineEdit->setProperty("valid", true);
+            ui->statusLabel->clear();
+        }
+        style()->unpolish(ui->updateUrlLineEdit);
+        style()->polish(ui->updateUrlLineEdit);
+
+        // If the text matches what is currently stored
+        // Set the line edit is unmodified
+        if (text == QSettings().value(Constants::Settings::SKYWARDSWORD_UPDATE_URL, Constants::Settings::SKYWARDSWORD_UPDATE_URL_DEFAULT).toString())
+            ui->updateUrlLineEdit->setModified(false);
+    }
 }
 
 void SettingsDialog::showEvent(QShowEvent* se)
@@ -61,7 +91,13 @@ void SettingsDialog::showEvent(QShowEvent* se)
         case SettingsManager::PAL:   ui->palRB  ->setChecked(true); break;
     }
 
-    ui->ntscUNameLE->setText(settings->defaultPlayerNameForRegion(SettingsManager::NTSCU));
-    ui->ntscJNameLE->setText(settings->defaultPlayerNameForRegion(SettingsManager::NTSCJ));
-    ui->palNameLE  ->setText(settings->defaultPlayerNameForRegion(SettingsManager::PAL  ));
+    ui->ntscUNameLE      ->setText(settings->defaultPlayerNameForRegion(SettingsManager::NTSCU));
+    ui->ntscUNameLE      ->setModified(false);
+    ui->ntscJNameLE      ->setText(settings->defaultPlayerNameForRegion(SettingsManager::NTSCJ));
+    ui->ntscJNameLE      ->setModified(false);
+    ui->palNameLE        ->setText(settings->defaultPlayerNameForRegion(SettingsManager::PAL  ));
+    ui->palNameLE        ->setModified(false);
+    ui->updateUrlLineEdit->setText(settings->updateUrl());
+    ui->updateUrlLineEdit->setModified(false);
+    ui->checkOnStart     ->setChecked(settings->updateCheckOnStart());
 }

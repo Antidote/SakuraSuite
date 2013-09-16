@@ -17,6 +17,7 @@
 #define PLUGINSDIALOG_HPP
 
 #include <QDialog>
+#include <QTimer>
 
 namespace Ui {
 class PluginsDialog;
@@ -50,10 +51,14 @@ private slots:
     void onItemClicked(QTreeWidgetItem* item, int column);
     void onSettingsClicked();
     void onReloadPlugin();
+    void onCheckUpdate();
+    void onPluginWarning(QString warning);
+    void onTimeOut();
 private:
     Ui::PluginsDialog *ui;
 
     PluginsManager* m_pluginsManager;
+    QTimer          m_statusTimer;
 };
 
 #endif // PLUGINSDIALOG_HPP

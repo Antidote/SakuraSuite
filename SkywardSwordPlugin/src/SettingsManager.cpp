@@ -15,6 +15,7 @@
 
 #include "SettingsManager.hpp"
 #include "SkywardSwordPlugin.hpp"
+#include "Constants.hpp"
 #include <QSettings>
 #include <QStringList>
 #include <QDebug>
@@ -33,7 +34,15 @@ SettingsManager::SettingsManager()
     settings.beginGroup(SkywardSwordPlugin::instance()->name());
     m_defaultNameList = settings.value("defaultPlayerNameForRegion", m_defaultNameList).toStringList();
     m_defaultRegion = (settings.value("defaultRegion", "NTSCU") == "NTSCU" ? NTSCU
-                      : settings.value("defaultRegion", "NTSCJ") == "NTSCJ"? NTSCJ : PAL);
+                                                                           : settings.value("defaultRegion", "NTSCJ") == "NTSCJ"? NTSCJ : PAL);
+
+#ifdef SS_INTERNAL
+    m_updateUrl = Constants::Settings::SKYWARDSWORD_UPDATE_URL_DEFAULT;
+#else
+    m_updateUrl = settings.value(Constants::Settings::SKYWARDSWORD_UPDATE_URL, Constants::Settings::SKYWARDSWORD_UPDATE_URL_DEFAULT).toString();
+#endif
+
+    m_updateCheckOnStart = settings.value(Constants::Settings::SKYWARDSWORD_CHECK_ON_START, false).toBool();
     settings.endGroup();
 }
 
@@ -71,13 +80,37 @@ void SettingsManager::setDefaultRegion(const quint32 region)
     m_defaultRegion = region;
 }
 
+QString SettingsManager::updateUrl() const
+{
+    return m_updateUrl;
+}
+
+void SettingsManager::setUpdateUrl(const QString& updateUrl)
+{
+    m_updateUrl = updateUrl;
+}
+
+bool SettingsManager::updateCheckOnStart() const
+{
+    return m_updateCheckOnStart;
+}
+
+void SettingsManager::setUpdateCheckOnStart(bool updateOnStart)
+{
+    m_updateCheckOnStart = updateOnStart;
+}
+
 void SettingsManager::saveSettings()
 {
-    qDebug() << "Saving settings...";
     QSettings settings;
     settings.beginGroup(SkywardSwordPlugin::instance()->name());
     settings.setValue("defaultPlayerNameForRegion", m_defaultNameList);
     settings.setValue("defaultRegion", (m_defaultRegion == NTSCU ? "NTSCU" : (m_defaultRegion == NTSCJ ? "NTSCJ" : "PAL")));
+#ifndef SS_INTERNAL
+    settings.setValue(Constants::Settings::SKYWARDSWORD_UPDATE_URL, m_updateUrl);
+#endif
+
+    settings.setValue(Constants::Settings::SKYWARDSWORD_CHECK_ON_START, m_updateCheckOnStart);
     settings.endGroup();
 }
 

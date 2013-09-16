@@ -28,6 +28,7 @@ class PluginInterface
 public:
     virtual ~PluginInterface(){}
 
+    virtual void initialize()=0;
     virtual QString filter()      const=0;
     virtual QString extension()   const=0;
     virtual QString name() const=0;
@@ -45,10 +46,12 @@ public:
     virtual GameFile* loadFile(const QString& file) const=0;
 
     virtual QDialog* settingsDialog()=0;
+    virtual Updater* updater()=0;
     virtual QObject* object()=0;
 
     virtual QIcon icon() const=0;
-    virtual Updater* updater() const=0;
+    virtual bool hasUpdater() const=0;
+    virtual void doUpdate()=0;
 };
 
 Q_DECLARE_INTERFACE(PluginInterface, "org.wiiking2.PluginInterface/1.1")

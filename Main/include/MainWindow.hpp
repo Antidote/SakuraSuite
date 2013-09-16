@@ -30,6 +30,7 @@ class QHBoxLayout;
 class GameFile;
 class PluginsManager;
 class AboutDialog;
+class PreferencesDialog;
 
 namespace Ui {
 class MainWindow;
@@ -106,6 +107,7 @@ private:
     QByteArray               m_defaultWindowState;
     AboutDialog*             m_aboutDialog;
     Updater*                 m_updater;
+    PreferencesDialog*       m_preferencesDialog;
     QMessageBox              m_updateMBox;
 #if defined(WK2_PREVIEW) || defined(WK2_INTERNAL)
     QHBoxLayout*             m_previewLayout;

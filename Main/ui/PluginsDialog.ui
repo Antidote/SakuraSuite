@@ -59,6 +59,26 @@
      </widget>
      <widget class="QWidget" name="layoutWidget">
       <layout class="QGridLayout" name="gridLayout">
+       <item row="1" column="1">
+        <widget class="QPushButton" name="closeBtn">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Close</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="statusLabel">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
        <item row="0" column="0" colspan="2">
         <widget class="QGroupBox" name="groupBox">
          <property name="sizePolicy">
@@ -181,26 +201,6 @@
          </layout>
         </widget>
        </item>
-       <item row="1" column="0">
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>517</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="1" column="1">
-        <widget class="QPushButton" name="closeBtn">
-         <property name="text">
-          <string>Close</string>
-         </property>
-        </widget>
-       </item>
       </layout>
      </widget>
     </widget>
@@ -289,11 +289,28 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>updatePushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>PluginsDialog</receiver>
+   <slot>onCheckUpdate()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>233</x>
+     <y>288</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>314</x>
+     <y>246</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>onItemSelectionChanged()</slot>
   <slot>onItemClicked(QTreeWidgetItem*,int)</slot>
   <slot>onSettingsClicked()</slot>
   <slot>onReloadPlugin()</slot>
+  <slot>onCheckUpdate()</slot>
  </slots>
 </ui>

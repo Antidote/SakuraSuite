@@ -7,25 +7,37 @@
     <x>0</x>
     <y>0</y>
     <width>756</width>
-    <height>583</height>
+    <height>598</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout_18">
-   <item row="0" column="0">
+   <item row="1" column="4">
+    <widget class="QLabel" name="checksumValueLbl">
+     <property name="font">
+      <font>
+       <family>Courier New</family>
+      </font>
+     </property>
+     <property name="text">
+      <string notr="true"/>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="3">
+    <widget class="QLabel" name="checksumLbl">
+     <property name="text">
+      <string>Checksum:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
     <widget class="QPushButton" name="deletePushButton">
      <property name="text">
       <string>Delete</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="1">
-    <widget class="QPushButton" name="createPushButton">
-     <property name="text">
-      <string>Create</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="2">
+   <item row="1" column="2">
     <spacer name="horizontalSpacer_4">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -38,26 +50,14 @@
      </property>
     </spacer>
    </item>
-   <item row="0" column="3">
-    <widget class="QLabel" name="checksumLbl">
+   <item row="1" column="1">
+    <widget class="QPushButton" name="createPushButton">
      <property name="text">
-      <string>Checksum:</string>
+      <string>Create</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="4">
-    <widget class="QLabel" name="checksumValueLbl">
-     <property name="font">
-      <font>
-       <family>Courier New</family>
-      </font>
-     </property>
-     <property name="text">
-      <string notr="true"/>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0" colspan="5">
+   <item row="3" column="0" colspan="5">
     <widget class="QTabWidget" name="tabWidget">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -2685,7 +2685,7 @@
      </widget>
     </widget>
    </item>
-   <item row="1" column="5">
+   <item row="3" column="5">
     <spacer name="horizontalSpacer">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -2698,7 +2698,7 @@
      </property>
     </spacer>
    </item>
-   <item row="2" column="1">
+   <item row="4" column="1">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -2710,6 +2710,13 @@
       </size>
      </property>
     </spacer>
+   </item>
+   <item row="0" column="0" colspan="6">
+    <widget class="QLabel" name="previewLabel">
+     <property name="text">
+      <string>&lt;center&gt;PREVIEW LABEL&lt;/center&gt;</string>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

@@ -19,6 +19,7 @@
 #include "PluginsManager.hpp"
 #include "PluginInterface.hpp"
 #include "AboutDialog.hpp"
+#include "PreferencesDialog.hpp"
 #include <Updater.hpp>
 
 #include <QLabel>
@@ -36,7 +37,9 @@ MainWindow::MainWindow(QWidget *parent) :
     m_currentFile(NULL),
     m_pluginsManager(new PluginsManager(this)),
     m_aboutDialog(NULL),
-    m_updater(new Updater(this))
+    m_updater(new Updater(this)),
+    m_preferencesDialog(new PreferencesDialog(this)),
+    m_updateMBox(this)
   #ifdef WK2_PREVIEW
   ,m_previewLayout(NULL),
     m_previewLabel(NULL)
@@ -62,7 +65,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->documentList->addAction(separator);
     ui->documentList->addAction(ui->actionClose);
     this->setWindowTitle(Constants::WIIKING2_TITLE);
-
 
     // lets load the plugins
     m_pluginsManager->loadPlugins();
@@ -110,12 +112,12 @@ MainWindow::MainWindow(QWidget *parent) :
     restoreGeometry(settings.value("mainWindowGeometry").toByteArray());
     restoreState(settings.value("mainWindowState").toByteArray());
 
-
     connect(m_updater, SIGNAL(done()), this, SLOT(onUpdateDone()));
     connect(m_updater, SIGNAL(error(Updater::ErrorType)), this, SLOT(onUpdateError(Updater::ErrorType)));
     connect(m_updater, SIGNAL(warning(QString)), this, SLOT(onUpdateWarning(QString)));
     connect(m_updater, SIGNAL(noUpdate()), this, SLOT(onNoUpdate()));
 
+    connect(ui->actionPreferences, SIGNAL(triggered()), m_preferencesDialog, SLOT(exec()));
     // Hide the toolbar if it has no actions
     ui->mainToolBar->setVisible((ui->mainToolBar->actions().count() > 0 ? true : false));
 }
@@ -134,13 +136,20 @@ MainWindow::~MainWindow()
         delete m_previewLabel;
         m_previewLabel = NULL;
     }
-    else
-        qDebug() << "alreadyDeleted";
 #endif
     QSettings settings;
     settings.setValue("mainWindowGeometry", saveGeometry());
     settings.setValue("mainWindowState", saveState());
     onCloseAll();
+
+    foreach (GameFile* file, m_documents.values())
+    {
+        delete file;
+        file = NULL;
+    }
+
+    delete m_pluginsManager;
+    m_pluginsManager = NULL;
     delete ui;
 }
 
@@ -170,8 +179,6 @@ void MainWindow::closeFilesFromLoader(PluginInterface* loader)
             targets.append(file);
             for (int i = 0; i < ui->documentList->count(); i++)
             {
-                qDebug() << "Widget: " << ui->documentList->item(i)->data(FILEPATH).toString();
-                qDebug() << "File: " << file->filePath();
                 if (cleanPath(ui->documentList->item(i)->data(FILEPATH).toString()) == cleanPath(file->filePath()))
                 {
                     delete ui->documentList->item(i);
@@ -272,14 +279,20 @@ void MainWindow::onDocumentChanged()
 {
     if (!ui->documentList->currentItem())
     {
+        ui->actionClose->setEnabled(false);
+        ui->actionSave->setEnabled(false);
+        ui->actionSaveAs->setEnabled(false);
         m_currentFile = NULL;
         return;
     }
 
+    ui->actionClose->setEnabled(true);
+    ui->actionSave->setEnabled(true);
+    ui->actionSaveAs->setEnabled(true);
+
     // First we need to store the old Widget so we can remove
     // it from the main layout.
     GameFile* oldFile = m_currentFile;
-    qDebug() << ui->documentList->currentItem()->data(FILEPATH).toString();
     m_currentFile = m_documents[cleanPath(ui->documentList->currentItem()->data(FILEPATH).toString())];
 
     if (!m_currentFile)
@@ -309,7 +322,6 @@ void MainWindow::onClose()
     if (m_documents.count() <= 0)
         return;
 
-    qDebug() << "Closing file" << cleanPath(m_currentFile->filePath());
     m_documents.remove(cleanPath(m_currentFile->filePath()));
     delete m_currentFile;
     m_currentFile = NULL;
@@ -525,9 +537,12 @@ void MainWindow::onUpdateDone()
     this->setEnabled(true);
     m_updateMBox.hide();
     m_updateMBox.setWindowTitle(Constants::WIIKING2_NOT_LATEST_VERSION);
-    m_updateMBox.setText(Constants::WIIKING2_NOT_LATEST_VERSION_MSG.arg(Constants::WIIKING2_APP_NAME).arg(m_updater->updateUrl())
+    m_updateMBox.setText(Constants::WIIKING2_NOT_LATEST_VERSION_MSG
+                         .arg(Constants::WIIKING2_APP_NAME)
+                         .arg(m_updater->updateUrl())
                          .arg(m_updater->md5Sum())
                          .arg(m_updater->changelogUrl()));
+
     m_updateMBox.setStandardButtons(QMessageBox::Ok);
     m_updateMBox.exec();
 }
@@ -567,7 +582,7 @@ void MainWindow::onNoUpdate()
     this->setEnabled(true);
     m_updateMBox.hide();
     m_updateMBox.setWindowTitle(Constants::WIIKING2_LATEST_VERSION);
-    m_updateMBox.setText(Constants::WIIKING2_LATEST_VERSION_MSG.arg(Constants::WIIKING2_APP_NAME).arg(m_updater->updateUrl()).arg(m_updater->changelogUrl()));
+    m_updateMBox.setText(Constants::WIIKING2_LATEST_VERSION_MSG);
     m_updateMBox.setStandardButtons(QMessageBox::Ok);
     m_updateMBox.setWindowModality(Qt::NonModal);
     m_updateMBox.exec();
@@ -585,7 +600,12 @@ void MainWindow::showEvent(QShowEvent* se)
         mbox.setStandardButtons(QMessageBox::Ok);
         mbox.exec();
         exit(1);
+        return;
     }
+
+    QSettings settings;
+    if (settings.value(Constants::Settings::WIIKING2_CHECK_ON_START, false).toBool())
+        onCheckUpdate();
 }
 
 void MainWindow::onPlugins()
@@ -616,14 +636,16 @@ void MainWindow::onCheckUpdate()
     m_updateMBox.setWindowTitle("Please wait...");
     m_updateMBox.setText("Checking for updates, please wait.");
     m_updateMBox.setStandardButtons(QMessageBox::NoButton);
+    // This prevents the user from clicking away
     m_updateMBox.setWindowModality(Qt::WindowModal);
 
+    // Prevent the user from interrupting the check
     this->setEnabled(false);
     // Using exec blocks everything, is there a work around?
     m_updateMBox.show();
 
 #ifdef WK2_INTERNAL
-    m_updater->checkForUpdate(Constants::Settings::WIIKING2_UPDATE_URL_DEFAULT, Constants::WIIKING2_APP_VERSION);
+    m_updater->checkForUpdate(Constants::Settings::WIIKING2_UPDATE_URL_DEFAULT, Constants::WIIKING2_APP_VERSION, Constants::WIIKING2_VERSION);
 #else
     m_updater->checkForUpdate(settings.value(Constants::Settings::WIIKING2_UPDATE_URL).toString(), Constants::WIIKING2_APP_VERSION);
 #endif

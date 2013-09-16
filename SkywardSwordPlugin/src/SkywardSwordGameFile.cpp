@@ -54,7 +54,6 @@ SkywardSwordGameFile::SkywardSwordGameFile(const PluginInterface *loader, const 
         zelda::io::BinaryReader reader(file.toStdString());
         reader.setEndianess(zelda::BigEndian);
         Uint32 magic = reader.readUInt32();
-        qDebug() << hex << magic;
         m_region = magic & 0x000000FF;
         magic &= 0xFFFFFF00;
 
@@ -97,6 +96,12 @@ SkywardSwordGameFile::SkywardSwordGameFile(const PluginInterface *loader, const 
     }
 }
 
+SkywardSwordGameFile::~SkywardSwordGameFile()
+{
+    delete[] m_skipData;
+    m_skipData = NULL;
+}
+
 QString SkywardSwordGameFile::game() const
 {
     return "SkywardSword";
@@ -114,7 +119,6 @@ bool SkywardSwordGameFile::save(const QString& filename)
     {
         QTabWidget* tw = (QTabWidget*)m_widget;
         zelda::io::BinaryWriter writer(filePath().toStdString());
-        qDebug() << writer.filepath().c_str();
         writer.setEndianess(zelda::BigEndian);
         writer.writeUInt32(0x534F5500);
         writer.seek(-1);

@@ -6,10 +6,11 @@
 
 QT    += core gui
 
-TARGET = OoTSavePlugin
+TARGET = ootsaveplugin
 TEMPLATE = lib
 CONFIG += plugin
 DESTDIR = ../plugins
+UI_DIR = ui
 
 CONFIG(release, release|debug) {
     DEFINES -= WK2_DEBUG

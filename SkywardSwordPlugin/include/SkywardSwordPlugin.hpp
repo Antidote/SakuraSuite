@@ -17,9 +17,12 @@
 #define TESTPLUGIN_HPP
 
 #include "skywardswordplugin_global.hpp"
-#include <QObject>
-#include <QIcon>
 #include "PluginInterface.hpp"
+#include <Updater.hpp>
+
+#include <QMessageBox>
+#include <QIcon>
+
 
 class SettingsDialog;
 class SettingsManager;
@@ -31,6 +34,7 @@ class SKYWARDSWORDPLUGGIN_EXPORT SkywardSwordPlugin : public QObject, public Plu
 public:
     SkywardSwordPlugin();
     ~SkywardSwordPlugin();
+    void initialize();
     QString filter()      const;
     QString extension()   const;
     QString name()        const;
@@ -47,7 +51,9 @@ public:
     GameFile* loadFile(const QString& file) const;
     bool canLoad(const QString& filename);
 
-    Updater* updater() const;
+    bool hasUpdater() const;
+    void doUpdate();
+    Updater* updater();
     QDialog* settingsDialog();
     QObject* object();
 
@@ -59,12 +65,19 @@ signals:
     void enabledChanged();
 public slots:
 
+private slots:
+    void onUpdaterDone();
+    void onUpdaterError(Updater::ErrorType error);
+    void onUpdaterWarning(QString warning);
+    void onNoUpdate();
 private:
-    bool m_enabled;
-    QString m_path;
-    QIcon m_icon;
-    SettingsDialog* m_settingsDialog;
+    bool                       m_enabled;
+    QString                    m_path;
+    QIcon                      m_icon;
+    Updater*                   m_updater;
+    SettingsDialog*            m_settingsDialog;
     static SkywardSwordPlugin* m_instance;
+    QMessageBox                m_updateMBox;
 };
 
 #endif // TESTPLUGIN_HPP

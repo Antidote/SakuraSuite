@@ -39,6 +39,10 @@ public:
     quint32 defaultRegion() const;
     void setDefaultRegion(const quint32 region);
 
+    QString updateUrl() const;
+    void setUpdateUrl(const QString& updateUrl);
+    bool updateCheckOnStart() const;
+    void setUpdateCheckOnStart(bool updateOnStart);
     void saveSettings();
     static SettingsManager* instance();
 signals:
@@ -51,6 +55,8 @@ private:
     SettingsManager();
     QStringList m_defaultNameList; //!< The default name for the region, Must be in order of NTSCU, NTSCJ, PAL
     quint32     m_defaultRegion;   //!< The default region for the save
+    QString     m_updateUrl;
+    bool        m_updateCheckOnStart;
 
     static SettingsManager* m_instance;
     static const ushort JAPANESE_NAME[4];

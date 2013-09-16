@@ -39,7 +39,7 @@ quint64 wiiTime()
 
 quint64 toWiiTime(QDateTime time)
 {
-    time_t sysTime, tzDiff, tzDST;
+    time_t sysTime, tzDiff;
     struct tm * gmTime;
 
     sysTime = time.toTime_t();
@@ -47,10 +47,6 @@ quint64 toWiiTime(QDateTime time)
     gmTime = localtime(&sysTime);
     if (!gmTime)
         return 0;
-    if(gmTime->tm_isdst == 1)
-        tzDST = 3600;
-    else
-        tzDST = 0;
 
     // Lazy way to get local time in sec
     gmTime	= gmtime(&sysTime);

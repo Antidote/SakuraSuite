@@ -31,8 +31,14 @@ PluginsManager::PluginsManager(MainWindow* parent)
 
 PluginsManager::~PluginsManager()
 {
-    foreach (PluginInterface* plugin, m_plugins)
-        delete plugin;
+    foreach (QPluginLoader* loader, m_pluginLoaders.values())
+    {
+        loader->unload();
+        delete loader;
+        loader = NULL;
+    }
+
+    m_pluginLoaders.clear();
     m_plugins.clear();
 }
 
@@ -54,7 +60,6 @@ PluginInterface* PluginsManager::plugin(const QString& name)
 
 bool PluginsManager::reloadByName(const QString& name)
 {
-//    return false;
     PluginInterface* plugin = this->plugin(name);
 
     if (!plugin)
@@ -69,7 +74,8 @@ bool PluginsManager::reloadByName(const QString& name)
 
     if (!loader)
         return false;
-
+    QMessageBox mbox(m_mainWindow);
+    mbox.setWindowTitle("Error reloading plugin...");
 
     if(loader->unload())
     {
@@ -87,27 +93,33 @@ bool PluginsManager::reloadByName(const QString& name)
             if (newPlugin)
             {
                 newPlugin->setPath(pluginPath);
+                newPlugin->object()->setParent(parent());
                 QSettings settings;
                 settings.beginGroup(newPlugin->name());
                 newPlugin->setEnabled(settings.value("enabled", true).toBool());
+                newPlugin->initialize();
                 m_plugins[pluginPath] = newPlugin;
                 return true;
             }
             else
             {
-                qDebug() << loader->errorString();
+                mbox.setText(loader->errorString());
+                mbox.exec();
                 return false;
             }
         }
         else
         {
-            qDebug() << loader->errorString();
+            mbox.setText(loader->errorString());
+            mbox.exec();
+            return false;
         }
     }
 
     m_pluginLoaders[pluginPath] = loader;
     m_plugins[pluginPath] = plugin;
-    qDebug() << loader->errorString();
+    mbox.setText(loader->errorString());
+    mbox.exec();
 
     return false;
 }
@@ -146,10 +158,8 @@ void PluginsManager::loadPlugins()
     }
 #endif
     pluginsDir.cd("plugins");
-    qDebug() << pluginsDir.absolutePath();
 
     foreach (QString fileName, pluginsDir.entryList(QDir::Files)) {
-        qDebug() << fileName;
         QPluginLoader* pluginLoader = new QPluginLoader(pluginsDir.absoluteFilePath(fileName));
         QObject *object = pluginLoader->instance();
 
@@ -158,29 +168,32 @@ void PluginsManager::loadPlugins()
             PluginInterface* plugin = qobject_cast<PluginInterface *>(object);
             if (plugin)
             {
-                m_plugins[pluginsDir.absoluteFilePath(fileName)] = plugin;
-                connect(plugin->object(), SIGNAL(enabledChanged()), this, SLOT(onEnabledChanged()));
-                plugin->object()->setParent(this->parent());
-                QSettings settings;
-                settings.beginGroup(plugin->name());
-                plugin->setPath(pluginsDir.absoluteFilePath(fileName));
-                plugin->setEnabled(settings.value("enabled", true).toBool());
-                m_pluginLoaders[pluginsDir.absoluteFilePath(fileName)] = pluginLoader;
+                if (!this->plugin(plugin->name()))
+                {
+                    m_plugins[pluginsDir.absoluteFilePath(fileName)] = plugin;
+                    connect(plugin->object(), SIGNAL(enabledChanged()), this, SLOT(onEnabledChanged()));
+                    plugin->object()->setParent(this->parent());
+                    QSettings settings;
+                    settings.beginGroup(plugin->name());
+                    plugin->setPath(pluginsDir.absoluteFilePath(fileName));
+                    plugin->setEnabled(settings.value("enabled", true).toBool());
+                    plugin->initialize();
+                    m_pluginLoaders[pluginsDir.absoluteFilePath(fileName)] = pluginLoader;
+                }
+                else
+                {
+                    pluginLoader->unload();
+                    delete pluginLoader;
+                }
             }
             else
             {
-                qDebug() << "Failed to load plugin" << fileName;
-                qDebug() << pluginLoader->errorString();
                 delete pluginLoader;
                 pluginLoader = NULL;
             }
         }
         else
         {
-            qDebug() << "Failed to load plugin" << fileName;
-            qDebug() << pluginLoader->errorString();
-            delete pluginLoader;
-            pluginLoader = NULL;
             delete pluginLoader;
             pluginLoader = NULL;
         }

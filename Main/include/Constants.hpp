@@ -46,6 +46,10 @@ const QString WIIKING2_APP_VERSION               = QString(WIIKING2_VERSION_STR)
 #endif
 
 const QString WIIKING2_TITLE                     = tr("WiiKing2 Editor");
+// Work around for Qt's retarded method of setWindowFilePath
+// It doesn't work if you set a custom window title
+// But the only way to set the window title to what you want is to
+// use setWindowTitle
 const QString WIIKING2_TITLE_FILE                = tr("%1%2 - Wiiking2 Editor");
 const QString WIIKING2_TITLE_DIRTY               = tr("*");
 const QString WIIKING2_APP_NAME                  = tr("wiiking2editor");
@@ -61,9 +65,9 @@ const QString WIIKING2_LATEST_VERSION            = tr("At latest version...");
 const QString WIIKING2_LATEST_VERSION_MSG        = tr("The application is up to date.");
 const QString WIIKING2_NOT_LATEST_VERSION        = tr("%1 is out of date...").arg(WIIKING2_TITLE);
 const QString WIIKING2_NOT_LATEST_VERSION_MSG    = tr("An update is available for %1<br />"
-                                                     "You may download the update at <a href=\"%2\">%2</a><br />"
+                                                     "You may download the update at: <a href=\"%2\">%2</a><br />"
                                                      "MD5 %3<br />"
-                                                     "The changelog is available at <a href=\"%3\">%3</a>");
+                                                     "The changelog is available at: <a href=\"%4\">%4</a>");
 
 const QString WIIKING2_BUILD_DATE                = tr(__DATE__ " " __TIME__);
 const QString WIIKING2_NO_PLUGINS_ERROR          = tr("Error Loading Plugins...");
@@ -101,6 +105,7 @@ const QString WIIKING2_RECENT_FILES           = QString("recentFiles");
 const QString WIIKING2_RECENT_DIRECTORY       = QString("recentDirectory");
 const QString WIIKING2_DEFAULT_STYLE          = QString("defaultStyle");
 const QString WIIKING2_CURRENT_STYLE          = QString("currentStyle");
+const QString WIIKING2_CHECK_ON_START         = QString("checkForUpdatesOnStart");
 }
 
 #undef tr

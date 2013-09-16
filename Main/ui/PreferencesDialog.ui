@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <author>Phillip &quot;Antidote&quot; Stephens</author>
+ <class>PreferencesDialog</class>
+ <widget class="QDialog" name="PreferencesDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>488</width>
+    <height>238</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="4" column="1">
+    <widget class="QDialogButtonBox" name="okCancelButtonBox">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="statusLabel">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="2">
+    <widget class="QGroupBox" name="updateGroupBox">
+     <property name="title">
+      <string>Update Settings</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_3">
+      <item row="0" column="0">
+       <widget class="QLabel" name="updateUrlLabel">
+        <property name="text">
+         <string>Update Url:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="updateUrlLineEdit">
+        <property name="text">
+         <string>Update Url</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" colspan="2">
+       <widget class="QCheckBox" name="checkOnStart">
+        <property name="text">
+         <string>Check for updates on start.</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="0" column="0" colspan="2">
+    <widget class="QGroupBox" name="styleGroupBox">
+     <property name="title">
+      <string>Style</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="1" column="0">
+       <widget class="QLabel" name="currentStyleLabel">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Current:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="defaultStyleLabel">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Default:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="defaultStyleCombo"/>
+      </item>
+      <item row="1" column="1">
+       <widget class="QComboBox" name="currentStyleCombo"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>okCancelButtonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>PreferencesDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>266</x>
+     <y>228</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>okCancelButtonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>PreferencesDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>334</x>
+     <y>228</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>defaultStyleCombo</sender>
+   <signal>currentIndexChanged(QString)</signal>
+   <receiver>PreferencesDialog</receiver>
+   <slot>onCurrentIndexChanged(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>166</x>
+     <y>47</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>168</x>
+     <y>6</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>currentStyleCombo</sender>
+   <signal>currentIndexChanged(QString)</signal>
+   <receiver>PreferencesDialog</receiver>
+   <slot>onCurrentIndexChanged(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>228</x>
+     <y>76</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>107</x>
+     <y>2</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>updateUrlLineEdit</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>PreferencesDialog</receiver>
+   <slot>onTextChanged(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>140</x>
+     <y>147</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>125</x>
+     <y>7</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>onCurrentIndexChanged(QString)</slot>
+  <slot>onTextChanged(QString)</slot>
+ </slots>
+</ui>

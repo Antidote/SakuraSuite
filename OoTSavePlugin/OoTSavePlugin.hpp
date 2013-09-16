@@ -29,6 +29,7 @@ public:
     OoTSavePlugin();
     ~OoTSavePlugin();
 
+    void initialize();
     QString filter()      const;
     QString extension()   const;
     QString name()        const;
@@ -45,7 +46,9 @@ public:
     GameFile* loadFile(const QString& file) const;
     bool canLoad(const QString& filename);
 
-    Updater* updater() const;
+    bool hasUpdater() const;
+    void doUpdate();
+    Updater* updater();
     QDialog* settingsDialog();
     QObject* object();
 

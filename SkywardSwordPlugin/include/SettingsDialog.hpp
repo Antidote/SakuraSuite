@@ -32,6 +32,7 @@ public:
 
 public slots:
     void accept();
+    void onTextChanged(QString text);
 protected:
     void showEvent(QShowEvent *se);
 private:

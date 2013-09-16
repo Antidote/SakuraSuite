@@ -8,6 +8,8 @@ INCLUDEPATH += \
     ../PluginFramework/include \
     ../Updater/include
 
+UI_DIR = ui
+
 CONFIG(release, release|debug){
     DEFINES -= WK2_DEBUG
     # We don't want the objects, or MOC sources
@@ -40,19 +42,22 @@ SOURCES += \
     src/PluginsDialog.cpp \
     src/PluginsManager.cpp \
     src/main.cpp \
-    src/AboutDialog.cpp
+    src/AboutDialog.cpp \
+    src/PreferencesDialog.cpp
 
 HEADERS += \
     include/Constants.hpp \
     include/MainWindow.hpp \
     include/PluginsDialog.hpp \
     include/PluginsManager.hpp \
-    include/AboutDialog.hpp
+    include/AboutDialog.hpp \
+    include/PreferencesDialog.hpp
 
 FORMS += \
     ui/MainWindow.ui \
     ui/PluginsDialog.ui \
-    ui/AboutDialog.ui
+    ui/AboutDialog.ui \
+    ui/PreferencesDialog.ui
 
 RESOURCES += \
     resources/resources.qrc

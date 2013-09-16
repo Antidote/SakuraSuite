@@ -14,8 +14,10 @@
   <property name="acceptDrops">
    <bool>true</bool>
   </property>
-  <property name="windowTitle">
-   <string notr="true"/>
+  <property name="styleSheet">
+   <string notr="true">QLineEdit[valid=&quot;false&quot;] {
+	background-color: red;
+}</string>
   </property>
   <property name="documentMode">
    <bool>true</bool>
@@ -25,7 +27,16 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout_2">
-    <property name="margin">
+    <property name="leftMargin">
+     <number>2</number>
+    </property>
+    <property name="topMargin">
+     <number>2</number>
+    </property>
+    <property name="rightMargin">
+     <number>2</number>
+    </property>
+    <property name="bottomMargin">
      <number>2</number>
     </property>
     <item row="0" column="0">
@@ -38,12 +49,21 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>577</width>
-         <height>615</height>
+         <width>498</width>
+         <height>617</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout_3">
-        <property name="margin">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
          <number>0</number>
         </property>
         <item row="0" column="0">
@@ -61,7 +81,7 @@
      <x>0</x>
      <y>0</y>
      <width>765</width>
-     <height>25</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -90,6 +110,7 @@
     <property name="title">
      <string>&amp;Edit</string>
     </property>
+    <addaction name="actionPreferences"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -137,9 +158,6 @@
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QDockWidget" name="dockWidget">
-   <property name="features">
-    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
-   </property>
    <property name="windowTitle">
     <string>Documents</string>
    </property>
@@ -148,7 +166,16 @@
    </attribute>
    <widget class="QWidget" name="dockWidgetContents">
     <layout class="QGridLayout" name="gridLayout">
-     <property name="margin">
+     <property name="leftMargin">
+      <number>2</number>
+     </property>
+     <property name="topMargin">
+      <number>2</number>
+     </property>
+     <property name="rightMargin">
+      <number>2</number>
+     </property>
+     <property name="bottomMargin">
       <number>2</number>
      </property>
      <item row="0" column="0">
@@ -176,10 +203,8 @@
    </widget>
   </widget>
   <action name="actionClose">
-   <property name="icon">
-    <iconset theme="close">
-     <normaloff/>
-    </iconset>
+   <property name="enabled">
+    <bool>false</bool>
    </property>
    <property name="text">
     <string>&amp;Close</string>
@@ -189,11 +214,6 @@
    </property>
   </action>
   <action name="actionOpen">
-   <property name="icon">
-    <iconset theme="fileopen">
-     <normaloff/>
-    </iconset>
-   </property>
    <property name="text">
     <string>&amp;Open</string>
    </property>
@@ -202,16 +222,14 @@
    </property>
   </action>
   <action name="actionNew">
-   <property name="icon">
-    <iconset theme="file_new">
-     <normaloff/>
-    </iconset>
-   </property>
    <property name="text">
     <string>&amp;New</string>
    </property>
   </action>
   <action name="actionSave">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>&amp;Save</string>
    </property>
@@ -220,6 +238,9 @@
    </property>
   </action>
   <action name="actionSaveAs">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Save &amp;As</string>
    </property>
@@ -228,21 +249,11 @@
    </property>
   </action>
   <action name="actionExit">
-   <property name="icon">
-    <iconset theme="exit">
-     <normaloff/>
-    </iconset>
-   </property>
    <property name="text">
     <string>&amp;Exit</string>
    </property>
   </action>
   <action name="actionClearRecent">
-   <property name="icon">
-    <iconset>
-     <normaloff/>
-    </iconset>
-   </property>
    <property name="text">
     <string>&amp;Clear</string>
    </property>
@@ -253,11 +264,6 @@
    </property>
   </action>
   <action name="actionAbout">
-   <property name="icon">
-    <iconset>
-     <normaloff/>
-    </iconset>
-   </property>
    <property name="text">
     <string>&amp;About</string>
    </property>
@@ -280,6 +286,11 @@
   <action name="actionDefaultStyle">
    <property name="text">
     <string>&amp;Default</string>
+   </property>
+  </action>
+  <action name="actionPreferences">
+   <property name="text">
+    <string>&amp;Preferences</string>
    </property>
   </action>
  </widget>

@@ -24,7 +24,7 @@ class SkywardSwordGameFile : public GameFile
     Q_OBJECT
 public:
     SkywardSwordGameFile(const PluginInterface* loader, const QString& file = QString());
-
+    ~SkywardSwordGameFile();
     QString game() const;
     bool save(const QString &filename = QString());
 

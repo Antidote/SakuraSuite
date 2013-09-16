@@ -43,7 +43,7 @@ public:
     QString md5Sum() const;
 
 public slots:
-    void checkForUpdate(QString url, QString currentVersion);
+    void checkForUpdate(QString url, QString currentVersionString, int currentVersion);
 
 signals:
     void noUpdate();
@@ -56,6 +56,9 @@ private slots:
     /// but make sure to emit ALL types of errors
     /// so the your plugin/app knows what happened
     virtual void onNetworkFinished(QNetworkReply* nr);
+private:
+    /// You may override this in order to fit your needs
+    virtual void parse(QStringList data);
 
 private:
     QUrl redirectUrl(const QUrl& possibleRedirect, const QUrl& oldRedirect) const;
@@ -63,7 +66,8 @@ private:
     QString                m_serverUrl;
     QString                m_updateUrl;
     QString                m_changelogUrl;
-    QString                m_currentVersion;
+    QString                m_currentVersionString;
+    int                    m_currentVersion;
     QString                m_errorString;
     QString                m_md5Sum;
 };

@@ -18,6 +18,7 @@
 #include "PluginInterface.hpp"
 #include "PluginsManager.hpp"
 #include "Constants.hpp"
+#include <Updater.hpp>
 #include <QMessageBox>
 #include <QDebug>
 
@@ -28,6 +29,8 @@ PluginsDialog::PluginsDialog(QWidget *parent, PluginsManager* pluginsManager) :
 {
     ui->setupUi(this);
     ui->groupBox->setEnabled(false);
+
+    connect(&m_statusTimer, SIGNAL(timeout()), this, SLOT(onTimeOut()));
 }
 
 PluginsDialog::~PluginsDialog()
@@ -62,6 +65,10 @@ void PluginsDialog::updatePluginData()
         item->setText(VersionColumn, plugin->version());
         item->setText(ExtensionColumn, plugin->extension());
         item->setCheckState(EnabledColumn, (plugin->enabled() ? Qt::Checked : Qt::Unchecked));
+
+        if (plugin->hasUpdater() && plugin->updater())
+            connect(plugin->updater(), SIGNAL(warning(QString)), this, SLOT(onPluginWarning(QString)));
+
         tw->addTopLevelItem(item);
     }
     ui->groupBox->setEnabled(false);
@@ -84,7 +91,7 @@ void PluginsDialog::onItemSelectionChanged()
     ui->licenseValue->setText(plugin->license());
     ui->descriptionTextEdit->setHtml(plugin->description());
     ui->settingsPushButton->setEnabled(plugin->settingsDialog() != NULL);
-    ui->updatePushButton->setEnabled(plugin->updater() != NULL);
+    ui->updatePushButton->setEnabled(plugin->hasUpdater());
     ui->groupBox->setEnabled(true);
 }
 
@@ -102,10 +109,7 @@ void PluginsDialog::onItemClicked(QTreeWidgetItem* item, int column)
         bool isChecked = (item->checkState(EnabledColumn) == Qt::Checked);
 
         if (isChecked != plugin->enabled())
-        {
-            qDebug() << (isChecked ? "Enabled" : "Disabled") <<  plugin->name();
             plugin->setEnabled(isChecked);
-        }
     }
 }
 
@@ -148,5 +152,28 @@ void PluginsDialog::onReloadPlugin()
     }
 
     updatePluginData();
+}
+
+void PluginsDialog::onCheckUpdate()
+{
+    if (!ui->treeWidget->currentItem())
+        return;
+
+    PluginInterface* plugin = m_pluginsManager->plugin(ui->treeWidget->currentItem()->text(0));
+    if (!plugin)
+        return;
+
+    plugin->doUpdate();
+}
+
+void PluginsDialog::onPluginWarning(QString warning)
+{
+    ui->statusLabel->setText(ui->statusLabel->text() + "<br />" + warning);
+    m_statusTimer.start(2000);
+}
+
+void PluginsDialog::onTimeOut()
+{
+    ui->statusLabel->clear();
 }
 

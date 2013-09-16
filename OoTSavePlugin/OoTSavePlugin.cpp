@@ -18,13 +18,18 @@
 
 
 OoTSavePlugin::OoTSavePlugin()
-    : m_icon(QIcon(":/icon/Ocarina64x64.png"))
+    : m_icon(QIcon(":/icon/Ocarina64x64.png")),
+      m_enabled(true)
 {
 }
 
 OoTSavePlugin::~OoTSavePlugin()
 {
 
+}
+
+void OoTSavePlugin::initialize()
+{
 }
 
 QString OoTSavePlugin::filter() const
@@ -107,7 +112,17 @@ bool OoTSavePlugin::canLoad(const QString& filename)
     return (!QString::compare(QFileInfo(filename).suffix(), extension(), Qt::CaseInsensitive));
 }
 
-Updater* OoTSavePlugin::updater() const
+bool OoTSavePlugin::hasUpdater() const
+{
+    return false;
+}
+
+void OoTSavePlugin::doUpdate()
+{
+
+}
+
+Updater* OoTSavePlugin::updater()
 {
     return NULL;
 }

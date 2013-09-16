@@ -30,4 +30,5 @@ CONFIG(debug, debug|release) {
 INCLUDEPATH += include
 SOURCES += src/Updater.cpp
 
-HEADERS += include/Updater.hpp
+HEADERS += include/Updater.hpp \
+    include/Constants.hpp

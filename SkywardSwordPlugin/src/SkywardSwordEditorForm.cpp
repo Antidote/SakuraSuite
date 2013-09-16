@@ -18,6 +18,8 @@
 #include "SkywardSwordGameFile.hpp"
 #include "SettingsManager.hpp"
 #include "SkywardSwordPlugin.hpp"
+#include "Constants.hpp"
+
 #include <QtEndian>
 #include <QDebug>
 #include <Checksums.hpp>
@@ -34,6 +36,14 @@ SkywardSwordEditorForm::SkywardSwordEditorForm(SkywardSwordGameFile* file, const
     ui->tabWidget->setCurrentIndex(0);
     connect(this, SIGNAL(modified()), this, SLOT(onModified()));
     updateData();
+
+#ifdef SS_PREVIEW
+    ui->previewLabel->setText("<center><b>PREVIEW BUILD</b></center>");
+#elif defined(SS_INTERNAL)
+    ui->previewLabel->setText("<center><b>INTERNAL BUILD</b></center>");
+#else
+    ui->previewLabel->setVisible(false);
+#endif
 }
 
 SkywardSwordEditorForm::~SkywardSwordEditorForm()
@@ -138,7 +148,7 @@ quint32 SkywardSwordEditorForm::unkHP()
 
 void SkywardSwordEditorForm::setUnkHP(int val)
 {
-    if (val == unkHP())
+    if (val == (int)unkHP())
         return;
 
     *(quint16*)(m_gameData + 0x5304) = qToBigEndian((quint16)val);
@@ -152,7 +162,7 @@ quint32 SkywardSwordEditorForm::currentHP()
 
 void SkywardSwordEditorForm::setCurrentHP(int val)
 {
-    if (val == currentHP())
+    if (val == (int)currentHP())
         return;
 
     *(quint16*)(m_gameData + 0x5306) = qToBigEndian((quint16)val);
