@@ -58,6 +58,16 @@ char* SkywardSwordEditorForm::gameData()
 
 void SkywardSwordEditorForm::onDelete()
 {
+    QMessageBox mbox(this);
+    mbox.setWindowTitle("Are you sure?");
+    mbox.setText("Are you sure you wish to delete this game?<br />"
+                 "This cannot be undone.(yet)");
+    mbox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+    mbox.exec();
+
+    if (mbox.result() == QMessageBox::Cancel)
+        return;
+
     memset(m_gameData, 0x00, 0x53C0);
     setNew(true);
     emit modified();
@@ -67,6 +77,55 @@ void SkywardSwordEditorForm::onCreate()
 {
     memset(m_gameData, 0x00, 0x53C0);
     setPlayerName(SkywardSwordPlugin::instance()->settings()->defaultPlayerName());
+    emit modified();
+}
+
+Playtime SkywardSwordEditorForm::playtime() const
+{
+    if (!m_gameData)
+        return Playtime();
+    Playtime playTime;
+    quint64 tmp = qFromBigEndian(*(quint64*)(m_gameData));
+    playTime.Days    = (((tmp / TICKS_PER_SECOND) / 60) / 60) / 24;
+    playTime.Hours   = (((tmp / TICKS_PER_SECOND) / 60) / 60) % 24;
+    playTime.Minutes = (( tmp / TICKS_PER_SECOND) / 60) % 60;
+    playTime.Seconds = (( tmp / TICKS_PER_SECOND) % 60);
+    return playTime;
+}
+
+void SkywardSwordEditorForm::setPlaytime(Playtime val)
+{
+    if (!m_gameData)
+        return;
+    if (val == playtime())
+        return;
+
+    quint64 totalSeconds = 0;
+    totalSeconds += ((val.Days    * 60) * 60) * 24;
+    totalSeconds += ( val.Hours   * 60) * 60;
+    totalSeconds += ( val.Minutes * 60);
+    totalSeconds +=   val.Seconds;
+    *(quint64*)(m_gameData) = qToBigEndian(TICKS_PER_SECOND * totalSeconds);
+
+    emit modified();
+}
+
+QDateTime SkywardSwordEditorForm::savetime() const
+{
+    if (!m_gameData)
+        return QDateTime::currentDateTime();
+
+    return fromWiiTime(qFromBigEndian(*(quint64*)(m_gameData + 0x0008)));
+}
+
+void SkywardSwordEditorForm::setSavetime(const QDateTime& time)
+{
+    if (!m_gameData)
+        return;
+    if (time == savetime())
+        return;
+
+    *(qint64*)(m_gameData + 0x0008) = qToBigEndian<qint64>(toWiiTime(time));
     emit modified();
 }
 
@@ -169,235 +228,192 @@ void SkywardSwordEditorForm::setCurrentHP(int val)
     emit modified();
 }
 
-float SkywardSwordEditorForm::playerX()
+float SkywardSwordEditorForm::player(Coord coord)
 {
-    return zelda::utility::swapFloat(*(float*)(m_gameData + 0x0010));
+    switch(coord)
+    {
+        case XCoord:    return zelda::utility::swapFloat(*(float*)(m_gameData + 0x0010));
+        case YCoord:    return zelda::utility::swapFloat(*(float*)(m_gameData + 0x0014));
+        case ZCoord:    return zelda::utility::swapFloat(*(float*)(m_gameData + 0x0018));
+        case RollCoord: return zelda::utility::swapFloat(*(float*)(m_gameData + 0x001C));
+        case PitchCoord:return zelda::utility::swapFloat(*(float*)(m_gameData + 0x001C));
+        case YawCoord:  return zelda::utility::swapFloat(*(float*)(m_gameData + 0x0024));
+        default:        return 0.f;
+    }
 }
 
-void SkywardSwordEditorForm::setPlayerX(double x)
+float SkywardSwordEditorForm::camera(Coord coord)
 {
-    if (x == playerX())
+    switch(coord)
+    {
+        case XCoord:    return zelda::utility::swapFloat(*(float*)(m_gameData + 0x0028));
+        case YCoord:    return zelda::utility::swapFloat(*(float*)(m_gameData + 0x002C));
+        case ZCoord:    return zelda::utility::swapFloat(*(float*)(m_gameData + 0x0030));
+        case RollCoord: return zelda::utility::swapFloat(*(float*)(m_gameData + 0x0034));
+        case PitchCoord:return zelda::utility::swapFloat(*(float*)(m_gameData + 0x0038));
+        case YawCoord:  return zelda::utility::swapFloat(*(float*)(m_gameData + 0x003C));
+        default: return 0.f;
+    }
+}
+
+void SkywardSwordEditorForm::setCoord(double val)
+{
+    if (!updatesEnabled())
         return;
 
-    *(float*)(m_gameData + 0x0010) = zelda::utility::swapFloat(x);
+    if (sender() == ui->playerXSpinBox)
+        *(float*)(m_gameData + 0x0010) = zelda::utility::swapFloat(val);
+    if (sender() == ui->playerYSpinBox)
+        *(float*)(m_gameData + 0x0014) = zelda::utility::swapFloat(val);
+    if (sender() == ui->playerZSpinBox)
+        *(float*)(m_gameData + 0x0018) = zelda::utility::swapFloat(val);
+    if (sender() == ui->playerRollSpinBox)
+        *(float*)(m_gameData + 0x001C) = zelda::utility::swapFloat(val);
+    if (sender() == ui->playerPitchSpinBox)
+        *(float*)(m_gameData + 0x0020) = zelda::utility::swapFloat(val);
+    if (sender() == ui->playerYawSpinBox)
+        *(float*)(m_gameData + 0x0024) = zelda::utility::swapFloat(val);
+    if (sender() == ui->cameraXSpinBox)
+        *(float*)(m_gameData + 0x0028) = zelda::utility::swapFloat(val);
+    if (sender() == ui->cameraYSpinBox)
+        *(float*)(m_gameData + 0x002C) = zelda::utility::swapFloat(val);
+    if (sender() == ui->cameraZSpinBox)
+        *(float*)(m_gameData + 0x0030) = zelda::utility::swapFloat(val);
+    if (sender() == ui->cameraRollSpinBox)
+        *(float*)(m_gameData + 0x0034) = zelda::utility::swapFloat(val);
+    if (sender() == ui->cameraPitchSpinBox)
+        *(float*)(m_gameData + 0x0038) = zelda::utility::swapFloat(val);
+    if (sender() == ui->cameraYawSpinBox)
+        *(float*)(m_gameData + 0x003C) = zelda::utility::swapFloat(val);
+
     emit modified();
 }
 
-float SkywardSwordEditorForm::playerY()
+bool SkywardSwordEditorForm::beetle(BeetleType type)
 {
-    return zelda::utility::swapFloat(*(float*)(m_gameData + 0x0014));
-}
-
-void SkywardSwordEditorForm::setPlayerY(double y)
-{
-    if (y == playerY())
-        return;
-
-    *(float*)(m_gameData + 0x0014) = zelda::utility::swapFloat(y);
-    emit modified();
-}
-
-float SkywardSwordEditorForm::playerZ()
-{
-    return zelda::utility::swapFloat(*(float*)(m_gameData + 0x0018));
-}
-
-void SkywardSwordEditorForm::setPlayerZ(double z)
-{
-    if (z == playerZ())
-        return;
-
-    *(float*)(m_gameData + 0x0018) = zelda::utility::swapFloat(z);
-    emit modified();
-}
-
-float SkywardSwordEditorForm::playerRoll()
-{
-    return zelda::utility::swapFloat(*(float*)(m_gameData + 0x001C));
-}
-
-void SkywardSwordEditorForm::setPlayerRoll(double roll)
-{
-    if (roll == playerRoll())
-        return;
-
-    *(float*)(m_gameData + 0x001C) = zelda::utility::swapFloat(roll);
-    emit modified();
-}
-
-float SkywardSwordEditorForm::playerPitch()
-{
-    return zelda::utility::swapFloat(*(float*)(m_gameData + 0x0020));
-}
-
-void SkywardSwordEditorForm::setPlayerPitch(double pitch)
-{
-    if (pitch == playerPitch())
-        return;
-
-    *(float*)(m_gameData + 0x0020) = zelda::utility::swapFloat(pitch);
-    emit modified();
-}
-
-float SkywardSwordEditorForm::playerYaw()
-{
-    return zelda::utility::swapFloat(*(float*)(m_gameData + 0x0024));
-}
-
-void SkywardSwordEditorForm::setPlayerYaw(double yaw)
-{
-    if (yaw == playerYaw())
-        return;
-
-    *(float*)(m_gameData + 0x0024) = zelda::utility::swapFloat(yaw);
-    emit modified();
-}
-
-float SkywardSwordEditorForm::cameraX()
-{
-    return zelda::utility::swapFloat(*(float*)(m_gameData + 0x0028));
-}
-
-void SkywardSwordEditorForm::setCameraX(double x)
-{
-    if (x == cameraX())
-        return;
-
-    *(float*)(m_gameData + 0x0028) = zelda::utility::swapFloat(x);
-    emit modified();
-}
-
-float SkywardSwordEditorForm::cameraY()
-{
-    return zelda::utility::swapFloat(*(float*)(m_gameData + 0x002C));
-}
-
-void SkywardSwordEditorForm::setCameraY(double y)
-{
-    if (y == cameraY())
-        return;
-
-    *(float*)(m_gameData + 0x002C) = zelda::utility::swapFloat(y);
-    emit modified();
-}
-
-float SkywardSwordEditorForm::cameraZ()
-{
-    return zelda::utility::swapFloat(*(float*)(m_gameData + 0x0030));
-}
-
-void SkywardSwordEditorForm::setCameraZ(double z)
-{
-    if (z == cameraZ())
-        return;
-
-    *(float*)(m_gameData + 0x0030) = zelda::utility::swapFloat(z);
-    emit modified();
-}
-
-
-float SkywardSwordEditorForm::cameraRoll()
-{
-    return zelda::utility::swapFloat(*(float*)(m_gameData + 0x0034));
-}
-
-void SkywardSwordEditorForm::setCameraRoll(double roll)
-{
-    if (roll == cameraRoll())
-        return;
-
-    *(float*)(m_gameData + 0x0034) = zelda::utility::swapFloat(roll);
-    emit modified();
-}
-
-
-float SkywardSwordEditorForm::cameraPitch()
-{
-    return zelda::utility::swapFloat(*(float*)(m_gameData + 0x0038));
-}
-
-void SkywardSwordEditorForm::setCameraPitch(double pitch)
-{
-    if (pitch == cameraPitch())
-        return;
-
-    *(float*)(m_gameData + 0x0038) = zelda::utility::swapFloat(pitch);
-    emit modified();
-}
-
-
-float SkywardSwordEditorForm::cameraYaw()
-{
-    return zelda::utility::swapFloat(*(float*)(m_gameData + 0x003C));
-}
-
-void SkywardSwordEditorForm::setCameraYaw(double yaw)
-{
-    if (yaw == cameraYaw())
-        return;
-
-    *(float*)(m_gameData + 0x003C) = zelda::utility::swapFloat(yaw);
-    emit modified();
-}
-
-bool SkywardSwordEditorForm::beetle()
-{
-    return flag(0x09E6, 0x20);
+    switch(type)
+    {
+        case NormalBeetle:return flag(0x09E6, 0x20);
+        case HookBeetle:  return flag(0x09EB, 0x02);
+        case QuickBeetle: return flag(0x09EB, 0x04);
+        case ToughBeetle: return flag(0x09EB, 0x08);
+        default:    return false;
+    }
 }
 
 void SkywardSwordEditorForm::setBeetle(bool val)
 {
-    if (val == beetle())
-        return;
-    setFlag(0x09E6, 0x20, val);
-}
-
-bool SkywardSwordEditorForm::hookBeetle()
-{
-    return flag(0x09EB, 0x02);
-}
-
-void SkywardSwordEditorForm::setHookBeetle(bool val)
-{
-    if (val == hookBeetle())
+    if (!updatesEnabled())
         return;
 
-    setFlag(0x09EB, 0x02, val);
+    if (sender() == ui->beetleChkBox)
+    {
+        if (!val)
+            ui->hookBeetleChkBox->setChecked(false);
+
+        setFlag(0x09E6, 0x20, val);
+    }
+    else if (sender() == ui->hookBeetleChkBox)
+    {
+        if (val)
+            ui->beetleChkBox->setChecked(true);
+
+        if (!val)
+            ui->quickBeetleChkBox->setChecked(false);
+
+        setFlag(0x09EB, 0x02, val);
+    }
+    else if (sender() == ui->quickBeetleChkBox)
+    {
+        if (val)
+            ui->hookBeetleChkBox->setChecked(true);
+        if (!val)
+            ui->toughBeetleChkBox->setChecked(false);
+
+        setFlag(0x09EB, 0x04, val);
+    }
+    else if (sender() == ui->toughBeetleChkBox)
+    {
+        if (val)
+            ui->quickBeetleChkBox->setChecked(true);
+
+        setFlag(0x09EB, 0x08, val);
+    }
 }
 
-bool SkywardSwordEditorForm::quickBeetle()
+bool SkywardSwordEditorForm::bow(BowType bow)
 {
-    return flag(0x09EB, 0x04);
+    switch (bow)
+    {
+        case NormalBow:return flag(0x09E4, 0x10);
+        case IronBow:  return flag(0x09ED, 0x01);
+        case SacredBow:return flag(0x09ED, 0x02);
+        default:       return false;
+    }
 }
 
-bool SkywardSwordEditorForm::toughBeetle()
+
+void SkywardSwordEditorForm::setBow(bool val)
 {
-    return flag(0x09EB, 0x08);
+    if (!updatesEnabled())
+        return;
+
+    if (sender() == ui->bowChkBox)
+    {
+        if (!val)
+            ui->ironBowChkBox->setChecked(false);
+
+        setFlag(0x09E4, 0x10, val);
+    }
+    else if (sender() == ui->ironBowChkBox)
+    {
+        if (val)
+            ui->bowChkBox->setChecked(true);
+
+        if (!val)
+            ui->sacredBowChkBox->setChecked(false);
+
+        setFlag(0x09ED, 0x01, val);
+    }
+    else if (sender() == ui->sacredBowChkBox)
+    {
+        if (val)
+            ui->ironBowChkBox->setChecked(true);
+
+        setFlag(0x09ED, 0x02, val);
+    }
 }
 
-bool SkywardSwordEditorForm::bow()
+bool SkywardSwordEditorForm::slingshot(SlingshotType type)
 {
-    return flag(0x09E4, 0x10);
+    switch(type)
+    {
+        case Slingshot:  return flag(0x09E6, 0x10);
+        case Scattershot:return flag(0x09EC, 0x80);
+        default: return false;
+    }
 }
 
-bool SkywardSwordEditorForm::ironBow()
+void SkywardSwordEditorForm::setSlingshot(bool val)
 {
-    return flag(0x09ED, 0x01);
-}
+    if (!updatesEnabled())
+        return;
 
-bool SkywardSwordEditorForm::sacredBow()
-{
-    return flag(0x09ED, 0x02);
-}
+    if (sender() == ui->slingShotChkBox)
+    {
+        if (!val)
+            ui->scatterShotChkBox->setChecked(false);
 
-bool SkywardSwordEditorForm::slingshot()
-{
-    return flag(0x09E6, 0x10);
-}
+        setFlag(0x09E6, 0x10, val);
+    }
+    else if (sender() == ui->scatterShotChkBox)
+    {
 
-bool SkywardSwordEditorForm::scattershot()
-{
-    return flag(0x09EC, 0x80);
+        if (val)
+            ui->slingShotChkBox->setChecked(true);
+
+        setFlag(0x09EC, 0x80, val);
+    }
 }
 
 bool SkywardSwordEditorForm::practiceSword()
@@ -405,19 +421,71 @@ bool SkywardSwordEditorForm::practiceSword()
     return flag(0x09F2, 0x01);
 }
 
+void SkywardSwordEditorForm::setPracticeSword(bool val)
+{
+    if (!updatesEnabled())
+        return;
+
+    if (!val)
+        setGoddessSword(false);
+
+    setFlag(0x09F2, 0x01, val);
+}
+
 bool SkywardSwordEditorForm::goddessSword()
 {
     return flag(0x09E4, 0x01);
 }
 
-bool SkywardSwordEditorForm::longSword()
+void SkywardSwordEditorForm::setGoddessSword(bool val)
+{
+    if (!updatesEnabled())
+        return;
+
+    if (val)
+        setPracticeSword(true);
+
+    if (!val)
+        setGoddessLongSword(false);
+
+    setFlag(0x09E4, 0x01, val);
+}
+
+bool SkywardSwordEditorForm::goddessLongSword()
 {
     return flag(0x09E4, 0x02);
 }
 
-bool SkywardSwordEditorForm::whiteSword()
+void SkywardSwordEditorForm::setGoddessLongSword(bool val)
+{
+    if (!updatesEnabled())
+        return;
+
+    if (val)
+        setGoddessSword(true);
+
+    if (!val)
+        setGoddessWhiteSword(false);
+    setFlag(0x09E4, 0x02, val);
+}
+
+bool SkywardSwordEditorForm::goddessWhiteSword()
 {
     return flag(0x09FB, 0x10);
+}
+
+void SkywardSwordEditorForm::setGoddessWhiteSword(bool val)
+{
+    if (!updatesEnabled())
+        return;
+
+    if (val)
+        setGoddessLongSword(true);
+
+    if (!val)
+        setMasterSword(false);
+
+    setFlag(0x09FB, 0x10, val);
 }
 
 bool SkywardSwordEditorForm::masterSword()
@@ -425,19 +493,65 @@ bool SkywardSwordEditorForm::masterSword()
     return flag(0x09E4, 0x04);
 }
 
+void SkywardSwordEditorForm::setMasterSword(bool val)
+{
+    if (!updatesEnabled())
+        return;
+
+    if (val)
+        setGoddessWhiteSword(true);
+    if (!val)
+        setTrueMasterSword(false);
+
+    setFlag(0x09E4, 0x04, val);
+}
+
 bool SkywardSwordEditorForm::trueMasterSword()
 {
     return flag(0x09F3, 0x80);
 }
 
-bool SkywardSwordEditorForm::bugnet()
+void SkywardSwordEditorForm::setTrueMasterSword(bool val)
 {
-    return flag(0x09E8, 0x01);
+    if (!updatesEnabled())
+        return;
+
+    if (val)
+        setMasterSword(true);
+
+    setFlag(0x09F3, 0x080, val);
 }
 
-bool SkywardSwordEditorForm::bigBugnet()
+
+bool SkywardSwordEditorForm::bugnet(BugnetType type)
 {
-    return flag(0x09F2, 0x02);
+    switch(type)
+    {
+        case Bugnet:    return flag(0x09E8, 0x01);
+        case BigBugnet: return flag(0x09F2, 0x02);
+        default:        return false;
+    }
+}
+
+void SkywardSwordEditorForm::setBugnet(bool val)
+{
+    if (!updatesEnabled())
+        return;
+
+    if (sender() == ui->bugNetChkBox)
+    {
+        if (!val)
+            ui->bigBugNetChkBox->setChecked(false);
+
+        setFlag(0x09E8, 0x01, val);
+    }
+    else if (sender() == ui->bigBugNetChkBox)
+    {
+        if (val)
+            ui->bugNetChkBox->setChecked(true);
+
+        setFlag(0x09F2, 0x02, val);
+    }
 }
 
 bool SkywardSwordEditorForm::gustBellows()
@@ -445,9 +559,24 @@ bool SkywardSwordEditorForm::gustBellows()
     return flag(0x09E6, 0x02);
 }
 
-bool SkywardSwordEditorForm::harp()
+void SkywardSwordEditorForm::setGustBellows(bool val)
 {
+    if (!updatesEnabled())
+        return;
+    setFlag(0x09E6, 0x02, val);
+}
+
+bool SkywardSwordEditorForm::goddessHarp()
+{
+
     return flag(0x09F4, 0x02);
+}
+
+void SkywardSwordEditorForm::setGoddessHarp(bool val)
+{
+    if (!updatesEnabled())
+        return;
+    setFlag(0x09F4, 0x02, val);
 }
 
 bool SkywardSwordEditorForm::whip()
@@ -455,9 +584,24 @@ bool SkywardSwordEditorForm::whip()
     return flag(0x09F3, 0x10);
 }
 
+void SkywardSwordEditorForm::setWhip(bool val)
+{
+    if (!updatesEnabled())
+        return;
+    setFlag(0x09F3, 0x10, val);
+}
+
 bool SkywardSwordEditorForm::clawshot()
 {
     return flag(0x09E4, 0x20);
+}
+
+void SkywardSwordEditorForm::setClawshot(bool val)
+{
+    if (!updatesEnabled())
+        return;
+
+    setFlag(0x09E4, 0x20, val);
 }
 
 bool SkywardSwordEditorForm::diggingMitts()
@@ -465,9 +609,31 @@ bool SkywardSwordEditorForm::diggingMitts()
     return flag(0x09E6, 0x40);
 }
 
+void SkywardSwordEditorForm::setDiggingMitts(bool val)
+{
+    if (!updatesEnabled())
+        return;
+
+    if (!val)
+        setMoleMitts(false);
+
+    setFlag(0x09E6, 0x40, val);
+}
+
 bool SkywardSwordEditorForm::moleMitts()
 {
     return flag(0x09EC, 0x02);
+}
+
+void SkywardSwordEditorForm::setMoleMitts(bool val)
+{
+    if (!updatesEnabled())
+        return;
+
+    if (val)
+        setDiggingMitts(true);
+
+    setFlag(0x09EC, 0x02, val);
 }
 
 bool SkywardSwordEditorForm::sailCloth()
@@ -475,9 +641,19 @@ bool SkywardSwordEditorForm::sailCloth()
     return flag(0x09F4, 0x01);
 }
 
+void SkywardSwordEditorForm::setSailCloth(bool val)
+{
+    setFlag(0x09F4, 0x01, val);
+}
+
 bool SkywardSwordEditorForm::waterDragonScale()
 {
     return flag(0x09E9, 0x20);
+}
+
+void SkywardSwordEditorForm::setWaterDragonScale(bool val)
+{
+    setFlag(0x09E9, 0x20, val);
 }
 
 bool SkywardSwordEditorForm::fireShieldEarings()
@@ -485,9 +661,259 @@ bool SkywardSwordEditorForm::fireShieldEarings()
     return flag(0x09F3, 0x20);
 }
 
-bool SkywardSwordEditorForm::bomb()
+void SkywardSwordEditorForm::setFireShieldEarings(bool val)
+{
+    setFlag(0x09F3, 0x20, val);
+}
+
+bool SkywardSwordEditorForm::bombs()
 {
     return flag(0x09ED, 0x04);
+}
+
+void SkywardSwordEditorForm::setBombs(bool val)
+{
+    setFlag(0x09ED, 0x04, val);
+}
+
+bool SkywardSwordEditorForm::bug(SkywardSwordEditorForm::Bug bug)
+{
+    switch(bug)
+    {
+        case DekuHornet:         return flag(0x08F6, 0x80);
+        case BlessedButterfly:   return flag(0x09F2, 0x80);
+        case GerudoDragonfly:    return flag(0x09F5, 0x04);
+        case StarryFirefly:      return flag(0x09F5, 0x20);
+        case WoodlandRhinoBeetle:return flag(0x09F2, 0x08);
+        case VolcanicLadybug:    return flag(0x09F2, 0x40);
+        case SandCicada:         return flag(0x09F5, 0x02);
+        case SkyStagBeetle:      return flag(0x09F5, 0x10);
+        case FaronGrasshopper:   return flag(0x09F2, 0x04);
+        case SkyloftMantis:      return flag(0x09F2, 0x20);
+        case LanayruAnt:         return flag(0x09F5, 0x01);
+        case EldinRoller:        return flag(0x09F5, 0x08);
+        default:                 return false;
+    }
+}
+
+void SkywardSwordEditorForm::setBug(bool val)
+{
+    if (!updatesEnabled())
+        return;
+
+    if (sender() == ui->hornetChkBox)
+        setFlag(0x08F6, 0x80, val);
+    if (sender() == ui->butterflyChkBox)
+        setFlag(0x09F2, 0x80, val);
+    if (sender() == ui->dragonflyChkBox)
+        setFlag(0x09F5, 0x04, val);
+    if (sender() == ui->fireflyChkBox)
+        setFlag(0x09F5, 0x20, val);
+    if (sender() == ui->rhinoBeetleChkBox)
+        setFlag(0x09F2, 0x08, val);
+    if (sender() == ui->ladybugChkBox)
+        setFlag(0x09F2, 0x40, val);
+    if (sender() == ui->sandCicadaChkBox)
+        setFlag(0x09F5, 0x02, val);
+    if (sender() == ui->stagBeetleChkBox)
+        setFlag(0x09F5, 0x10, val);
+    if (sender() == ui->grasshopperChkBox)
+        setFlag(0x09F2, 0x04, val);
+    if (sender() == ui->mantisChkBox)
+        setFlag(0x09F2, 0x20, val);
+    if (sender() == ui->antChkBox)
+        setFlag(0x09F5, 0x01, val);
+    if (sender() == ui->eldinRollerChkBox)
+        setFlag(0x09F5, 0x08, val);
+}
+
+int SkywardSwordEditorForm::bugAmount(SkywardSwordEditorForm::Bug bug)
+{
+    switch(bug)
+    {
+        case DekuHornet:          return quantity(true,  0x0A4C);
+        case BlessedButterfly:    return quantity(false, 0x0A4A);
+        case GerudoDragonfly:     return quantity(true,  0x0A46);
+        case StarryFirefly:       return quantity(false, 0x0A44);
+        case WoodlandRhinoBeetle: return quantity(false, 0x0A4E);
+        case VolcanicLadybug:     return quantity(true,  0x0A4A);
+        case SandCicada:          return quantity(false, 0x0A48);
+        case SkyStagBeetle:       return quantity(true,  0x0A44);
+        case FaronGrasshopper:    return quantity(true,  0x0A4E);
+        case SkyloftMantis:       return quantity(false, 0x0A4C);
+        case LanayruAnt:          return quantity(true,  0x0A48);
+        case EldinRoller:         return quantity(false, 0x0A46);
+        default:                  return 0;
+    }
+}
+
+void SkywardSwordEditorForm::setBugAmount(int val)
+{
+    if (!updatesEnabled())
+        return;
+
+    if (val > 99)
+        sender()->setProperty("valid", false);
+    else
+        sender()->setProperty("valid", true);
+
+    QWidget* w = qobject_cast<QWidget*>(sender());
+    if (w)
+        style()->polish(w);
+
+    if (sender() == ui->hornetSpinBox)
+        setQuantity(true,  0x0A4C, val);
+    if (sender() == ui->butterflySpinBox)
+        setQuantity(false, 0x0A4A, val);
+    if (sender() == ui->dragonflySpinBox)
+        setQuantity(true,  0x0A46, val);
+    if (sender() == ui->fireflySpinBox)
+        setQuantity(false, 0x0A44, val);
+    if (sender() == ui->rhinoBeetleSpinBox)
+        setQuantity(false, 0x0A4E, val);
+    if (sender() == ui->ladybugSpinBox)
+        setQuantity(true,  0x0A4A, val);
+    if (sender() == ui->sandCicadaSpinBox)
+        setQuantity(false, 0x0A48, val);
+    if (sender() == ui->stagBeetleSpinBox)
+        setQuantity(true,  0x0A44, val);
+    if (sender() == ui->grasshopperSpinBox)
+        setQuantity(true,  0x0A4E, val);
+    if (sender() == ui->mantisSpinBox)
+        setQuantity(false, 0x0A4C, val);
+    if (sender() == ui->antSpinBox)
+        setQuantity(true,  0x0A48, val);
+    if (sender() == ui->eldinRollerSpinBox)
+        setQuantity(false, 0x0A46, val);
+}
+
+bool SkywardSwordEditorForm::material(Material material)
+{
+    switch(material)
+    {
+        case DekuHornetLarvae:return flag(0x0934, 0x02);
+        case BirdFeather:     return flag(0x0934, 0x04);
+        case TumbleWeed:      return flag(0x0934, 0x08);
+        case LizardTail:      return flag(0x0934, 0x10);
+        case EldinOre:        return flag(0x0934, 0x20);
+        case AncientFlower:   return flag(0x0934, 0x40);
+        case AmberRelic:      return flag(0x0934, 0x80);
+        case DuskRelic:       return flag(0x0937, 0x01);
+        case JellyBlob:       return flag(0x0937, 0x02);
+        case MonsterClaw:     return flag(0x0937, 0x04);
+        case MonsterHorn:     return flag(0x0937, 0x08);
+        case OrnamentalSkull: return flag(0x0937, 0x10);
+        case EvilCrystal:     return flag(0x0937, 0x20);
+        case BlueBirdFeather: return flag(0x0937, 0x40);
+        case GoldenSkull:     return flag(0x0937, 0x80);
+        case GoddessPlume:    return flag(0x0936, 0x01);
+        default:              return false;
+    }
+}
+
+void SkywardSwordEditorForm::setMaterial(bool val)
+{
+    if (!updatesEnabled())
+        return;
+}
+
+int SkywardSwordEditorForm::materialAmount(Material material)
+{
+    switch(material)
+    {
+        case DekuHornetLarvae: return quantity(true, 0x0A42);
+        case BirdFeather:      return quantity(false,0x0A42);
+        case TumbleWeed:       return quantity(true, 0x0A40);
+        case LizardTail:       return quantity(false,0x0A40);
+        case EldinOre:         return quantity(true, 0x0A3E);
+        case AncientFlower:    return quantity(false,0x0A3E);
+        case AmberRelic:       return quantity(true, 0x0A3C);
+        case DuskRelic:        return quantity(false,0x0A3C);
+        case JellyBlob:        return quantity(true, 0x0A3A);
+        case MonsterClaw:      return quantity(false,0x0A3A);
+        case MonsterHorn:      return quantity(true, 0x0A38);
+        case OrnamentalSkull:  return quantity(false,0x0A38);
+        case EvilCrystal:      return quantity(true, 0x0A36);
+        case BlueBirdFeather:  return quantity(false,0x0A36);
+        case GoldenSkull:      return quantity(true, 0x0A34);
+        case GoddessPlume:     return quantity(false,0x0A34);
+        default:               return 0;
+    }
+}
+
+void SkywardSwordEditorForm::setMaterialAmount(int val)
+{
+    if (!updatesEnabled())
+        return;
+
+    if (val > 99)
+        sender()->setProperty("valid", false);
+    else
+        sender()->setProperty("valid", true);
+
+    QWidget* w = qobject_cast<QWidget*>(sender());
+    if (w)
+        style()->polish(w);
+
+    if (sender() == ui->hornetLarvaeSpinBox)
+        setQuantity(true,  0x0A42, val);
+    else if (sender() == ui->birdFeatherSpinBox)
+        setQuantity(false, 0x0A42, val);
+    else if (sender() == ui->tumbleWeedSpinBox)
+        setQuantity(true,  0x0A40, val);
+    else if (sender() == ui->lizardTailSpinBox)
+        setQuantity(false, 0x0A40, val);
+    else if (sender() == ui->eldinOreSpinBox)
+        setQuantity(true,  0x0A3E, val);
+    else if (sender() == ui->ancientFlowerSpinBox)
+        setQuantity(false, 0x0A3E, val);
+    else if (sender() == ui->amberRelicSpinBox)
+        setQuantity(true,  0x0A3C, val);
+    else if (sender() == ui->duskRelicSpinBox)
+        setQuantity(false, 0x0A3C, val);
+    else if (sender() == ui->jellyBlobSpinBox)
+        setQuantity(true,  0x0A3A, val);
+    else if (sender() == ui->monsterClawSpinBox)
+        setQuantity(false, 0x0A3A, val);
+    else if (sender() == ui->monsterHornSpinBox)
+        setQuantity(true,  0x0A38, val);
+    else if (sender() == ui->decoSkullSpinBox)
+        setQuantity(false, 0x0A38, val);
+    else if (sender() == ui->evilCrystalSpinBox)
+        setQuantity(true,  0x0A36, val);
+    else if (sender() == ui->blueBirdFeatherSpinBox)
+        setQuantity(false, 0x0A36, val);
+    else if (sender() == ui->goldenSkullSpinBox)
+        setQuantity(true,  0x0A34, val);
+    else if (sender() == ui->goddessPlumeSpinBox)
+        setQuantity(false, 0x0A34, val);
+}
+
+int SkywardSwordEditorForm::gratitudeCrystals()
+{
+    return (int)((qFromBigEndian<quint16>(*(quint16*)(m_gameData + 0x0A50)) >> 3) & 127);
+}
+
+void SkywardSwordEditorForm::setGratitudeCrystals(int val)
+{
+    if (!updatesEnabled())
+        return;
+
+    if (val > 127)
+    {
+        ui->gratitudeCrystalsSpinBox->setProperty("valid", false);
+        style()->polish(ui->gratitudeCrystalsSpinBox);
+        return;
+    }
+    else
+    {
+        ui->gratitudeCrystalsSpinBox->setProperty("valid", true);
+        style()->polish(ui->gratitudeCrystalsSpinBox);
+    }
+
+    quint16 oldVal = qFromBigEndian(*(quint16*)(m_gameData + 0x0A50)) & 0xFC00;
+    *(quint16*)(m_gameData + 0x0A50) = qToBigEndian((quint16)(oldVal | (((quint16)val << 3) & 0x03FF)));
+    emit modified();
 }
 
 void SkywardSwordEditorForm::onModified()
@@ -500,56 +926,6 @@ void SkywardSwordEditorForm::onModified()
     updateChecksum();
     updateData();
     this->setUpdatesEnabled(true);
-}
-
-Playtime SkywardSwordEditorForm::playtime() const
-{
-    if (!m_gameData)
-        return Playtime();
-    Playtime playTime;
-    quint64 tmp = qFromBigEndian(*(quint64*)(m_gameData));
-    playTime.Days    = (((tmp / TICKS_PER_SECOND) / 60) / 60) / 24;
-    playTime.Hours   = (((tmp / TICKS_PER_SECOND) / 60) / 60) % 24;
-    playTime.Minutes = (( tmp / TICKS_PER_SECOND) / 60) % 60;
-    playTime.Seconds = (( tmp / TICKS_PER_SECOND) % 60);
-    return playTime;
-}
-
-void SkywardSwordEditorForm::setPlaytime(Playtime val)
-{
-    if (!m_gameData)
-        return;
-    if (val == playtime())
-        return;
-
-    quint64 totalSeconds = 0;
-    totalSeconds += ((val.Days    * 60) * 60) * 24;
-    totalSeconds += ( val.Hours   * 60) * 60;
-    totalSeconds += ( val.Minutes * 60);
-    totalSeconds +=   val.Seconds;
-    *(quint64*)(m_gameData) = qToBigEndian(TICKS_PER_SECOND * totalSeconds);
-
-    emit modified();
-}
-
-QDateTime SkywardSwordEditorForm::savetime() const
-{
-    if (!m_gameData)
-        return QDateTime::currentDateTime();
-
-    return fromWiiTime(qFromBigEndian(*(quint64*)(m_gameData + 0x0008)));
-}
-
-
-void SkywardSwordEditorForm::setSavetime(const QDateTime& time)
-{
-    if (!m_gameData)
-        return;
-    if (time == savetime())
-        return;
-
-    *(qint64*)(m_gameData + 0x0008) = qToBigEndian<qint64>(toWiiTime(time));
-    emit modified();
 }
 
 QString SkywardSwordEditorForm::currentMap() const
@@ -681,9 +1057,6 @@ void SkywardSwordEditorForm::updateChecksum()
 
 void SkywardSwordEditorForm::setQuantity(bool isRight, int offset, quint32 val)
 {
-    if (!m_gameData)
-        return;
-
     quint16 oldVal = qFromBigEndian(*(quint16*)(m_gameData + offset));
     if (!isRight)
     {
@@ -738,7 +1111,10 @@ void SkywardSwordEditorForm::updateData()
     ui->tabWidget->setEnabled(!isNew());
 
     // Play Stats
-    ((PlaytimeWidget*)ui->playtime)->setPlaytime(playtime());
+    PlaytimeWidget* ptw = qobject_cast<PlaytimeWidget*>(ui->playtime);
+    if (ptw)
+        ptw->setPlaytime(playtime());
+
     ui->saveTimeEdit->setDateTime(savetime());
     ui->curMapLineEdit->setText(currentMap());
     ui->curAreaLineEdit->setText(currentArea());
@@ -756,33 +1132,33 @@ void SkywardSwordEditorForm::updateData()
     ui->curHPSpinBox->setValue(currentHP());
 
     // Player Location
-    ui->playerXSpinBox->setValue(playerX());
-    ui->playerYSpinBox->setValue(playerY());
-    ui->playerZSpinBox->setValue(playerZ());
-    ui->playerRollSpinBox->setValue(playerRoll());
-    ui->playerPitchSpinBox->setValue(playerPitch());
-    ui->playerYawSpinBox->setValue(playerYaw());
+    ui->playerXSpinBox->setValue(player(XCoord));
+    ui->playerYSpinBox->setValue(player(YCoord));
+    ui->playerZSpinBox->setValue(player(ZCoord));
+    ui->playerRollSpinBox->setValue(player(RollCoord));
+    ui->playerPitchSpinBox->setValue(player(PitchCoord));
+    ui->playerYawSpinBox->setValue(player(YawCoord));
 
     // Camera Location
-    ui->cameraXSpinBox->setValue(cameraX());
-    ui->cameraYSpinBox->setValue(cameraY());
-    ui->cameraZSpinBox->setValue(cameraZ());
-    ui->cameraRollSpinBox->setValue(cameraRoll());
-    ui->cameraPitchSpinBox->setValue(cameraPitch());
-    ui->cameraYawSpinBox->setValue(cameraYaw());
+    ui->cameraXSpinBox->setValue(camera(XCoord));
+    ui->cameraYSpinBox->setValue(camera(YCoord));
+    ui->cameraZSpinBox->setValue(camera(ZCoord));
+    ui->cameraRollSpinBox->setValue(camera(RollCoord));
+    ui->cameraPitchSpinBox->setValue(camera(PitchCoord));
+    ui->cameraYawSpinBox->setValue(camera(YawCoord));
 
     // Equipment
-    ui->beetleChkBox->setChecked(beetle());
-    ui->hookBeetleChkBox->setChecked(hookBeetle());
-    ui->quickBeetleChkBox->setChecked(quickBeetle());
-    ui->toughBeetleChkBox->setChecked(toughBeetle());
-    ui->bowChkBox->setChecked(bow());
-    ui->ironBowChkBox->setChecked(ironBow());
-    ui->sacredBowChkBox->setChecked(sacredBow());
-    ui->bugNetChkBox->setChecked(bugnet());
-    ui->bigBugNetChkBox->setChecked(bigBugnet());
+    ui->beetleChkBox->setChecked(beetle(NormalBeetle));
+    ui->hookBeetleChkBox->setChecked(beetle(HookBeetle));
+    ui->quickBeetleChkBox->setChecked(beetle(QuickBeetle));
+    ui->toughBeetleChkBox->setChecked(beetle(ToughBeetle));
+    ui->bowChkBox->setChecked(bow(NormalBow));
+    ui->ironBowChkBox->setChecked(bow(IronBow));
+    ui->sacredBowChkBox->setChecked(bow(SacredBow));
+    ui->bugNetChkBox->setChecked(bugnet(Bugnet));
+    ui->bigBugNetChkBox->setChecked(bugnet(BigBugnet));
     ui->gustBellowsChkBox->setChecked(gustBellows());
-    ui->harpChkBox->setChecked(harp());
+    ui->harpChkBox->setChecked(goddessHarp());
     ui->whipChkBox->setChecked(whip());
     ui->clawShotChkBox->setChecked(clawshot());
     ui->diggingMittsChkBox->setChecked(diggingMitts());
@@ -790,16 +1166,90 @@ void SkywardSwordEditorForm::updateData()
     ui->sailClothChkBox->setChecked(sailCloth());
     ui->dragonScaleChkBox->setChecked(waterDragonScale());
     ui->fireEaringsChkBox->setChecked(fireShieldEarings());
-    ui->bombChkBox->setChecked(bomb());
-    ui->slingShotChkBox->setChecked(slingshot());
-    ui->scatterShotChkBox->setChecked(scattershot());
+    ui->bombChkBox->setChecked(bombs());
+    ui->slingShotChkBox->setChecked(slingshot(Slingshot));
+    ui->scatterShotChkBox->setChecked(slingshot(Scattershot));
 
     // Swords
     ui->practiceSwdChkBox->setChecked(practiceSword());
     ui->goddessSwdChkBox->setChecked(goddessSword());
-    ui->longSwdChkBox->setChecked(longSword());
-    ui->whiteSwdChkBox->setChecked(whiteSword());
+    ui->longSwdChkBox->setChecked(goddessLongSword());
+    ui->whiteSwdChkBox->setChecked(goddessWhiteSword());
     ui->masterSwdChkBox->setChecked(masterSword());
     ui->trueMasterSwdChkBox->setChecked(trueMasterSword());
+
+    // Bugs
+    updateBugs();
+
+    // Materials
+    updateMaterials();
+
+    // Gratitude crystals
+    ui->gratitudeCrystalsLabel->setEnabled(gratitudeCrystals() > 0);
+    ui->gratitudeCrystalsSpinBox->setValue(gratitudeCrystals());
     this->setUpdatesEnabled(true);
+    this->update();
+}
+
+void SkywardSwordEditorForm::updateBugs()
+{
+    ui->hornetChkBox      ->setChecked(bug(DekuHornet));
+    ui->hornetSpinBox     ->setValue(bugAmount(DekuHornet));
+    ui->butterflyChkBox   ->setChecked(bug(BlessedButterfly));
+    ui->butterflySpinBox  ->setValue(bugAmount(BlessedButterfly));
+    ui->dragonflyChkBox   ->setChecked(bug(GerudoDragonfly));
+    ui->dragonflySpinBox  ->setValue(bugAmount(GerudoDragonfly));
+    ui->fireflyChkBox     ->setChecked(bug(StarryFirefly));
+    ui->fireflySpinBox    ->setValue(bugAmount(StarryFirefly));
+    ui->rhinoBeetleChkBox ->setChecked(bug(WoodlandRhinoBeetle));
+    ui->rhinoBeetleSpinBox->setValue(bugAmount(WoodlandRhinoBeetle));
+    ui->ladybugChkBox     ->setChecked(bug(VolcanicLadybug));
+    ui->ladybugSpinBox    ->setValue(bugAmount(VolcanicLadybug));
+    ui->sandCicadaChkBox  ->setChecked(bug(SandCicada));
+    ui->sandCicadaSpinBox ->setValue(bugAmount(SandCicada));
+    ui->stagBeetleChkBox  ->setChecked(bug(SkyStagBeetle));
+    ui->stagBeetleSpinBox ->setValue(bugAmount(SkyStagBeetle));
+    ui->grasshopperChkBox ->setChecked(bug(FaronGrasshopper));
+    ui->grasshopperSpinBox->setValue(bugAmount(FaronGrasshopper));
+    ui->mantisChkBox      ->setChecked(bug(SkyloftMantis));
+    ui->mantisSpinBox     ->setValue(bugAmount(SkyloftMantis));
+    ui->antChkBox         ->setChecked(bug(LanayruAnt));
+    ui->antSpinBox        ->setValue(bugAmount(LanayruAnt));
+    ui->eldinRollerChkBox ->setChecked(bug(EldinRoller));
+    ui->eldinRollerSpinBox->setValue(bugAmount(EldinRoller));
+}
+
+
+void SkywardSwordEditorForm::updateMaterials()
+{
+    ui->hornetLarvaeChkBox->setChecked(material(DekuHornetLarvae));
+    ui->hornetLarvaeSpinBox->setValue(materialAmount(DekuHornetLarvae));
+    ui->birdFeatherChkBox->setChecked(material(BirdFeather));
+    ui->birdFeatherSpinBox->setValue(materialAmount(BirdFeather));
+    ui->tumbleWeedChkBox->setChecked(material(TumbleWeed));
+    ui->tumbleWeedSpinBox->setValue(materialAmount(TumbleWeed));
+    ui->lizardTailChkBox->setChecked(material(LizardTail));
+    ui->lizardTailSpinBox->setValue(materialAmount(LizardTail));
+    ui->eldinOreChkBox->setChecked(material(EldinOre));
+    ui->eldinOreSpinBox->setValue(materialAmount(EldinOre));
+    ui->ancientFlowerChkBox->setChecked(material(AncientFlower));
+    ui->ancientFlowerSpinBox->setValue(materialAmount(AncientFlower));
+    ui->amberRelicChkBox->setChecked(material(AmberRelic));
+    ui->amberRelicSpinBox->setValue(materialAmount(AmberRelic));
+    ui->duskRelicChkBox->setChecked(material(DuskRelic));
+    ui->duskRelicSpinBox->setValue(materialAmount(DuskRelic));
+    ui->jellyBlobChkBox->setChecked(material(JellyBlob));
+    ui->jellyBlobSpinBox->setValue(materialAmount(JellyBlob));
+    ui->monsterClawChkBox->setChecked(material(MonsterClaw));
+    ui->monsterClawSpinBox->setValue(materialAmount(MonsterClaw));
+    ui->monsterHornChkBox->setChecked(material(MonsterHorn));
+    ui->monsterHornSpinBox->setValue(materialAmount(MonsterHorn));
+    ui->decoSkullChkBox->setChecked(material(OrnamentalSkull));
+    ui->decoSkullSpinBox->setValue(materialAmount(OrnamentalSkull));
+    ui->evilCrystalChkBox->setChecked(material(EvilCrystal));
+    ui->evilCrystalSpinBox->setValue(materialAmount(EvilCrystal));
+    ui->blueBirdFeatherChkBox->setChecked(material(BlueBirdFeather));
+    ui->blueBirdFeatherSpinBox->setValue(materialAmount(BlueBirdFeather));
+    ui->goddessPlumeChkBox->setChecked(material(GoddessPlume));
+    ui->goddessPlumeSpinBox->setValue(materialAmount(GoddessPlume));
 }

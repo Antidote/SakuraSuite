@@ -12,6 +12,8 @@
 **/*.user
 **/.directory
 **/moc_*
+**/ui_*
+**/qrc_*
 # Directories
 **/doc
 **/moc

@@ -6,49 +6,22 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>756</width>
-    <height>598</height>
+    <width>955</width>
+    <height>652</height>
    </rect>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QSpinBox[valid=false] {
+	background-color:red;
+}</string>
+  </property>
   <layout class="QGridLayout" name="gridLayout_18">
-   <item row="1" column="4">
-    <widget class="QLabel" name="checksumValueLbl">
-     <property name="font">
-      <font>
-       <family>Courier New</family>
-      </font>
-     </property>
-     <property name="text">
-      <string notr="true"/>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="3">
-    <widget class="QLabel" name="checksumLbl">
-     <property name="text">
-      <string>Checksum:</string>
-     </property>
-    </widget>
-   </item>
    <item row="1" column="0">
     <widget class="QPushButton" name="deletePushButton">
      <property name="text">
       <string>Delete</string>
      </property>
     </widget>
-   </item>
-   <item row="1" column="2">
-    <spacer name="horizontalSpacer_4">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>0</width>
-       <height>0</height>
-      </size>
-     </property>
-    </spacer>
    </item>
    <item row="1" column="1">
     <widget class="QPushButton" name="createPushButton">
@@ -57,7 +30,7 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="0" colspan="5">
+   <item row="2" column="0" colspan="5">
     <widget class="QTabWidget" name="tabWidget">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -69,7 +42,7 @@
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="playerTab">
       <attribute name="title">
@@ -91,415 +64,6 @@
        <property name="spacing">
         <number>4</number>
        </property>
-       <item row="3" column="0">
-        <spacer name="verticalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="2" column="0">
-        <widget class="QGroupBox" name="playerGroup">
-         <property name="title">
-          <string>Player</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_7">
-          <item row="1" column="0">
-           <widget class="QLabel" name="rupeeLabel">
-            <property name="text">
-             <string>Rupees:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="nameLabel">
-            <property name="text">
-             <string>Name:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1" colspan="3">
-           <widget class="QLineEdit" name="nameLineEdit">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string notr="true"/>
-            </property>
-            <property name="maxLength">
-             <number>8</number>
-            </property>
-            <property name="placeholderText">
-             <string notr="true"/>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="totalHPLabel">
-            <property name="text">
-             <string>Total HP:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="unkHPLabel">
-            <property name="text">
-             <string>Unk HP:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0">
-           <widget class="QLabel" name="curHPLabel">
-            <property name="text">
-             <string>Current HP:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1" colspan="3">
-           <widget class="QSpinBox" name="rupeeSpinBox">
-            <property name="maximum">
-             <number>9999</number>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1" colspan="2">
-           <widget class="QSpinBox" name="totalHPSpinBox">
-            <property name="maximum">
-             <number>80</number>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1" colspan="2">
-           <widget class="QSpinBox" name="unkHPSpinBox">
-            <property name="maximum">
-             <number>80</number>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="1" colspan="2">
-           <widget class="QSpinBox" name="curHPSpinBox">
-            <property name="maximum">
-             <number>80</number>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QGroupBox" name="playInfoGroup">
-         <property name="title">
-          <string>Play Stats</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_5">
-          <item row="1" column="2" colspan="6">
-           <widget class="QDateTimeEdit" name="saveTimeEdit">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="readOnly">
-             <bool>false</bool>
-            </property>
-            <property name="buttonSymbols">
-             <enum>QAbstractSpinBox::NoButtons</enum>
-            </property>
-            <property name="dateTime">
-             <datetime>
-              <hour>0</hour>
-              <minute>0</minute>
-              <second>0</second>
-              <year>2000</year>
-              <month>1</month>
-              <day>1</day>
-             </datetime>
-            </property>
-            <property name="minimumDate">
-             <date>
-              <year>2000</year>
-              <month>1</month>
-              <day>1</day>
-             </date>
-            </property>
-            <property name="calendarPopup">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0" colspan="2">
-           <widget class="QLabel" name="saveTimeLabel">
-            <property name="text">
-             <string>Save Time:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0" colspan="2">
-           <widget class="QLabel" name="curMapLabel">
-            <property name="text">
-             <string>Current Map</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0" colspan="2">
-           <widget class="QLabel" name="curRoomLabel">
-            <property name="text">
-             <string>Current Room(?):</string>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="0">
-           <widget class="QLabel" name="label_2">
-            <property name="text">
-             <string>Room ID</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0" colspan="2">
-           <widget class="QLabel" name="curAreaLabel">
-            <property name="text">
-             <string>Current Area:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="2" colspan="5">
-           <widget class="QLineEdit" name="curRoomLineEdit">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="2" colspan="5">
-           <widget class="QSpinBox" name="roomIDSpinBox">
-            <property name="buttonSymbols">
-             <enum>QAbstractSpinBox::NoButtons</enum>
-            </property>
-            <property name="maximum">
-             <number>255</number>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="2" colspan="4">
-           <widget class="QLineEdit" name="curMapLineEdit">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="4" colspan="3">
-           <widget class="QCheckBox" name="heroModeChkBox">
-            <property name="text">
-             <string>Hero Mode</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="2" colspan="4">
-           <widget class="QLineEdit" name="curAreaLineEdit">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="2" colspan="2">
-           <widget class="QCheckBox" name="nightChkbox">
-            <property name="text">
-             <string>Night</string>
-            </property>
-           </widget>
-          </item>
-          <item row="6" column="0" colspan="2">
-           <widget class="QCheckBox" name="introViewedChkBox">
-            <property name="text">
-             <string>Watched Intro</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0" colspan="7">
-           <widget class="PlaytimeWidget" name="playtime" native="true">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>25</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="0" column="2">
-        <spacer name="horizontalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="0" column="1">
-        <widget class="QGroupBox" name="playerLocationGroupBox">
-         <property name="title">
-          <string>Player Location</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_16">
-          <item row="0" column="0">
-           <widget class="QLabel" name="playerXLabel">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>X:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QDoubleSpinBox" name="playerXSpinBox">
-            <property name="decimals">
-             <number>6</number>
-            </property>
-            <property name="minimum">
-             <double>-1000000.000000000000000</double>
-            </property>
-            <property name="maximum">
-             <double>1000000.000000000000000</double>
-            </property>
-            <property name="value">
-             <double>0.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="playerYLabel">
-            <property name="text">
-             <string>Y:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QDoubleSpinBox" name="playerYSpinBox">
-            <property name="decimals">
-             <number>6</number>
-            </property>
-            <property name="minimum">
-             <double>-1000000.000000000000000</double>
-            </property>
-            <property name="maximum">
-             <double>1000000.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="playerZLabel">
-            <property name="text">
-             <string>Z:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QDoubleSpinBox" name="playerZSpinBox">
-            <property name="decimals">
-             <number>6</number>
-            </property>
-            <property name="minimum">
-             <double>-1000000.000000000000000</double>
-            </property>
-            <property name="maximum">
-             <double>1000000.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="playerRollLabel">
-            <property name="text">
-             <string>Roll:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1">
-           <widget class="QDoubleSpinBox" name="playerRollSpinBox">
-            <property name="decimals">
-             <number>6</number>
-            </property>
-            <property name="minimum">
-             <double>-1000000.000000000000000</double>
-            </property>
-            <property name="maximum">
-             <double>1000000.000000000000000</double>
-            </property>
-            <property name="value">
-             <double>0.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0">
-           <widget class="QLabel" name="playerPitchLabel">
-            <property name="text">
-             <string>Pitch:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="1">
-           <widget class="QDoubleSpinBox" name="playerPitchSpinBox">
-            <property name="decimals">
-             <number>6</number>
-            </property>
-            <property name="minimum">
-             <double>-1000000.000000000000000</double>
-            </property>
-            <property name="maximum">
-             <double>1000000.000000000000000</double>
-            </property>
-            <property name="value">
-             <double>0.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="0">
-           <widget class="QLabel" name="playerYawLabel">
-            <property name="text">
-             <string>Yaw:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="1">
-           <widget class="QDoubleSpinBox" name="playerYawSpinBox">
-            <property name="decimals">
-             <number>6</number>
-            </property>
-            <property name="minimum">
-             <double>-1000000.000000000000000</double>
-            </property>
-            <property name="maximum">
-             <double>1000000.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
        <item row="2" column="1">
         <widget class="QGroupBox" name="cameraGroupBox">
          <property name="title">
@@ -511,12 +75,18 @@
             <property name="text">
              <string>Yaw:</string>
             </property>
+            <property name="buddy">
+             <cstring>cameraYawSpinBox</cstring>
+            </property>
            </widget>
           </item>
           <item row="4" column="0">
            <widget class="QLabel" name="camPitchLabel">
             <property name="text">
              <string>Pitch:</string>
+            </property>
+            <property name="buddy">
+             <cstring>cameraPitchSpinBox</cstring>
             </property>
            </widget>
           </item>
@@ -525,6 +95,9 @@
             <property name="text">
              <string>Roll:</string>
             </property>
+            <property name="buddy">
+             <cstring>cameraRollSpinBox</cstring>
+            </property>
            </widget>
           </item>
           <item row="2" column="0">
@@ -532,12 +105,18 @@
             <property name="text">
              <string>Z:</string>
             </property>
+            <property name="buddy">
+             <cstring>cameraZSpinBox</cstring>
+            </property>
            </widget>
           </item>
           <item row="1" column="0">
            <widget class="QLabel" name="camYLabel">
             <property name="text">
              <string>Y:</string>
+            </property>
+            <property name="buddy">
+             <cstring>cameraYSpinBox</cstring>
             </property>
            </widget>
           </item>
@@ -551,6 +130,9 @@
             </property>
             <property name="text">
              <string>X:</string>
+            </property>
+            <property name="buddy">
+             <cstring>cameraXSpinBox</cstring>
             </property>
            </widget>
           </item>
@@ -632,6 +214,450 @@
             </property>
             <property name="maximum">
              <double>1000000.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QGroupBox" name="playerGroup">
+         <property name="title">
+          <string>Player</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_7">
+          <item row="1" column="0">
+           <widget class="QLabel" name="rupeeLabel">
+            <property name="text">
+             <string>Rupees:</string>
+            </property>
+            <property name="buddy">
+             <cstring>rupeeSpinBox</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="nameLabel">
+            <property name="text">
+             <string>Name:</string>
+            </property>
+            <property name="buddy">
+             <cstring>nameLineEdit</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" colspan="3">
+           <widget class="QLineEdit" name="nameLineEdit">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string notr="true"/>
+            </property>
+            <property name="maxLength">
+             <number>8</number>
+            </property>
+            <property name="placeholderText">
+             <string notr="true"/>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="totalHPLabel">
+            <property name="text">
+             <string>Total HP:</string>
+            </property>
+            <property name="buddy">
+             <cstring>totalHPSpinBox</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="unkHPLabel">
+            <property name="text">
+             <string>Unk HP:</string>
+            </property>
+            <property name="buddy">
+             <cstring>unkHPSpinBox</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="curHPLabel">
+            <property name="text">
+             <string>Current HP:</string>
+            </property>
+            <property name="buddy">
+             <cstring>curHPSpinBox</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1" colspan="3">
+           <widget class="QSpinBox" name="rupeeSpinBox">
+            <property name="maximum">
+             <number>9999</number>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1" colspan="2">
+           <widget class="QSpinBox" name="totalHPSpinBox">
+            <property name="maximum">
+             <number>80</number>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1" colspan="2">
+           <widget class="QSpinBox" name="unkHPSpinBox">
+            <property name="maximum">
+             <number>80</number>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1" colspan="2">
+           <widget class="QSpinBox" name="curHPSpinBox">
+            <property name="maximum">
+             <number>80</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="0" column="1">
+        <widget class="QGroupBox" name="playerLocationGroupBox">
+         <property name="title">
+          <string>Player Location</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_16">
+          <item row="0" column="0">
+           <widget class="QLabel" name="playerXLabel">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>X:</string>
+            </property>
+            <property name="buddy">
+             <cstring>playerXSpinBox</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QDoubleSpinBox" name="playerXSpinBox">
+            <property name="decimals">
+             <number>6</number>
+            </property>
+            <property name="minimum">
+             <double>-1000000.000000000000000</double>
+            </property>
+            <property name="maximum">
+             <double>1000000.000000000000000</double>
+            </property>
+            <property name="value">
+             <double>0.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="playerYLabel">
+            <property name="text">
+             <string>Y:</string>
+            </property>
+            <property name="buddy">
+             <cstring>playerYSpinBox</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QDoubleSpinBox" name="playerYSpinBox">
+            <property name="decimals">
+             <number>6</number>
+            </property>
+            <property name="minimum">
+             <double>-1000000.000000000000000</double>
+            </property>
+            <property name="maximum">
+             <double>1000000.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="playerZLabel">
+            <property name="text">
+             <string>Z:</string>
+            </property>
+            <property name="buddy">
+             <cstring>playerZSpinBox</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QDoubleSpinBox" name="playerZSpinBox">
+            <property name="decimals">
+             <number>6</number>
+            </property>
+            <property name="minimum">
+             <double>-1000000.000000000000000</double>
+            </property>
+            <property name="maximum">
+             <double>1000000.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="playerRollLabel">
+            <property name="text">
+             <string>Roll:</string>
+            </property>
+            <property name="buddy">
+             <cstring>playerRollSpinBox</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QDoubleSpinBox" name="playerRollSpinBox">
+            <property name="decimals">
+             <number>6</number>
+            </property>
+            <property name="minimum">
+             <double>-1000000.000000000000000</double>
+            </property>
+            <property name="maximum">
+             <double>1000000.000000000000000</double>
+            </property>
+            <property name="value">
+             <double>0.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="playerPitchLabel">
+            <property name="text">
+             <string>Pitch:</string>
+            </property>
+            <property name="buddy">
+             <cstring>playerPitchSpinBox</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QDoubleSpinBox" name="playerPitchSpinBox">
+            <property name="decimals">
+             <number>6</number>
+            </property>
+            <property name="minimum">
+             <double>-1000000.000000000000000</double>
+            </property>
+            <property name="maximum">
+             <double>1000000.000000000000000</double>
+            </property>
+            <property name="value">
+             <double>0.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QLabel" name="playerYawLabel">
+            <property name="text">
+             <string>Yaw:</string>
+            </property>
+            <property name="buddy">
+             <cstring>playerYawSpinBox</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="QDoubleSpinBox" name="playerYawSpinBox">
+            <property name="decimals">
+             <number>6</number>
+            </property>
+            <property name="minimum">
+             <double>-1000000.000000000000000</double>
+            </property>
+            <property name="maximum">
+             <double>1000000.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QGroupBox" name="playInfoGroup">
+         <property name="title">
+          <string>Play Stats</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_5">
+          <item row="1" column="2" colspan="6">
+           <widget class="QDateTimeEdit" name="saveTimeEdit">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="readOnly">
+             <bool>false</bool>
+            </property>
+            <property name="buttonSymbols">
+             <enum>QAbstractSpinBox::NoButtons</enum>
+            </property>
+            <property name="dateTime">
+             <datetime>
+              <hour>0</hour>
+              <minute>0</minute>
+              <second>0</second>
+              <year>2000</year>
+              <month>1</month>
+              <day>1</day>
+             </datetime>
+            </property>
+            <property name="minimumDate">
+             <date>
+              <year>2000</year>
+              <month>1</month>
+              <day>1</day>
+             </date>
+            </property>
+            <property name="calendarPopup">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="2">
+           <widget class="QLabel" name="saveTimeLabel">
+            <property name="text">
+             <string>Save Time:</string>
+            </property>
+            <property name="buddy">
+             <cstring>saveTimeEdit</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0" colspan="2">
+           <widget class="QLabel" name="curMapLabel">
+            <property name="text">
+             <string>Current Map</string>
+            </property>
+            <property name="buddy">
+             <cstring>curMapLineEdit</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0" colspan="2">
+           <widget class="QLabel" name="curRoomLabel">
+            <property name="text">
+             <string>Current Room(?):</string>
+            </property>
+            <property name="buddy">
+             <cstring>curRoomLineEdit</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0" colspan="2">
+           <widget class="QLabel" name="curAreaLabel">
+            <property name="text">
+             <string>Current Area:</string>
+            </property>
+            <property name="buddy">
+             <cstring>curAreaLineEdit</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="2" colspan="5">
+           <widget class="QLineEdit" name="curRoomLineEdit">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="2" colspan="5">
+           <widget class="QSpinBox" name="roomIDSpinBox">
+            <property name="buttonSymbols">
+             <enum>QAbstractSpinBox::NoButtons</enum>
+            </property>
+            <property name="maximum">
+             <number>255</number>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2" colspan="4">
+           <widget class="QLineEdit" name="curMapLineEdit">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="4" colspan="3">
+           <widget class="QCheckBox" name="heroModeChkBox">
+            <property name="text">
+             <string>Hero Mode</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="2" colspan="4">
+           <widget class="QLineEdit" name="curAreaLineEdit">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="2" colspan="2">
+           <widget class="QCheckBox" name="nightChkbox">
+            <property name="text">
+             <string>Night</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="0" colspan="2">
+           <widget class="QCheckBox" name="introViewedChkBox">
+            <property name="text">
+             <string>Watched Intro</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" colspan="7">
+           <widget class="PlaytimeWidget" name="playtime" native="true">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>25</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0" colspan="2">
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>Room ID</string>
+            </property>
+            <property name="buddy">
+             <cstring>roomIDSpinBox</cstring>
             </property>
            </widget>
           </item>
@@ -1000,7 +1026,7 @@
             </property>
             <property name="icon">
              <iconset resource="../resources/resources.qrc">
-              <normaloff>:/Weapons/SlingShot</normaloff>:/Weapons/SlingShot</iconset>
+              <normaloff>:/Weapons/ScatterShot</normaloff>:/Weapons/ScatterShot</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -1010,13 +1036,26 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="0" colspan="2">
+          <item row="1" column="1">
            <widget class="QSpinBox" name="seedAmmoSpinBox">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="buttonSymbols">
              <enum>QAbstractSpinBox::PlusMinus</enum>
             </property>
             <property name="maximum">
              <number>127</number>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="seedAmmoLabel">
+            <property name="text">
+             <string notr="true">Ammo:</string>
+            </property>
+            <property name="scaledContents">
+             <bool>false</bool>
             </property>
            </widget>
           </item>
@@ -1538,6 +1577,9 @@
           </property>
           <item row="0" column="0">
            <widget class="QCheckBox" name="letterChkBox">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="toolTip">
              <string>Crawlin's Letter</string>
             </property>
@@ -1558,6 +1600,9 @@
           </item>
           <item row="0" column="1">
            <widget class="QCheckBox" name="bugCageChkBox">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="toolTip">
              <string>Beedle's Bug Cage</string>
             </property>
@@ -1578,6 +1623,9 @@
           </item>
           <item row="0" column="2">
            <widget class="QCheckBox" name="rattleChkBox">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="toolTip">
              <string>Rattle</string>
             </property>
@@ -1602,25 +1650,28 @@
        <item row="1" column="1">
         <layout class="QVBoxLayout" name="verticalLayout_5">
          <item>
-          <widget class="QLabel" name="label_3">
+          <widget class="QLabel" name="gratitudeCrystalsLabel">
+           <property name="text">
+            <string notr="true"/>
+           </property>
            <property name="pixmap">
             <pixmap resource="../resources/resources.qrc">:/QuestItems/GratitudeCrystal</pixmap>
-           </property>
-           <property name="scaledContents">
-            <bool>false</bool>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
            </property>
+           <property name="buddy">
+            <cstring>gratitudeCrystalsSpinBox</cstring>
+           </property>
           </widget>
          </item>
          <item>
-          <widget class="QSpinBox" name="gratitudeCrystalSpinBox">
+          <widget class="QSpinBox" name="gratitudeCrystalsSpinBox">
            <property name="buttonSymbols">
             <enum>QAbstractSpinBox::PlusMinus</enum>
            </property>
            <property name="maximum">
-            <number>255</number>
+            <number>127</number>
            </property>
           </widget>
          </item>
@@ -2178,19 +2229,6 @@
          </layout>
         </widget>
        </item>
-       <item row="0" column="3">
-        <spacer name="horizontalSpacer_3">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
        <item row="2" column="1">
         <spacer name="verticalSpacer_6">
          <property name="orientation">
@@ -2685,7 +2723,14 @@
      </widget>
     </widget>
    </item>
-   <item row="3" column="5">
+   <item row="1" column="3">
+    <widget class="QLabel" name="checksumLbl">
+     <property name="text">
+      <string>Checksum:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2">
     <spacer name="horizontalSpacer">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -2698,25 +2743,56 @@
      </property>
     </spacer>
    </item>
-   <item row="4" column="1">
-    <spacer name="verticalSpacer">
+   <item row="1" column="4">
+    <widget class="QLabel" name="checksumValueLbl">
+     <property name="font">
+      <font>
+       <family>Courier New</family>
+      </font>
+     </property>
+     <property name="text">
+      <string notr="true">Checksum</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" colspan="5">
+    <widget class="QLabel" name="previewLabel">
+     <property name="text">
+      <string>PREVIEW LABEL</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="5">
+    <spacer name="horizontalSpacer_3">
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Horizontal</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>20</width>
-       <height>1</height>
+       <width>40</width>
+       <height>20</height>
       </size>
      </property>
     </spacer>
    </item>
-   <item row="0" column="0" colspan="6">
-    <widget class="QLabel" name="previewLabel">
-     <property name="text">
-      <string>&lt;center&gt;PREVIEW LABEL&lt;/center&gt;</string>
+   <item row="3" column="0" colspan="4">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
      </property>
-    </widget>
+     <property name="sizeType">
+      <enum>QSizePolicy::Expanding</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>
@@ -2854,7 +2930,7 @@
   <tabstop>letterChkBox</tabstop>
   <tabstop>bugCageChkBox</tabstop>
   <tabstop>rattleChkBox</tabstop>
-  <tabstop>gratitudeCrystalSpinBox</tabstop>
+  <tabstop>gratitudeCrystalsSpinBox</tabstop>
  </tabstops>
  <resources>
   <include location="../resources/resources.qrc"/>
@@ -2867,8 +2943,8 @@
    <slot>onDelete()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>58</x>
-     <y>23</y>
+     <x>93</x>
+     <y>56</y>
     </hint>
     <hint type="destinationlabel">
      <x>239</x>
@@ -2883,8 +2959,8 @@
    <slot>onCreate()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>153</x>
-     <y>20</y>
+     <x>184</x>
+     <y>50</y>
     </hint>
     <hint type="destinationlabel">
      <x>336</x>
@@ -2899,8 +2975,8 @@
    <slot>setPlaytime(Playtime)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>97</x>
-     <y>112</y>
+     <x>54</x>
+     <y>125</y>
     </hint>
     <hint type="destinationlabel">
      <x>357</x>
@@ -2915,12 +2991,12 @@
    <slot>setSavetime(QDateTime)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>275</x>
-     <y>141</y>
+     <x>114</x>
+     <y>125</y>
     </hint>
     <hint type="destinationlabel">
-     <x>802</x>
-     <y>39</y>
+     <x>749</x>
+     <y>41</y>
     </hint>
    </hints>
   </connection>
@@ -2931,8 +3007,8 @@
    <slot>setCurrentMap(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>183</x>
-     <y>172</y>
+     <x>114</x>
+     <y>125</y>
     </hint>
     <hint type="destinationlabel">
      <x>440</x>
@@ -2947,8 +3023,8 @@
    <slot>setCurrentArea(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>221</x>
-     <y>204</y>
+     <x>114</x>
+     <y>125</y>
     </hint>
     <hint type="destinationlabel">
      <x>654</x>
@@ -2963,12 +3039,12 @@
    <slot>setCurrentRoom(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>166</x>
-     <y>232</y>
+     <x>114</x>
+     <y>125</y>
     </hint>
     <hint type="destinationlabel">
      <x>206</x>
-     <y>-26</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -2979,12 +3055,12 @@
    <slot>setRoomID(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>306</x>
-     <y>265</y>
+     <x>114</x>
+     <y>125</y>
     </hint>
     <hint type="destinationlabel">
      <x>390</x>
-     <y>-40</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -2995,12 +3071,12 @@
    <slot>setIntroWatched(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>83</x>
-     <y>296</y>
+     <x>98</x>
+     <y>125</y>
     </hint>
     <hint type="destinationlabel">
      <x>90</x>
-     <y>-24</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -3011,12 +3087,12 @@
    <slot>setNight(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>200</x>
-     <y>299</y>
+     <x>114</x>
+     <y>125</y>
     </hint>
     <hint type="destinationlabel">
      <x>240</x>
-     <y>-49</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -3027,12 +3103,12 @@
    <slot>setHeroMode(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>254</x>
-     <y>292</y>
+     <x>114</x>
+     <y>125</y>
     </hint>
     <hint type="destinationlabel">
      <x>253</x>
-     <y>-11</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -3043,12 +3119,12 @@
    <slot>setPlayerName(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>139</x>
-     <y>354</y>
+     <x>114</x>
+     <y>138</y>
     </hint>
     <hint type="destinationlabel">
      <x>104</x>
-     <y>-66</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -3059,12 +3135,12 @@
    <slot>setRupees(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>289</x>
-     <y>397</y>
+     <x>114</x>
+     <y>138</y>
     </hint>
     <hint type="destinationlabel">
      <x>345</x>
-     <y>-68</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -3075,12 +3151,12 @@
    <slot>setTotalHP(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>228</x>
-     <y>434</y>
+     <x>114</x>
+     <y>138</y>
     </hint>
     <hint type="destinationlabel">
      <x>229</x>
-     <y>-41</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -3091,12 +3167,12 @@
    <slot>setUnkHP(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>147</x>
-     <y>468</y>
+     <x>114</x>
+     <y>138</y>
     </hint>
     <hint type="destinationlabel">
      <x>185</x>
-     <y>-33</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -3107,12 +3183,12 @@
    <slot>setCurrentHP(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>198</x>
-     <y>504</y>
+     <x>114</x>
+     <y>138</y>
     </hint>
     <hint type="destinationlabel">
      <x>243</x>
-     <y>-61</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -3120,15 +3196,15 @@
    <sender>playerXSpinBox</sender>
    <signal>valueChanged(double)</signal>
    <receiver>SkywardSwordEditorForm</receiver>
-   <slot>setPlayerX(double)</slot>
+   <slot>setCoord(double)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>515</x>
-     <y>103</y>
+     <x>160</x>
+     <y>125</y>
     </hint>
     <hint type="destinationlabel">
      <x>527</x>
-     <y>-44</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -3136,15 +3212,15 @@
    <sender>playerYSpinBox</sender>
    <signal>valueChanged(double)</signal>
    <receiver>SkywardSwordEditorForm</receiver>
-   <slot>setPlayerY(double)</slot>
+   <slot>setCoord(double)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>486</x>
-     <y>153</y>
+     <x>160</x>
+     <y>125</y>
     </hint>
     <hint type="destinationlabel">
      <x>514</x>
-     <y>-114</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -3152,15 +3228,15 @@
    <sender>playerZSpinBox</sender>
    <signal>valueChanged(double)</signal>
    <receiver>SkywardSwordEditorForm</receiver>
-   <slot>setPlayerZ(double)</slot>
+   <slot>setCoord(double)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>476</x>
-     <y>182</y>
+     <x>160</x>
+     <y>125</y>
     </hint>
     <hint type="destinationlabel">
      <x>482</x>
-     <y>-22</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -3168,15 +3244,15 @@
    <sender>playerRollSpinBox</sender>
    <signal>valueChanged(double)</signal>
    <receiver>SkywardSwordEditorForm</receiver>
-   <slot>setPlayerRoll(double)</slot>
+   <slot>setCoord(double)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>441</x>
-     <y>218</y>
+     <x>160</x>
+     <y>125</y>
     </hint>
     <hint type="destinationlabel">
      <x>455</x>
-     <y>-76</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -3184,15 +3260,15 @@
    <sender>playerPitchSpinBox</sender>
    <signal>valueChanged(double)</signal>
    <receiver>SkywardSwordEditorForm</receiver>
-   <slot>setPlayerPitch(double)</slot>
+   <slot>setCoord(double)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>529</x>
-     <y>250</y>
+     <x>160</x>
+     <y>125</y>
     </hint>
     <hint type="destinationlabel">
      <x>506</x>
-     <y>-47</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -3200,15 +3276,15 @@
    <sender>playerYawSpinBox</sender>
    <signal>valueChanged(double)</signal>
    <receiver>SkywardSwordEditorForm</receiver>
-   <slot>setPlayerYaw(double)</slot>
+   <slot>setCoord(double)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>499</x>
-     <y>288</y>
+     <x>160</x>
+     <y>125</y>
     </hint>
     <hint type="destinationlabel">
      <x>498</x>
-     <y>-66</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -3216,15 +3292,15 @@
    <sender>cameraXSpinBox</sender>
    <signal>valueChanged(double)</signal>
    <receiver>SkywardSwordEditorForm</receiver>
-   <slot>setCameraX(double)</slot>
+   <slot>setCoord(double)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>465</x>
-     <y>356</y>
+     <x>160</x>
+     <y>138</y>
     </hint>
     <hint type="destinationlabel">
      <x>465</x>
-     <y>-27</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -3232,15 +3308,15 @@
    <sender>cameraYSpinBox</sender>
    <signal>valueChanged(double)</signal>
    <receiver>SkywardSwordEditorForm</receiver>
-   <slot>setCameraY(double)</slot>
+   <slot>setCoord(double)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>554</x>
-     <y>391</y>
+     <x>160</x>
+     <y>138</y>
     </hint>
     <hint type="destinationlabel">
      <x>543</x>
-     <y>-11</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -3248,15 +3324,15 @@
    <sender>cameraZSpinBox</sender>
    <signal>valueChanged(double)</signal>
    <receiver>SkywardSwordEditorForm</receiver>
-   <slot>setCameraZ(double)</slot>
+   <slot>setCoord(double)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>515</x>
-     <y>421</y>
+     <x>160</x>
+     <y>138</y>
     </hint>
     <hint type="destinationlabel">
      <x>615</x>
-     <y>-11</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -3264,14 +3340,14 @@
    <sender>cameraRollSpinBox</sender>
    <signal>valueChanged(double)</signal>
    <receiver>SkywardSwordEditorForm</receiver>
-   <slot>setCameraRoll(double)</slot>
+   <slot>setCoord(double)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>500</x>
-     <y>443</y>
+     <x>160</x>
+     <y>138</y>
     </hint>
     <hint type="destinationlabel">
-     <x>838</x>
+     <x>749</x>
      <y>13</y>
     </hint>
    </hints>
@@ -3280,14 +3356,14 @@
    <sender>cameraPitchSpinBox</sender>
    <signal>valueChanged(double)</signal>
    <receiver>SkywardSwordEditorForm</receiver>
-   <slot>setCameraPitch(double)</slot>
+   <slot>setCoord(double)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>487</x>
-     <y>480</y>
+     <x>160</x>
+     <y>138</y>
     </hint>
     <hint type="destinationlabel">
-     <x>941</x>
+     <x>749</x>
      <y>24</y>
     </hint>
    </hints>
@@ -3296,14 +3372,14 @@
    <sender>cameraYawSpinBox</sender>
    <signal>valueChanged(double)</signal>
    <receiver>SkywardSwordEditorForm</receiver>
-   <slot>setCameraYaw(double)</slot>
+   <slot>setCoord(double)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>454</x>
-     <y>518</y>
+     <x>160</x>
+     <y>138</y>
     </hint>
     <hint type="destinationlabel">
-     <x>805</x>
+     <x>749</x>
      <y>19</y>
     </hint>
    </hints>
@@ -3315,12 +3391,12 @@
    <slot>setBeetle(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>71</x>
-     <y>140</y>
+     <x>110</x>
+     <y>204</y>
     </hint>
     <hint type="destinationlabel">
      <x>435</x>
-     <y>-1</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -3328,15 +3404,1935 @@
    <sender>hookBeetleChkBox</sender>
    <signal>toggled(bool)</signal>
    <receiver>SkywardSwordEditorForm</receiver>
-   <slot>setHookBeetle(bool)</slot>
+   <slot>setBeetle(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>160</x>
-     <y>145</y>
+     <x>190</x>
+     <y>204</y>
     </hint>
     <hint type="destinationlabel">
      <x>177</x>
-     <y>-59</y>
+     <y>0</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>quickBeetleChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setBeetle(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>110</x>
+     <y>289</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>3</x>
+     <y>2</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>toughBeetleChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setBeetle(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>190</x>
+     <y>289</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>62</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>bugNetChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setBugnet(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>289</x>
+     <y>183</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>2</x>
+     <y>105</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>bigBugNetChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setBugnet(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>371</x>
+     <y>183</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1</x>
+     <y>144</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>gustBellowsChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setGustBellows(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>290</x>
+     <y>287</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>3</x>
+     <y>184</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>harpChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setGoddessHarp(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>371</x>
+     <y>287</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>205</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>whipChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setWhip(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>290</x>
+     <y>350</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>2</x>
+     <y>234</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>clawShotChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setClawshot(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>371</x>
+     <y>350</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1</x>
+     <y>271</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>diggingMittsChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setDiggingMitts(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>290</x>
+     <y>413</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>2</x>
+     <y>307</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>sailClothChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setSailCloth(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>371</x>
+     <y>413</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>4</x>
+     <y>334</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>moleMittsChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setMoleMitts(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>290</x>
+     <y>476</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>2</x>
+     <y>366</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>dragonScaleChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setWaterDragonScale(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>371</x>
+     <y>476</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>400</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>fireEaringsChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setFireShieldEarings(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>290</x>
+     <y>556</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>439</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>bombChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setBombs(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>371</x>
+     <y>539</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>462</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>bombAmmoSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setBombAmmo(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>371</x>
+     <y>574</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>491</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>bowChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setBow(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>110</x>
+     <y>421</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>394</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ironBowChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setBow(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>190</x>
+     <y>421</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>405</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>sacredBowChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setBow(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>110</x>
+     <y>492</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>4</x>
+     <y>430</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>arrowAmmoSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setBowAmmo(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>141</x>
+     <y>535</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>2</x>
+     <y>520</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>slingShotChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setSlingshot(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>485</x>
+     <y>171</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>355</x>
+     <y>62</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>scatterShotChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setSlingshot(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>581</x>
+     <y>171</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>450</x>
+     <y>59</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>practiceSwdChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setPracticeSword(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>453</x>
+     <y>346</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>560</x>
+     <y>29</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>goddessSwdChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setGoddessSword(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>517</x>
+     <y>346</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>533</x>
+     <y>59</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>longSwdChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setGoddessLongSword(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>581</x>
+     <y>346</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>694</x>
+     <y>61</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>whiteSwdChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setGoddessWhiteSword(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>453</x>
+     <y>511</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>219</x>
+     <y>28</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>masterSwdChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setMasterSword(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>517</x>
+     <y>511</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>314</x>
+     <y>0</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>trueMasterSwdChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setTrueMasterSword(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>581</x>
+     <y>511</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>570</x>
+     <y>0</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>smallWalletChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setSmallWallet(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>714</x>
+     <y>202</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>655</x>
+     <y>48</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mediumWalletChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setMediumWallet(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>714</x>
+     <y>285</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>726</x>
+     <y>29</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>bigWalletChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setBigWallet(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>714</x>
+     <y>368</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>456</x>
+     <y>25</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>giantWalletChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setGiantWallet(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>714</x>
+     <y>451</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>745</x>
+     <y>115</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tycoonWalletChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setTycoonWallet(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>714</x>
+     <y>534</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>749</x>
+     <y>532</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>seedAmmoSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setSeedAmmo(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>581</x>
+     <y>196</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>258</x>
+     <y>24</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>hornetChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>hornetSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>111</x>
+     <y>148</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>111</x>
+     <y>196</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>butterflyChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>butterflySpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>119</x>
+     <y>130</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>193</x>
+     <y>196</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>dragonflyChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>dragonflySpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>275</x>
+     <y>148</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>275</x>
+     <y>196</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>fireflyChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>fireflySpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>357</x>
+     <y>148</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>357</x>
+     <y>196</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>hornetLarvaeChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>hornetLarvaeSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>459</x>
+     <y>149</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>459</x>
+     <y>200</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>birdFeatherChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>birdFeatherSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>547</x>
+     <y>149</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>545</x>
+     <y>200</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tumbleWeedChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>tumbleWeedSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>633</x>
+     <y>149</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>631</x>
+     <y>200</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lizardTailChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>lizardTailSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>719</x>
+     <y>149</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>719</x>
+     <y>200</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rhinoBeetleChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>rhinoBeetleSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>111</x>
+     <y>226</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>111</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ladybugChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>ladybugSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>193</x>
+     <y>226</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>193</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>sandCicadaChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>sandCicadaSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>275</x>
+     <y>226</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>275</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>stagBeetleChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>stagBeetleSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>357</x>
+     <y>226</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>357</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>eldinOreChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>eldinOreSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>459</x>
+     <y>233</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>459</x>
+     <y>284</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ancientFlowerChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>ancientFlowerSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>547</x>
+     <y>233</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>545</x>
+     <y>284</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>amberRelicChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>amberRelicSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>633</x>
+     <y>233</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>631</x>
+     <y>284</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>duskRelicChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>duskRelicSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>719</x>
+     <y>233</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>719</x>
+     <y>284</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>grasshopperChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>grasshopperSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>111</x>
+     <y>304</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>111</x>
+     <y>352</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mantisChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>mantisSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>193</x>
+     <y>304</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>193</x>
+     <y>352</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>antChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>antSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>275</x>
+     <y>304</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>275</x>
+     <y>352</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>eldinRollerChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>eldinRollerSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>357</x>
+     <y>304</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>357</x>
+     <y>352</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>jellyBlobChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>jellyBlobSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>463</x>
+     <y>317</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>459</x>
+     <y>368</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>monsterClawChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>monsterClawSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>545</x>
+     <y>317</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>545</x>
+     <y>368</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>monsterHornChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>monsterHornSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>631</x>
+     <y>317</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>631</x>
+     <y>368</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>decoSkullChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>decoSkullSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>719</x>
+     <y>317</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>719</x>
+     <y>368</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>evilCrystalChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>evilCrystalSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>461</x>
+     <y>401</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>459</x>
+     <y>452</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>blueBirdFeatherChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>blueBirdFeatherSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>549</x>
+     <y>401</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>545</x>
+     <y>452</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>goldenSkullChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>goldenSkullSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>635</x>
+     <y>401</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>631</x>
+     <y>452</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>goddessPlumeChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>goddessPlumeSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>719</x>
+     <y>401</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>719</x>
+     <y>452</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>hornetChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setBug(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>111</x>
+     <y>148</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>142</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>butterflyChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setBug(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>119</x>
+     <y>130</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>131</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>dragonflyChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setBug(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>275</x>
+     <y>148</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>150</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>fireflyChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setBug(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>357</x>
+     <y>148</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>159</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rhinoBeetleChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setBug(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>111</x>
+     <y>226</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>177</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ladybugChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setBug(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>193</x>
+     <y>226</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>185</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>sandCicadaChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setBug(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>275</x>
+     <y>226</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>203</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>stagBeetleChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setBug(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>357</x>
+     <y>226</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>214</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>grasshopperChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setBug(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>111</x>
+     <y>304</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>229</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mantisChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setBug(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>193</x>
+     <y>304</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>239</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>antChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setBug(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>275</x>
+     <y>304</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>254</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>eldinRollerChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setBug(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>357</x>
+     <y>304</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>264</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>hornetSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setBugAmount(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>111</x>
+     <y>196</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>177</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>butterflySpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setBugAmount(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>193</x>
+     <y>196</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>188</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>dragonflySpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setBugAmount(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>275</x>
+     <y>196</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>193</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>fireflySpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setBugAmount(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>357</x>
+     <y>196</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>192</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rhinoBeetleSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setBugAmount(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>111</x>
+     <y>274</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>260</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ladybugSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setBugAmount(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>193</x>
+     <y>274</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>264</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>sandCicadaSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setBugAmount(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>275</x>
+     <y>274</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>262</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>stagBeetleSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setBugAmount(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>357</x>
+     <y>274</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>272</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>grasshopperSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setBugAmount(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>111</x>
+     <y>352</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>279</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mantisSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setBugAmount(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>193</x>
+     <y>352</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>294</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>antSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setBugAmount(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>275</x>
+     <y>352</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>305</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>eldinRollerSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setBugAmount(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>357</x>
+     <y>352</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>0</x>
+     <y>334</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>hornetLarvaeChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setMaterial(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>459</x>
+     <y>149</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>749</x>
+     <y>30</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>birdFeatherChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setMaterial(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>547</x>
+     <y>149</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>749</x>
+     <y>79</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tumbleWeedChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setMaterial(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>633</x>
+     <y>149</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>749</x>
+     <y>121</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lizardTailChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setMaterial(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>719</x>
+     <y>149</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>742</x>
+     <y>159</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>eldinOreChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setMaterial(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>459</x>
+     <y>233</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>749</x>
+     <y>193</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ancientFlowerChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setMaterial(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>547</x>
+     <y>233</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>743</x>
+     <y>251</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>amberRelicChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setMaterial(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>633</x>
+     <y>233</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>749</x>
+     <y>297</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>jellyBlobChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setMaterial(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>463</x>
+     <y>317</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>749</x>
+     <y>330</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>monsterClawChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setMaterial(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>545</x>
+     <y>317</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>749</x>
+     <y>392</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>monsterHornChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setMaterial(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>631</x>
+     <y>317</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>749</x>
+     <y>591</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>evilCrystalChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setMaterial(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>461</x>
+     <y>401</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>204</x>
+     <y>597</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>decoSkullChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setMaterial(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>719</x>
+     <y>317</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>651</x>
+     <y>597</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>blueBirdFeatherChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setMaterial(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>549</x>
+     <y>401</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>311</x>
+     <y>597</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>goldenSkullChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setMaterial(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>635</x>
+     <y>401</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>344</x>
+     <y>597</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>hornetLarvaeSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setMaterialAmount(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>459</x>
+     <y>200</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>749</x>
+     <y>59</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>birdFeatherSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setMaterialAmount(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>545</x>
+     <y>200</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>749</x>
+     <y>99</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tumbleWeedSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setMaterialAmount(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>631</x>
+     <y>200</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>749</x>
+     <y>140</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lizardTailSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setMaterialAmount(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>719</x>
+     <y>200</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>749</x>
+     <y>180</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>eldinOreSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setMaterialAmount(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>459</x>
+     <y>284</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>743</x>
+     <y>226</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ancientFlowerSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setMaterialAmount(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>545</x>
+     <y>284</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>749</x>
+     <y>279</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>amberRelicSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setMaterialAmount(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>631</x>
+     <y>284</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>749</x>
+     <y>322</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>duskRelicSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setMaterialAmount(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>719</x>
+     <y>284</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>749</x>
+     <y>370</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>jellyBlobSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setMaterialAmount(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>459</x>
+     <y>368</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>749</x>
+     <y>510</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>monsterClawSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setMaterialAmount(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>545</x>
+     <y>368</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>749</x>
+     <y>452</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>monsterHornSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setMaterialAmount(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>631</x>
+     <y>368</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>749</x>
+     <y>597</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>goddessPlumeChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setMaterial(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>719</x>
+     <y>401</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>420</x>
+     <y>597</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>decoSkullSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setMaterialAmount(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>719</x>
+     <y>368</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>614</x>
+     <y>597</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>evilCrystalSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setMaterialAmount(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>459</x>
+     <y>452</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>177</x>
+     <y>597</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>blueBirdFeatherSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setMaterialAmount(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>545</x>
+     <y>452</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>285</x>
+     <y>597</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>goddessPlumeSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setMaterialAmount(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>719</x>
+     <y>452</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>501</x>
+     <y>597</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>bombChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>bombAmmoSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>371</x>
+     <y>539</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>371</x>
+     <y>574</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>slingShotChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>seedAmmoSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>485</x>
+     <y>171</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>581</x>
+     <y>196</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>bowChkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>arrowAmmoSpinBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>97</x>
+     <y>421</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>141</x>
+     <y>535</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>gratitudeCrystalsSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setGratitudeCrystals(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>305</x>
+     <y>452</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>84</x>
+     <y>610</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>goldenSkullSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>SkywardSwordEditorForm</receiver>
+   <slot>setMaterialAmount(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>597</x>
+     <y>441</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>716</x>
+     <y>617</y>
     </hint>
    </hints>
   </connection>
@@ -3358,19 +5354,39 @@
   <slot>setTotalHP(int)</slot>
   <slot>setUnkHP(int)</slot>
   <slot>setCurrentHP(int)</slot>
-  <slot>setPlayerX(double)</slot>
-  <slot>setPlayerY(double)</slot>
-  <slot>setPlayerZ(double)</slot>
-  <slot>setPlayerRoll(double)</slot>
-  <slot>setPlayerPitch(double)</slot>
-  <slot>setPlayerYaw(double)</slot>
-  <slot>setCameraX(double)</slot>
-  <slot>setCameraY(double)</slot>
-  <slot>setCameraZ(double)</slot>
-  <slot>setCameraRoll(double)</slot>
-  <slot>setCameraPitch(double)</slot>
-  <slot>setCameraYaw(double)</slot>
+  <slot>setCoord(double)</slot>
   <slot>setBeetle(bool)</slot>
-  <slot>setHookBeetle(bool)</slot>
+  <slot>setBow(bool)</slot>
+  <slot>setBowAmmo(int)</slot>
+  <slot>setBugnet(bool)</slot>
+  <slot>setGustBellows(bool)</slot>
+  <slot>setGoddessHarp(bool)</slot>
+  <slot>setWhip(bool)</slot>
+  <slot>setClawshot(bool)</slot>
+  <slot>setDiggingMitts(bool)</slot>
+  <slot>setMoleMitts(bool)</slot>
+  <slot>setSailCloth(bool)</slot>
+  <slot>setWaterDragonScale(bool)</slot>
+  <slot>setFireShieldEarings(bool)</slot>
+  <slot>setBombs(bool)</slot>
+  <slot>setBombAmmo(int)</slot>
+  <slot>setSlingshot(bool)</slot>
+  <slot>setSeedAmmo(int)</slot>
+  <slot>setPracticeSword(bool)</slot>
+  <slot>setGoddessSword(bool)</slot>
+  <slot>setGoddessLongSword(bool)</slot>
+  <slot>setGoddessWhiteSword(bool)</slot>
+  <slot>setMasterSword(bool)</slot>
+  <slot>setTrueMasterSword(bool)</slot>
+  <slot>setSmallWallet(bool)</slot>
+  <slot>setMediumWallet(bool)</slot>
+  <slot>setBigWallet(bool)</slot>
+  <slot>setGiantWallet(bool)</slot>
+  <slot>setTycoonWallet(bool)</slot>
+  <slot>setBug(bool)</slot>
+  <slot>setBugAmount(int)</slot>
+  <slot>setMaterial(bool)</slot>
+  <slot>setMaterialAmount(int)</slot>
+  <slot>setGratitudeCrystals(int)</slot>
  </slots>
 </ui>

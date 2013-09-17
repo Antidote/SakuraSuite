@@ -96,9 +96,9 @@ MainWindow::MainWindow(QWidget *parent) :
     m_previewLabel  = new QLabel(bar);
     m_previewLabel->setObjectName("previewLabel");
 #ifdef WK2_PREVIEW
-    m_previewLabel->setText("PREVIEW BUILD");
+    m_previewLabel->setText("<b>PREVIEW BUILD</b>");
 #elif defined(WK2_INTERNAL)
-    m_previewLabel->setText("INTERNAL BUILD");
+    m_previewLabel->setText("<b>INTERNAL BUILD</b>");
 #endif
     m_previewLayout->setContentsMargins(150, 0, 6, 0);
     m_previewLayout->addWidget(m_previewLabel);
@@ -633,8 +633,8 @@ void MainWindow::onCheckUpdate()
     if (!settings.value(Constants::Settings::WIIKING2_UPDATE_URL).isValid())
         settings.setValue(Constants::Settings::WIIKING2_UPDATE_URL, Constants::Settings::WIIKING2_UPDATE_URL_DEFAULT);
 
-    m_updateMBox.setWindowTitle("Please wait...");
-    m_updateMBox.setText("Checking for updates, please wait.");
+    m_updateMBox.setWindowTitle(Constants::WIIKING2_UPDATE_CHECKING);
+    m_updateMBox.setText(Constants::WIIKING2_UPDATE_CHECKING_MSG);
     m_updateMBox.setStandardButtons(QMessageBox::NoButton);
     // This prevents the user from clicking away
     m_updateMBox.setWindowModality(Qt::WindowModal);
@@ -647,7 +647,7 @@ void MainWindow::onCheckUpdate()
 #ifdef WK2_INTERNAL
     m_updater->checkForUpdate(Constants::Settings::WIIKING2_UPDATE_URL_DEFAULT, Constants::WIIKING2_APP_VERSION, Constants::WIIKING2_VERSION);
 #else
-    m_updater->checkForUpdate(settings.value(Constants::Settings::WIIKING2_UPDATE_URL).toString(), Constants::WIIKING2_APP_VERSION);
+    m_updater->checkForUpdate(settings.value(Constants::Settings::WIIKING2_UPDATE_URL).toString(), Constants::WIIKING2_APP_VERSION, Constants::WIIKING2_VERSION);
 #endif
 }
 

@@ -68,7 +68,7 @@ QString SkywardSwordPlugin::extension() const
 
 QString SkywardSwordPlugin::name() const
 {
-    return Constants::SKYWARDSWORD_PLUGIN_NAME;
+    return Constants::SKYWARDSWORD_TITLE;
 }
 
 QString SkywardSwordPlugin::author() const
@@ -165,8 +165,8 @@ void SkywardSwordPlugin::doUpdate()
     if (!m_updateMBox.parent())
         m_updateMBox.setParent((QWidget*)parent());
 
-    m_updateMBox.setWindowTitle("Please wait...");
-    m_updateMBox.setText("Checking for updates, please wait.");
+    m_updateMBox.setWindowTitle(Constants::SKYWARDSWORD_UPDATE_CHECKING);
+    m_updateMBox.setText(Constants::SKYWARDSWORD_UPDATE_CHECKING_MSG);
     m_updateMBox.setStandardButtons(QMessageBox::NoButton);
     // This prevents the user from clicking away
     m_updateMBox.setWindowModality(Qt::WindowModal);

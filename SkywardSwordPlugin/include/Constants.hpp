@@ -5,8 +5,8 @@
 #include <QSettings>
 
 // Only ONE of these may be defined
-//#define SS_PREVIEW
-#define SS_INTERNAL
+#define SS_PREVIEW
+//#define SS_INTERNAL
 
 #if defined(SS_PREVIEW) && defined(SS_INTERNAL)
 #error "You can only define either SS_PREVIEW or SS_INTERNAL"
@@ -36,7 +36,8 @@ const QString SKYWARDSWORD_PLUGIN_VERSION            = QString(SKYWARDSWORD_VERS
 
 const QString SKYWARDSWORD_TITLE                     = QString("Skyward Sword Plugin");
 const QString SKYWARDSWORD_PLUGIN_NAME               = QString("skywardswordplugin");
-
+const QString SKYWARDSWORD_UPDATE_CHECKING           = tr("Checking for updates please wait...");
+const QString SKYWARDSWORD_UPDATE_CHECKING_MSG       = tr("%1 is checking for updates, please wait.").arg(SKYWARDSWORD_TITLE);
 const QString SKYWARDSWORD_UPDATE_CONTACT_ERROR      = tr("Unable to contact server");
 const QString SKYWARDSWORD_UPDATE_CONTACT_ERROR_MSG  = tr("%1 was unable to contact the update server.<br />"
                                                           "check your network settings and try again.<br />"

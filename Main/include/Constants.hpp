@@ -53,6 +53,8 @@ const QString WIIKING2_TITLE                     = tr("WiiKing2 Editor");
 const QString WIIKING2_TITLE_FILE                = tr("%1%2 - Wiiking2 Editor");
 const QString WIIKING2_TITLE_DIRTY               = tr("*");
 const QString WIIKING2_APP_NAME                  = tr("wiiking2editor");
+const QString WIIKING2_UPDATE_CHECKING           = tr("Checking for updates please wait...");
+const QString WIIKING2_UPDATE_CHECKING_MSG       = tr("%1 is checking for updates, please wait.").arg(WIIKING2_TITLE);
 const QString WIIKING2_UPDATE_CONTACT_ERROR      = tr("Unable to contact server");
 const QString WIIKING2_UPDATE_CONTACT_ERROR_MSG  = tr("%1 was unable to contact the update server.<br />"
                                                      "check your network settings and try again.<br />"
@@ -61,8 +63,9 @@ const QString WIIKING2_UPDATE_CONTACT_ERROR_MSG  = tr("%1 was unable to contact 
 const QString WIIKING2_UPDATE_PARSE_ERROR        = tr("Error while parsing...");
 const QString WIIKING2_UPDATE_PARSE_ERROR_MSG    = tr("Unable to parse update file <br />"
                                                       "Please contact a developer for assistance with this message:<br />%1");
-const QString WIIKING2_LATEST_VERSION            = tr("At latest version...");
-const QString WIIKING2_LATEST_VERSION_MSG        = tr("The application is up to date.");
+const QString WIIKING2_LATEST_VERSION            = tr("%1 is up to date...").arg(WIIKING2_TITLE);
+const QString WIIKING2_LATEST_VERSION_MSG        = tr("%1 is at the latest version.<br />"
+                                                      "If you feel this is an error please contact a developer with your platform.").arg(WIIKING2_TITLE);
 const QString WIIKING2_NOT_LATEST_VERSION        = tr("%1 is out of date...").arg(WIIKING2_TITLE);
 const QString WIIKING2_NOT_LATEST_VERSION_MSG    = tr("An update is available for %1<br />"
                                                      "You may download the update at: <a href=\"%2\">%2</a><br />"

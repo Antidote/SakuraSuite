@@ -30,6 +30,80 @@ class SkywardSwordEditorForm : public QWidget
 {
     Q_OBJECT
 public:
+
+    enum Coord
+    {
+        XCoord,
+        YCoord,
+        ZCoord,
+        RollCoord,
+        PitchCoord,
+        YawCoord
+    };
+
+    enum BeetleType
+    {
+        NormalBeetle,
+        HookBeetle,
+        QuickBeetle,
+        ToughBeetle
+    };
+
+    enum BowType
+    {
+        NormalBow,
+        IronBow,
+        SacredBow
+    };
+
+    enum SlingshotType
+    {
+        Slingshot,
+        Scattershot
+    };
+
+    enum BugnetType
+    {
+        Bugnet,
+        BigBugnet
+    };
+
+    enum Bug
+    {
+        DekuHornet,
+        BlessedButterfly,
+        GerudoDragonfly,
+        StarryFirefly,
+        WoodlandRhinoBeetle,
+        VolcanicLadybug,
+        SandCicada,
+        SkyStagBeetle,
+        FaronGrasshopper,
+        SkyloftMantis,
+        LanayruAnt,
+        EldinRoller
+    };
+
+    enum Material
+    {
+        DekuHornetLarvae,
+        BirdFeather,
+        TumbleWeed,
+        LizardTail,
+        EldinOre,
+        AncientFlower,
+        AmberRelic,
+        DuskRelic,
+        JellyBlob,
+        MonsterClaw,
+        MonsterHorn,
+        OrnamentalSkull,
+        EvilCrystal,
+        BlueBirdFeather,
+        GoldenSkull,
+        GoddessPlume
+    };
+
     // Default coords for new file
     static const float DEFAULT_POS_X;
     static const float DEFAULT_POS_Y;
@@ -86,8 +160,8 @@ public slots:
     void setCurrentHP(int val);
 
     // Player Location
-    float playerX();
-    void setPlayerX(double x);
+    float player(Coord coord);
+    void setCoord(double x);
     float playerY();
     void setPlayerY(double y);
     float playerZ();
@@ -100,51 +174,65 @@ public slots:
     void setPlayerYaw(double yaw);
 
     // Camera Location
-    float cameraX();
-    void setCameraX(double x);
-    float cameraY();
-    void setCameraY(double y);
-    float cameraZ();
-    void setCameraZ(double z);
-    float cameraRoll();
-    void setCameraRoll(double roll);
-    float cameraPitch();
-    void setCameraPitch(double pitch);
-    float cameraYaw();
-    void setCameraYaw(double yaw);
+    float camera(Coord coord);
+    void setCamera(double val);
 
     // Equipment
-    bool beetle();
+    bool beetle(BeetleType type);
     void setBeetle(bool val);
-    bool hookBeetle();
-    void setHookBeetle(bool val);
-    bool quickBeetle();
-    bool toughBeetle();
-    bool bow();
-    bool ironBow();
-    bool sacredBow();
-    bool bugnet();
-    bool bigBugnet();
+    bool bow(BowType bow);
+    void setBow(bool val);
+    bool bugnet(BugnetType type);
+    void setBugnet(bool val);
     bool gustBellows();
-    bool harp();
+    void setGustBellows(bool val);
+    bool goddessHarp();
+    void setGoddessHarp(bool val);
     bool whip();
+    void setWhip(bool val);
     bool clawshot();
+    void setClawshot(bool val);
     bool diggingMitts();
+    void setDiggingMitts(bool val);
     bool moleMitts();
+    void setMoleMitts(bool val);
     bool sailCloth();
+    void setSailCloth(bool val);
     bool waterDragonScale();
+    void setWaterDragonScale(bool val);
     bool fireShieldEarings();
-    bool bomb();
-    bool slingshot();
-    bool scattershot();
+    void setFireShieldEarings(bool val);
+    bool bombs();
+    void setBombs(bool val);
+    bool slingshot(SlingshotType type);
+    void setSlingshot(bool val);
 
     // Swords
     bool practiceSword();
+    void setPracticeSword(bool val);
     bool goddessSword();
-    bool longSword();
-    bool whiteSword();
+    void setGoddessSword(bool val);
+    bool goddessLongSword();
+    void setGoddessLongSword(bool val);
+    bool goddessWhiteSword();
+    void setGoddessWhiteSword(bool val);
     bool masterSword();
+    void setMasterSword(bool val);
     bool trueMasterSword();
+    void setTrueMasterSword(bool val);
+
+    bool bug(Bug bug);
+    void setBug(bool val);
+    int bugAmount(Bug bug);
+    void setBugAmount(int val);
+
+    bool material(Material material);
+    void setMaterial(bool val);
+    int materialAmount(Material material);
+    void setMaterialAmount(int val);
+
+    int gratitudeCrystals();
+    void setGratitudeCrystals(int val);
 
     bool isNew() const;
     void setNew(bool isNew);
@@ -160,9 +248,12 @@ private:
     bool flag(quint32 offset, quint32 flag);
     void setFlag(quint32 offset, quint32 flag, bool val);
     void updateData();
+    void updateBugs();
+    void updateMaterials();
     Ui::SkywardSwordEditorForm *ui;
     SkywardSwordGameFile* m_gameFile;
     char* m_gameData;
 };
 
 #endif // SKYWARDSWORDEDITORFORM_HPP
+
