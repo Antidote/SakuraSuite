@@ -178,20 +178,7 @@ public slots:
     // Player Location
     float player(Coord coord);
     void setCoord(double x);
-    float playerY();
-    void setPlayerY(double y);
-    float playerZ();
-    void setPlayerZ(double z);
-    float playerRoll();
-    void setPlayerRoll(double roll);
-    float playerPitch();
-    void setPlayerPitch(double pitch);
-    float playerYaw();
-    void setPlayerYaw(double yaw);
-
-    // Camera Location
     float camera(Coord coord);
-    void setCamera(double val);
 
     // Equipment
     bool beetle(BeetleType type);

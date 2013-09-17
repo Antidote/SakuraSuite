@@ -46,8 +46,9 @@ const QString SKYWARDSWORD_UPDATE_CONTACT_ERROR_MSG  = tr("%1 was unable to cont
 const QString SKYWARDSWORD_UPDATE_PARSE_ERROR        = tr("Error while parsing...");
 const QString SKYWARDSWORD_UPDATE_PARSE_ERROR_MSG    = tr("Unable to parse update file <br />"
                                                           "Please contact a developer for assistance with this message:<br />%1");
-const QString SKYWARDSWORD_LATEST_VERSION            = tr("At latest version...");
-const QString SKYWARDSWORD_LATEST_VERSION_MSG        = tr("The application is up to date.");
+const QString SKYWARDSWORD_LATEST_VERSION            = tr("%1 is up to date...").arg(SKYWARDSWORD_TITLE);
+const QString SKYWARDSWORD_LATEST_VERSION_MSG        = tr("%1 is at the latest version.<br />"
+                                                          "If you feel this is an error please contact a developer with your platform.").arg(SKYWARDSWORD_TITLE);
 const QString SKYWARDSWORD_NOT_LATEST_VERSION        = tr("%1 is out of date...").arg(SKYWARDSWORD_TITLE);
 const QString SKYWARDSWORD_NOT_LATEST_VERSION_MSG    = tr("An update is available for %1<br />"
                                                           "You may download the update at: <a href=\"%2\">%2</a><br />"

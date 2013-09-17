@@ -9,6 +9,7 @@ QT       += network gui
 TARGET = updater
 TEMPLATE = lib
 CONFIG += staticlib
+DESTDIR = $$PWD
 
 CONFIG(release, release|debug) {
     DEFINES -= WK2_DEBUG
