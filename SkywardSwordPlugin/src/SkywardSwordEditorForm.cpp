@@ -815,6 +815,39 @@ void SkywardSwordEditorForm::setMaterial(bool val)
 {
     if (!updatesEnabled())
         return;
+
+    if (sender() == ui->hornetLarvaeChkBox)
+        setFlag(0x0934, 0x02, val);
+    else if (sender() == ui->birdFeatherChkBox)
+        setFlag(0x0934, 0x04, val);
+    else if (sender() == ui->tumbleWeedChkBox)
+        setFlag(0x0934, 0x08, val);
+    else if (sender() == ui->lizardTailChkBox)
+        setFlag(0x0934, 0x10, val);
+    else if (sender() == ui->eldinOreChkBox)
+        setFlag(0x0934, 0x20, val);
+    else if (sender() == ui->ancientFlowerChkBox)
+        setFlag(0x0934, 0x40, val);
+    else if (sender() == ui->amberRelicChkBox)
+        setFlag(0x0934, 0x80, val);
+    else if (sender() == ui->duskRelicChkBox)
+        setFlag(0x0937, 0x01, val);
+    else if (sender() == ui->jellyBlobChkBox)
+        setFlag(0x0937, 0x02, val);
+    else if (sender() == ui->monsterClawChkBox)
+        setFlag(0x0937, 0x04, val);
+    else if (sender() == ui->monsterHornChkBox)
+        setFlag(0x0937, 0x08, val);
+    else if (sender() == ui->decoSkullChkBox)
+        setFlag(0x0937, 0x10, val);
+    else if (sender() == ui->evilCrystalChkBox)
+        setFlag(0x0937, 0x20, val);
+    else if (sender() == ui->blueBirdFeatherChkBox)
+        setFlag(0x0937, 0x40, val);
+    else if (sender() == ui->goldenSkullChkBox)
+        setFlag(0x0937, 0x80, val);
+    else if (sender() == ui->goddessPlumeChkBox)
+        setFlag(0x0936, 0x01, val);
 }
 
 int SkywardSwordEditorForm::materialAmount(Material material)
