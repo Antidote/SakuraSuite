@@ -18,8 +18,8 @@
 
 #include <QSettings>
 // Only ONE of these may be defined
-//#define WK2_PREVIEW
-#define WK2_INTERNAL
+#define WK2_PREVIEW
+//#define WK2_INTERNAL
 
 #if defined(WK2_PREVIEW) && defined(WK2_INTERNAL)
 #error "You can only define either WK2_PREVIEW or WK2_INTERNAL"
@@ -30,13 +30,13 @@ namespace Constants
 #define tr QObject::tr
 const int     WIIKING2_MAJOR                    = 0;
 const int     WIIKING2_MINOR                    = 1;
-const int     WIIKING2_PATCH                    = 0;
+const int     WIIKING2_PATCH                    = 1;
 const int     WIIKING2_VERSION                  = (WIIKING2_MAJOR << 16) | (WIIKING2_MINOR << 8) | WIIKING2_PATCH;
 const QString WIIKING2_VERSION_STR              = QString("%1.%2.%3").arg(WIIKING2_MAJOR)
                                                                      .arg(WIIKING2_MINOR)
                                                                      .arg(WIIKING2_PATCH);
 #ifdef WK2_PREVIEW
-const QString WIIKING2_APP_VERSION               = QString(WIIKING2_VERSION_STR + " PREVIEW");
+const QString WIIKING2_APP_VERSION               = QString(WIIKING2_VERSION_STR + " PREVIEW 2");
 #elif defined(WK2_INTERNAL)
 const QString WIIKING2_APP_VERSION               = QString(WIIKING2_VERSION_STR + " INTERNAL");
 #elif defined(DEBUG)

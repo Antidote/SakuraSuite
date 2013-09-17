@@ -19,13 +19,13 @@ namespace Constants
 
 const int     SKYWARDSWORD_MAJOR                     = 0;
 const int     SKYWARDSWORD_MINOR                     = 1;
-const int     SKYWARDSWORD_PATCH                     = 0;
+const int     SKYWARDSWORD_PATCH                     = 1;
 const int     SKYWARDSWORD_VERSION                   = (SKYWARDSWORD_MAJOR << 16) | (SKYWARDSWORD_MINOR << 8) | SKYWARDSWORD_PATCH;
 const QString SKYWARDSWORD_VERSION_STR               = QString("%1.%2.%3").arg(SKYWARDSWORD_MAJOR)
                                                                           .arg(SKYWARDSWORD_MINOR)
                                                                           .arg(SKYWARDSWORD_PATCH);
 #ifdef SS_PREVIEW
-const QString SKYWARDSWORD_PLUGIN_VERSION            = QString(SKYWARDSWORD_VERSION_STR + " PREVIEW");
+const QString SKYWARDSWORD_PLUGIN_VERSION            = QString(SKYWARDSWORD_VERSION_STR + " PREVIEW 2");
 #elif defined(SS_INTERNAL)
 const QString SKYWARDSWORD_PLUGIN_VERSION            = QString(SKYWARDSWORD_VERSION_STR + " INTERNAL");
 #elif defined(DEBUG)

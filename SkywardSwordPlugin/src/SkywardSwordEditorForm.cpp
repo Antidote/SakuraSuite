@@ -416,6 +416,42 @@ void SkywardSwordEditorForm::setSlingshot(bool val)
     }
 }
 
+int SkywardSwordEditorForm::ammo(SkywardSwordEditorForm::AmmoType type)
+{
+    quint32 val = qFromBigEndian(*(quint32*)(m_gameData + 0x0A60));
+    quint32 ret = 0;
+
+    switch(type)
+    {
+        case Arrows: ret = (val >> 0 ) & 127; break;
+        case Bombs:  ret = (val >> 7 ) & 127; break;
+        case Seeds:  ret = (val >> 23) & 127; break;
+    }
+
+    return ret;
+}
+
+void SkywardSwordEditorForm::setAmmo(int val)
+{
+    if (!updatesEnabled())
+        return;
+    quint32 tmp = qFromBigEndian(*(quint32*)(m_gameData + 0x0A60));
+    quint32 arrows = (tmp >> 0)  & 127;
+    quint32 bombs  = (tmp >> 7)  & 127;
+    quint32 seeds  = (tmp >> 23) & 127;
+
+    if (sender() == ui->arrowAmmoSpinBox)
+        arrows = val;
+    else if (sender() == ui->bombAmmoSpinBox)
+        bombs = val;
+    else if (sender() == ui->seedAmmoSpinBox)
+        seeds = val;
+
+    *(quint32*)(m_gameData + 0x0A60) = qToBigEndian(arrows | (bombs << 7) | (seeds << 23));
+
+    emit modified();
+}
+
 bool SkywardSwordEditorForm::practiceSword()
 {
     return flag(0x09F2, 0x01);
@@ -520,6 +556,37 @@ void SkywardSwordEditorForm::setTrueMasterSword(bool val)
         setMasterSword(true);
 
     setFlag(0x09F3, 0x080, val);
+}
+
+bool SkywardSwordEditorForm::wallet(WalletType type)
+{
+    switch(type)
+    {
+        case SmallWallet:  return true;
+        case MediumWallet: return flag(0x09EF, 0x04);
+        case BigWallet:    return flag(0x09EF, 0x08);
+        case GiantWallet:  return flag(0x09EF, 0x10);
+        case TycoonWallet: return flag(0x09EF, 0x20);
+    }
+
+    return false;
+}
+
+void SkywardSwordEditorForm::setWallet(bool val)
+{
+    if (!updatesEnabled())
+        return;
+
+    if (sender() == ui->smallWalletChkBox)
+        emit modified();
+    if (sender() == ui->mediumWalletChkBox)
+        setFlag(0x09EF, 0x04, val);
+    else if (sender() == ui->bigWalletChkBox)
+        setFlag(0x09EF, 0x08, val);
+    else if (sender() == ui->giantWalletChkBox)
+        setFlag(0x09EF, 0x10, val);
+    else if (sender() == ui->tycoonWalletChkBox)
+        setFlag(0x09Ef, 0x20, val);
 }
 
 
@@ -676,7 +743,7 @@ void SkywardSwordEditorForm::setBombs(bool val)
     setFlag(0x09ED, 0x04, val);
 }
 
-bool SkywardSwordEditorForm::bug(SkywardSwordEditorForm::Bug bug)
+bool SkywardSwordEditorForm::bug(SkywardSwordEditorForm::BugType bug)
 {
     switch(bug)
     {
@@ -727,7 +794,7 @@ void SkywardSwordEditorForm::setBug(bool val)
         setFlag(0x09F5, 0x08, val);
 }
 
-int SkywardSwordEditorForm::bugAmount(SkywardSwordEditorForm::Bug bug)
+int SkywardSwordEditorForm::bugAmount(SkywardSwordEditorForm::BugType bug)
 {
     switch(bug)
     {
@@ -787,7 +854,7 @@ void SkywardSwordEditorForm::setBugAmount(int val)
         setQuantity(false, 0x0A46, val);
 }
 
-bool SkywardSwordEditorForm::material(Material material)
+bool SkywardSwordEditorForm::material(MaterialType material)
 {
     switch(material)
     {
@@ -850,7 +917,7 @@ void SkywardSwordEditorForm::setMaterial(bool val)
         setFlag(0x0936, 0x01, val);
 }
 
-int SkywardSwordEditorForm::materialAmount(Material material)
+int SkywardSwordEditorForm::materialAmount(MaterialType material)
 {
     switch(material)
     {
@@ -1188,6 +1255,7 @@ void SkywardSwordEditorForm::updateData()
     ui->bowChkBox->setChecked(bow(NormalBow));
     ui->ironBowChkBox->setChecked(bow(IronBow));
     ui->sacredBowChkBox->setChecked(bow(SacredBow));
+    ui->arrowAmmoSpinBox->setValue(ammo(Arrows));
     ui->bugNetChkBox->setChecked(bugnet(Bugnet));
     ui->bigBugNetChkBox->setChecked(bugnet(BigBugnet));
     ui->gustBellowsChkBox->setChecked(gustBellows());
@@ -1200,8 +1268,17 @@ void SkywardSwordEditorForm::updateData()
     ui->dragonScaleChkBox->setChecked(waterDragonScale());
     ui->fireEaringsChkBox->setChecked(fireShieldEarings());
     ui->bombChkBox->setChecked(bombs());
+    ui->bombAmmoSpinBox->setValue(ammo(Bombs));
     ui->slingShotChkBox->setChecked(slingshot(Slingshot));
     ui->scatterShotChkBox->setChecked(slingshot(Scattershot));
+    ui->seedAmmoSpinBox->setValue(ammo(Seeds));
+
+    // Wallets
+    ui->smallWalletChkBox->setChecked(wallet(SmallWallet));
+    ui->mediumWalletChkBox->setChecked(wallet(MediumWallet));
+    ui->bigWalletChkBox->setChecked(wallet(BigWallet));
+    ui->giantWalletChkBox->setChecked(wallet(GiantWallet));
+    ui->tycoonWalletChkBox->setChecked(wallet(TycoonWallet));
 
     // Swords
     ui->practiceSwdChkBox->setChecked(practiceSword());

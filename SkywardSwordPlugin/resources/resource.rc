@@ -17,8 +17,8 @@
 
 
 VS_VERSION_INFO VERSIONINFO
-FILEVERSION 1,0,0,0
-PRODUCTVERSION 1,0,0,0
+FILEVERSION 0,1,1,0
+PRODUCTVERSION 0,1,1,0
 FILEFLAGS 0x0L
 FILEFLAGSMASK 0x3fL
 FILEOS VOS__WINDOWS32
@@ -31,12 +31,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "Wiiking2.com"
             VALUE "FileDescription", "Skyward Sword Save Plugin"
-            VALUE "FileVersion", "1.0.0.0"
+            VALUE "FileVersion", "0.1.1.0"
             VALUE "LegalCopyright", "Copyright (C) 2013 Wiiking2.com"
             VALUE "InternalName", "skywardswordplugin"
             VALUE "OriginalFilename", "skywardswordplugin.dll"
             VALUE "ProductName", "Skyward Sword Save Plugin"
-            VALUE "ProductVersion", "1.0.0.0"
+            VALUE "ProductVersion", "0.1.1.0 Pre 2"
         END
     END
     BLOCK "VarFileInfo"

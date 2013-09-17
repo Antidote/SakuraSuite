@@ -350,7 +350,7 @@ void MainWindow::onOpen()
 
 void MainWindow::onSave()
 {
-
+#if 0
 #ifdef WK2_PREVIEW
     QMessageBox mbox(this);
     mbox.setWindowTitle("Saving disabled");
@@ -363,8 +363,8 @@ void MainWindow::onSave()
     mbox.setStandardButtons(QMessageBox::Ok);
     mbox.exec();
     return;
-#endif
-
+#endif // WK2_PREVIEW
+#endif // 0
     if (m_documents.count() <= 0)
         return;
     if (!m_currentFile || !m_currentFile->isDirty())
@@ -383,8 +383,9 @@ void MainWindow::onSave()
 
 void MainWindow::onSaveAs()
 {
+#if 0
 #ifdef WK2_PREVIEW
-    QMessageBox mbox;
+    QMessageBox mbox(this);
     mbox.setWindowTitle("Saving disabled");
     mbox.setText("<center>Saving has been disabled in this preview build.<br />"
                  "The application is far too unstable for everyday use.<br />"
@@ -395,7 +396,9 @@ void MainWindow::onSaveAs()
     mbox.setStandardButtons(QMessageBox::Ok);
     mbox.exec();
     return;
-#endif
+#endif // WK2_PREVIEW
+#endif // 0
+
     if (m_documents.count() <= 0)
         return;
     if (!m_currentFile)

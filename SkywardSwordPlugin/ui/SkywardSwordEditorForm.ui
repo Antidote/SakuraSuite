@@ -42,7 +42,7 @@
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>3</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="playerTab">
       <attribute name="title">
@@ -3644,7 +3644,7 @@
    <sender>bombAmmoSpinBox</sender>
    <signal>valueChanged(int)</signal>
    <receiver>SkywardSwordEditorForm</receiver>
-   <slot>setBombAmmo(int)</slot>
+   <slot>setAmmo(int)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>371</x>
@@ -3708,7 +3708,7 @@
    <sender>arrowAmmoSpinBox</sender>
    <signal>valueChanged(int)</signal>
    <receiver>SkywardSwordEditorForm</receiver>
-   <slot>setBowAmmo(int)</slot>
+   <slot>setAmmo(int)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>141</x>
@@ -3852,7 +3852,7 @@
    <sender>smallWalletChkBox</sender>
    <signal>toggled(bool)</signal>
    <receiver>SkywardSwordEditorForm</receiver>
-   <slot>setSmallWallet(bool)</slot>
+   <slot>setWallet(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>714</x>
@@ -3868,7 +3868,7 @@
    <sender>mediumWalletChkBox</sender>
    <signal>toggled(bool)</signal>
    <receiver>SkywardSwordEditorForm</receiver>
-   <slot>setMediumWallet(bool)</slot>
+   <slot>setWallet(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>714</x>
@@ -3884,7 +3884,7 @@
    <sender>bigWalletChkBox</sender>
    <signal>toggled(bool)</signal>
    <receiver>SkywardSwordEditorForm</receiver>
-   <slot>setBigWallet(bool)</slot>
+   <slot>setWallet(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>714</x>
@@ -3900,7 +3900,7 @@
    <sender>giantWalletChkBox</sender>
    <signal>toggled(bool)</signal>
    <receiver>SkywardSwordEditorForm</receiver>
-   <slot>setGiantWallet(bool)</slot>
+   <slot>setWallet(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>714</x>
@@ -3916,7 +3916,7 @@
    <sender>tycoonWalletChkBox</sender>
    <signal>toggled(bool)</signal>
    <receiver>SkywardSwordEditorForm</receiver>
-   <slot>setTycoonWallet(bool)</slot>
+   <slot>setWallet(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>714</x>
@@ -3932,7 +3932,7 @@
    <sender>seedAmmoSpinBox</sender>
    <signal>valueChanged(int)</signal>
    <receiver>SkywardSwordEditorForm</receiver>
-   <slot>setSeedAmmo(int)</slot>
+   <slot>setAmmo(int)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>581</x>
@@ -5357,7 +5357,6 @@
   <slot>setCoord(double)</slot>
   <slot>setBeetle(bool)</slot>
   <slot>setBow(bool)</slot>
-  <slot>setBowAmmo(int)</slot>
   <slot>setBugnet(bool)</slot>
   <slot>setGustBellows(bool)</slot>
   <slot>setGoddessHarp(bool)</slot>
@@ -5369,20 +5368,15 @@
   <slot>setWaterDragonScale(bool)</slot>
   <slot>setFireShieldEarings(bool)</slot>
   <slot>setBombs(bool)</slot>
-  <slot>setBombAmmo(int)</slot>
+  <slot>setAmmo(int)</slot>
   <slot>setSlingshot(bool)</slot>
-  <slot>setSeedAmmo(int)</slot>
   <slot>setPracticeSword(bool)</slot>
   <slot>setGoddessSword(bool)</slot>
   <slot>setGoddessLongSword(bool)</slot>
   <slot>setGoddessWhiteSword(bool)</slot>
   <slot>setMasterSword(bool)</slot>
   <slot>setTrueMasterSword(bool)</slot>
-  <slot>setSmallWallet(bool)</slot>
-  <slot>setMediumWallet(bool)</slot>
-  <slot>setBigWallet(bool)</slot>
-  <slot>setGiantWallet(bool)</slot>
-  <slot>setTycoonWallet(bool)</slot>
+  <slot>setWallet(bool)</slot>
   <slot>setBug(bool)</slot>
   <slot>setBugAmount(int)</slot>
   <slot>setMaterial(bool)</slot>

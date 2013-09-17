@@ -18,8 +18,8 @@
 IDI_ICON1  ICON DISCARDABLE "mainicon.ico"
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,1,0,0
- PRODUCTVERSION 0,1,0,0
+ FILEVERSION 0,1,1,0
+ PRODUCTVERSION 0,1,1,0
  FILEFLAGS 0x0L
  FILEFLAGSMASK 0x3fL
  FILEOS 0x00040004L
@@ -32,12 +32,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "Wiiking2.com"
             VALUE "FileDescription", "Wiiking2 Editor"
-            VALUE "FileVersion", "0.1.0.0"
+            VALUE "FileVersion", "0.1.1.0"
             VALUE "LegalCopyright", "Copyright (C) 2013 Wiiking2.com"
             VALUE "InternalName", "wiiking2editor"
             VALUE "OriginalFilename", "wiiking2editor.exe"
             VALUE "ProductName", "Wiiking2 Editor"
-            VALUE "ProductVersion", "0.1.0.0"
+            VALUE "ProductVersion", "0.1.1.0 Pre2"
         END
     END
     BLOCK "VarFileInfo"

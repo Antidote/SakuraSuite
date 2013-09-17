@@ -68,7 +68,7 @@ public:
         BigBugnet
     };
 
-    enum Bug
+    enum BugType
     {
         DekuHornet,
         BlessedButterfly,
@@ -84,7 +84,23 @@ public:
         EldinRoller
     };
 
-    enum Material
+    enum AmmoType
+    {
+        Arrows,
+        Bombs,
+        Seeds
+    };
+
+    enum WalletType
+    {
+        SmallWallet,
+        MediumWallet,
+        BigWallet,
+        GiantWallet,
+        TycoonWallet
+    };
+
+    enum MaterialType
     {
         DekuHornetLarvae,
         BirdFeather,
@@ -207,6 +223,8 @@ public slots:
     bool slingshot(SlingshotType type);
     void setSlingshot(bool val);
 
+    int ammo(AmmoType type);
+    void setAmmo(int val);
     // Swords
     bool practiceSword();
     void setPracticeSword(bool val);
@@ -221,14 +239,18 @@ public slots:
     bool trueMasterSword();
     void setTrueMasterSword(bool val);
 
-    bool bug(Bug bug);
+    // Wallet
+    bool wallet(WalletType type);
+    void setWallet(bool val);
+
+    bool bug(BugType bug);
     void setBug(bool val);
-    int bugAmount(Bug bug);
+    int bugAmount(BugType bug);
     void setBugAmount(int val);
 
-    bool material(Material material);
+    bool material(MaterialType material);
     void setMaterial(bool val);
-    int materialAmount(Material material);
+    int materialAmount(MaterialType material);
     void setMaterialAmount(int val);
 
     int gratitudeCrystals();
