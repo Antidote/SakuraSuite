@@ -20,7 +20,6 @@
 #include "Constants.hpp"
 #include <Updater.hpp>
 #include <QMessageBox>
-#include <QDebug>
 
 PluginsDialog::PluginsDialog(QWidget *parent, PluginsManager* pluginsManager) :
     QDialog(parent),

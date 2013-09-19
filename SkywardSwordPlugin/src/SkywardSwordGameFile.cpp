@@ -15,25 +15,36 @@
 
 #include "SkywardSwordGameFile.hpp"
 #include "SkywardSwordEditorForm.hpp"
-#include <QTabWidget>
-#include <QMessageBox>
+#include "SkywardSwordTabWidget.hpp"
+#include "CopyWidget.hpp"
+
+
 #include <BinaryReader.hpp>
 #include <BinaryWriter.hpp>
 #include <Exception.hpp>
 #include <FileNotFoundException.hpp>
 #include <InvalidOperationException.hpp>
-#include <QDebug>
+
+#include <QMessageBox>
 #include <QtEndian>
 #include <QApplication>
 #include <QFileInfo>
+#include <QTabBar>
+#include <QDebug>
 
-SkywardSwordGameFile::SkywardSwordGameFile(const PluginInterface *loader, const QString &file)
+SkywardSwordGameDocument::SkywardSwordGameDocument(const PluginInterface *loader, const QString &file)
     : GameDocument(loader, file)
 {
 
-    m_widget = new QTabWidget;
-    QTabWidget* tw = (QTabWidget*)m_widget;
+    m_widget = new SkywardSwordTabWidget;
+    m_copyWidget = new CopyWidget(m_widget);
+    SkywardSwordTabWidget* tw = qobject_cast<SkywardSwordTabWidget*>(m_widget);
+    Q_ASSERT(tw != NULL);
     tw->setIconSize(QSize(32, 32));
+    tw->setDocumentMode(true);
+    tw->setMovable(true);
+    connect(tw->tabBar(), SIGNAL(tabMoved(int,int)), this, SLOT(onTabMoved(int, int)));
+
     if (file.isEmpty())
     {
         for (int i = 0; i < 3; i++)
@@ -41,17 +52,35 @@ SkywardSwordGameFile::SkywardSwordGameFile(const PluginInterface *loader, const 
             char* data = new char[0x53C0];
             SkywardSwordEditorForm* sw = new SkywardSwordEditorForm(this, data);
             sw->setNew(true);
-            tw->addTab(sw, QIcon(QString(":/icon/Game%1").arg(i+1)), QString() /*QObject::tr("Game %1").arg(i + 1)*/);
-            connect(sw, SIGNAL(modified()), this, SIGNAL(modified()));
+            tw->addTab(sw, QIcon(QString(":/icon/Game%1").arg(i+1)), tr("&%1 New Game").arg(i + 1));
+            connect(sw, SIGNAL(modified()), this, SLOT(onModified()));
         }
         return;
     }
 
+    loadFile();
+}
+
+SkywardSwordGameDocument::~SkywardSwordGameDocument()
+{
+    delete[] m_skipData;
+    m_skipData = NULL;
+}
+
+
+bool SkywardSwordGameDocument::loadFile()
+{
     QMessageBox mbox;
     mbox.setParent(qApp->topLevelWidgets()[0]);
+    SkywardSwordTabWidget* tw = qobject_cast<SkywardSwordTabWidget*>(m_widget);
+    Q_ASSERT(tw);
+    tw->clear();
+    if (filePath().isEmpty())
+        return true;
+
     try
     {
-        zelda::io::BinaryReader reader(file.toStdString());
+        zelda::io::BinaryReader reader(filePath().toStdString());
         reader.setEndianess(zelda::BigEndian);
         Uint32 magic = reader.readUInt32();
         m_region = magic & 0x000000FF;
@@ -71,43 +100,60 @@ SkywardSwordGameFile::SkywardSwordGameFile(const PluginInterface *loader, const 
         {
             char* data = (char*)reader.readBytes(0x53C0);
             SkywardSwordEditorForm* sw = new SkywardSwordEditorForm(this, data);
-            connect(sw, SIGNAL(modified()), this, SIGNAL(modified()));
-            tw->addTab(sw, QIcon(QString(":/icon/Game%1").arg(i+1)), QString()/*QObject::tr("Game %1").arg(i + 1)*/);
+            connect(sw, SIGNAL(modified()), this, SLOT(onModified()));
+            connect(sw, SIGNAL(copy(SkywardSwordEditorForm*)), this, SLOT(onCopy(SkywardSwordEditorForm*)));
+            if (!sw->isNew())
+                tw->addTab(sw, QIcon(QString(":/icon/Game%1").arg(i+1)), QString("&%1 %2").arg(i+1).arg(sw->playerName()));
+            else
+                tw->addTab(sw, QIcon(QString(":/icon/Game%1").arg(i+1)), tr("&%1 New Game").arg(i + 1));
         }
         m_skipData = (char*)reader.readBytes(0x80);
+        return true;
     }
-    catch (zelda::error::FileNotFoundException e)
+    catch (...)
     {
-        mbox.setWindowTitle(mbox.tr("File not found..."));
-        mbox.setText(mbox.tr("Unable to locate file <b>'%1'</b><br/>Please ensure that it exists.").arg(e.filename().c_str()));
-        mbox.exec();
     }
-    catch (zelda::error::InvalidOperationException e)
-    {
-        mbox.setWindowTitle(mbox.tr("Invalid Operation..."));
-        mbox.setText(mbox.tr("%1").arg(e.message().c_str()));
-        mbox.exec();
-    }
-    catch (zelda::error::Exception e)
-    {
-        mbox.setWindowTitle(mbox.tr("Exception..."));
-        mbox.setText(mbox.tr("%1").arg(e.message().c_str()));
-        mbox.exec();
-    }
+
+    return false;
 }
 
-SkywardSwordGameFile::~SkywardSwordGameFile()
+bool SkywardSwordGameDocument::reload()
 {
-    delete[] m_skipData;
-    m_skipData = NULL;
+    // First store the current tabs
+    QList<int> swCurTabs;
+    QTabWidget* tw = qobject_cast<QTabWidget*>(m_widget);
+    Q_ASSERT(tw);
+    int twCurrentTab = tw->currentIndex();
+
+    for (int i = 0; i < tw->count(); i++)
+    {
+        SkywardSwordEditorForm* sw = qobject_cast<SkywardSwordEditorForm*>(tw->widget(i));
+        swCurTabs.push_back(sw->currentTab());
+    }
+
+    bool ret = loadFile();
+    // Now set them back
+    if (ret)
+    {
+        for (int i = 0; i < tw->count(); i++)
+        {
+            SkywardSwordEditorForm* sw = qobject_cast<SkywardSwordEditorForm*>(tw->widget(i));
+            sw->setCurrentTab(swCurTabs[i]);
+        }
+        tw->setCurrentIndex(twCurrentTab);
+    }
+
+
+    // Finally inform Main that we're done
+    return ret;
 }
 
-QString SkywardSwordGameFile::game() const
+QString SkywardSwordGameDocument::game() const
 {
     return "SkywardSword";
 }
 
-bool SkywardSwordGameFile::save(const QString& filename)
+bool SkywardSwordGameDocument::save(const QString& filename)
 {
 #ifndef SS_PREVIEW
     if (!filename.isEmpty())
@@ -148,12 +194,82 @@ bool SkywardSwordGameFile::save(const QString& filename)
     catch (...)
     {
     }
-    return false;
 #endif
+    return false;
 }
 
-void SkywardSwordGameFile::onModified()
+void SkywardSwordGameDocument::onModified()
 {
+    QTabWidget* tw = qobject_cast<QTabWidget*>(m_widget);
+    for (int i = 0; i < tw->count(); i++)
+    {
+        SkywardSwordEditorForm* sw = qobject_cast<SkywardSwordEditorForm*>(tw->widget(i));
+        tw->setTabIcon(i, QIcon(QString(":/icon/Game%1").arg(i + 1)));
+        if (!sw->isNew())
+            tw->setTabText(i, QString("&%1 %2").arg(i+1).arg(sw->playerName()));
+        else
+            tw->setTabText(i, tr("&%1 New Game").arg(i + 1));
+    }
+    this->setDirty(true);
     emit modified();
+}
+
+void SkywardSwordGameDocument::onCopy(SkywardSwordEditorForm* source)
+{
+    QTabWidget* tw = qobject_cast<QTabWidget*>(m_widget);
+    int index = 0;
+    for (int i = 0; i < tw->count(); i++)
+    {
+        if (tw->widget(i) == source)
+            index = i;
+
+        m_copyWidget->setQuestEnabled((CopyWidget::Quest)i, true);
+    }
+
+    m_copyWidget->setQuestEnabled((CopyWidget::Quest)index, false);
+    m_copyWidget->move(QCursor().pos());
+    m_copyWidget->exec();
+
+    if (m_copyWidget->result() == QDialog::Accepted)
+    {
+        QMessageBox mbox(source);
+        mbox.setWindowTitle("Copy data...");
+        mbox.setText("Are you sure you wish to copy this data?<br />"
+                     "The data in the destinations you selected <b>will be lost</b>");
+        mbox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+        mbox.exec();
+        if (mbox.result() == QMessageBox::No)
+            return;
+
+        SkywardSwordEditorForm* dest = NULL;
+        if (m_copyWidget->questChecked(CopyWidget::Quest1) && source != tw->widget(0))
+        {
+            dest = qobject_cast<SkywardSwordEditorForm*>(tw->widget(0));
+            if (dest)
+                dest->setGameData(QByteArray(source->gameData(), 0x53C0));
+            dest = NULL;
+        }
+        if (m_copyWidget->questChecked(CopyWidget::Quest2) && source != tw->widget(1))
+        {
+            dest = qobject_cast<SkywardSwordEditorForm*>(tw->widget(1));
+            if (dest)
+                dest->setGameData(QByteArray(source->gameData(), 0x53C0));
+            dest = NULL;
+        }
+        if (m_copyWidget->questChecked(CopyWidget::Quest3) && source != tw->widget(2))
+        {
+            dest = qobject_cast<SkywardSwordEditorForm*>(tw->widget(2));
+            if (dest)
+                dest->setGameData(QByteArray(source->gameData(), 0x53C0));
+            dest = NULL;
+        }
+    }
+}
+
+void SkywardSwordGameDocument::onTabMoved(int from, int to)
+{
+    Q_UNUSED(from);
+    Q_UNUSED(to);
+    onModified();
 }
 

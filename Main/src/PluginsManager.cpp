@@ -19,7 +19,6 @@
 #include "PluginInterface.hpp"
 #include <QApplication>
 #include <QPluginLoader>
-#include <QDebug>
 #include <QDir>
 
 PluginsManager::PluginsManager(MainWindow* parent)
@@ -94,6 +93,7 @@ bool PluginsManager::reloadByName(const QString& name)
             {
                 newPlugin->setPath(pluginPath);
                 newPlugin->object()->setParent(parent());
+                m_mainWindow->addFileFilter(newPlugin->filter());
                 QSettings settings;
                 settings.beginGroup(newPlugin->name());
                 newPlugin->setEnabled(settings.value("enabled", true).toBool());
@@ -182,6 +182,7 @@ void PluginsManager::loadPlugins()
                     m_plugins.append(plugin);
                     connect(plugin->object(), SIGNAL(enabledChanged()), this, SLOT(onEnabledChanged()));
                     plugin->object()->setParent(this->parent());
+                    m_mainWindow->addFileFilter(plugin->filter());
                     QSettings settings;
                     settings.beginGroup(plugin->name());
                     plugin->setPath(pluginsDir.absoluteFilePath(fileName));

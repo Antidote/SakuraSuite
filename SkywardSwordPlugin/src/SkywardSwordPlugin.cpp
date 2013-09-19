@@ -22,7 +22,6 @@
 
 #include <QFileInfo>
 #include <QIcon>
-#include <QDebug>
 #include <QApplication>
 #include <BinaryReader.hpp>
 #include <Updater.hpp>
@@ -32,16 +31,20 @@ SkywardSwordPlugin* SkywardSwordPlugin::m_instance = NULL;
 SkywardSwordPlugin::SkywardSwordPlugin()
     : m_icon(QIcon(":/icon/Bomb64x64.png")),
       m_updater(new Updater(this)),
-      m_enabled(true)
+      m_enabled(true),
+      m_settingsDialog(NULL)
 {
     m_instance = this;
 }
 
 SkywardSwordPlugin::~SkywardSwordPlugin()
 {
-    delete m_updater;
-    delete m_settingsDialog;
-    delete settings();
+    if (m_updater)
+        delete m_updater;
+    if (m_settingsDialog)
+        delete m_settingsDialog;
+    if (settings())
+        delete settings();
 }
 
 void SkywardSwordPlugin::initialize()
@@ -128,7 +131,8 @@ void SkywardSwordPlugin::setEnabled(const bool enable)
 
 DocumentBase* SkywardSwordPlugin::loadFile(const QString& file) const
 {
-    return new SkywardSwordGameFile(this, file);
+    SkywardSwordGameDocument* ret = new SkywardSwordGameDocument(this, file);
+    return (ret->loadFile() ? ret: NULL);
 }
 
 bool SkywardSwordPlugin::canLoad(const QString& filename)

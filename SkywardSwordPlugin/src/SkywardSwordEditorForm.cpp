@@ -21,11 +21,10 @@
 #include "Constants.hpp"
 
 #include <QtEndian>
-#include <QDebug>
 #include <Checksums.hpp>
 #include <utility.hpp>
 
-SkywardSwordEditorForm::SkywardSwordEditorForm(SkywardSwordGameFile* file, const char *data, QWidget *parent)
+SkywardSwordEditorForm::SkywardSwordEditorForm(SkywardSwordGameDocument* file, const char *data, QWidget *parent)
     : QWidget(parent),
       ui(new Ui::SkywardSwordEditorForm),
       m_gameFile(file),
@@ -51,9 +50,25 @@ SkywardSwordEditorForm::~SkywardSwordEditorForm()
     delete ui;
 }
 
+void SkywardSwordEditorForm::setGameData(const QByteArray& data)
+{
+    memcpy(m_gameData, data.data(), data.size());
+    emit modified();
+}
+
 char* SkywardSwordEditorForm::gameData()
 {
     return m_gameData;
+}
+
+int SkywardSwordEditorForm::currentTab()
+{
+    return ui->tabWidget->currentIndex();
+}
+
+void SkywardSwordEditorForm::setCurrentTab(int index)
+{
+    ui->tabWidget->setCurrentIndex(index);
 }
 
 void SkywardSwordEditorForm::onDelete()
@@ -80,6 +95,7 @@ void SkywardSwordEditorForm::onCreate()
     setCurrentMap("F000");
     setCurrentArea("F000");
     setCurrentRoom("F000");
+    ui->saveTimeEdit->setDateTime(QDateTime::currentDateTime());
     ui->playerXSpinBox->setValue(-4798.150391f);
     ui->playerYSpinBox->setValue(1237.629517f);
     ui->playerZSpinBox->setValue(-6573.722656f);
@@ -93,14 +109,18 @@ void SkywardSwordEditorForm::onCreate()
     emit modified();
 }
 
+void SkywardSwordEditorForm::onCopy()
+{
+    emit copy(this);
+}
+
 Playtime SkywardSwordEditorForm::playtime() const
 {
     if (!m_gameData)
         return Playtime();
     Playtime playTime;
     quint64 tmp = qFromBigEndian(*(quint64*)(m_gameData));
-    playTime.Days    = (((tmp / TICKS_PER_SECOND) / 60) / 60) / 24;
-    playTime.Hours   = (((tmp / TICKS_PER_SECOND) / 60) / 60) % 24;
+    playTime.Hours   = (((tmp / TICKS_PER_SECOND) / 60) / 60);
     playTime.Minutes = (( tmp / TICKS_PER_SECOND) / 60) % 60;
     playTime.Seconds = (( tmp / TICKS_PER_SECOND) % 60);
     return playTime;
@@ -109,7 +129,6 @@ Playtime SkywardSwordEditorForm::playtime() const
 void SkywardSwordEditorForm::setPlaytime(Playtime val)
 {
     quint64 totalSeconds = 0;
-    totalSeconds += ((val.Days    * 60) * 60) * 24;
     totalSeconds += ( val.Hours   * 60) * 60;
     totalSeconds += ( val.Minutes * 60);
     totalSeconds +=   val.Seconds;
@@ -123,7 +142,7 @@ QDateTime SkywardSwordEditorForm::savetime() const
     if (!m_gameData)
         return QDateTime::currentDateTime();
 
-    return fromWiiTime(qFromBigEndian(*(quint64*)(m_gameData + 0x0008)));
+    return fromWiiTime(qFromBigEndian(*(quint64*)(m_gameData + 0x0008))).addSecs(-(60*60));
 }
 
 void SkywardSwordEditorForm::setSavetime(const QDateTime& time)
@@ -133,7 +152,7 @@ void SkywardSwordEditorForm::setSavetime(const QDateTime& time)
     if (time == savetime())
         return;
 
-    *(qint64*)(m_gameData + 0x0008) = qToBigEndian<qint64>(toWiiTime(time));
+    *(qint64*)(m_gameData + 0x0008) = qToBigEndian<qint64>(toWiiTime(time.addSecs((60*60))));
     emit modified();
 }
 
@@ -142,7 +161,11 @@ QString SkywardSwordEditorForm::playerName() const
     if (!m_gameData)
         return QString("");
 
-    ushort tmpName[8];
+    // tmpName has 8 characters
+    // the ninth is for the null terminator
+    // this prevents garbage data from being displayed
+    ushort tmpName[9];
+    tmpName[8] = 0;
     for (int i = 0, j=0; i < 8; ++i, j+= 2)
     {
         tmpName[i] = *(quint16*)(m_gameData + (0x08D4 + j));
@@ -1057,7 +1080,6 @@ void SkywardSwordEditorForm::onModified()
     if (!this->updatesEnabled())
         return;
 
-    m_gameFile->setDirty(true);
     this->setUpdatesEnabled(false);
     updateChecksum();
     updateData();
@@ -1405,6 +1427,8 @@ void SkywardSwordEditorForm::updateMaterials()
     ui->evilCrystalSpinBox->setValue(materialAmount(EvilCrystal));
     ui->blueBirdFeatherChkBox->setChecked(material(BlueBirdFeather));
     ui->blueBirdFeatherSpinBox->setValue(materialAmount(BlueBirdFeather));
+    ui->goldenSkullChkBox->setChecked(material(GoldenSkull));
+    ui->goldenSkullSpinBox->setValue(materialAmount(GoldenSkull));
     ui->goddessPlumeChkBox->setChecked(material(GoddessPlume));
     ui->goddessPlumeSpinBox->setValue(materialAmount(GoddessPlume));
 }

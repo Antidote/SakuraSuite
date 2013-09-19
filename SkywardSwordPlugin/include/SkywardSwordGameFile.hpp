@@ -19,20 +19,29 @@
 #include <GameDocument.hpp>
 #include <QObject>
 
-class SkywardSwordGameFile : public GameDocument
+class CopyWidget;
+class SkywardSwordEditorForm;
+
+class SkywardSwordGameDocument : public GameDocument
 {
     Q_OBJECT
 public:
-    SkywardSwordGameFile(const PluginInterface* loader, const QString& file = QString());
-    ~SkywardSwordGameFile();
+    SkywardSwordGameDocument(const PluginInterface* loader, const QString& file = QString());
+    ~SkywardSwordGameDocument();
     QString game() const;
     bool save(const QString &filename = QString());
 
+    bool loadFile();
+
+    bool reload();
 private slots:
     void onModified();
+    void onCopy(SkywardSwordEditorForm* source);
+    void onTabMoved(int left, int right);
 private:
-    char* m_skipData;
-    char m_region;
+    char*       m_skipData;
+    char        m_region;
+    CopyWidget* m_copyWidget;
 };
 
 #endif // SKYWARDSWORDGAMEFILE_HPP

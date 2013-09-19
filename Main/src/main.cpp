@@ -18,7 +18,6 @@
 #include "Constants.hpp"
 #include <QTranslator>
 #include <QDir>
-#include <QDebug>
 #include <QLocale>
 
 int main(int argc, char *argv[])
@@ -33,6 +32,7 @@ int main(int argc, char *argv[])
     a.setOrganizationDomain("http://wiiking2.com");
     a.setApplicationName(Constants::WIIKING2_APP_NAME);
     a.setApplicationVersion(Constants::WIIKING2_APP_VERSION);
+    a.setWindowIcon(QIcon(":/icon/Bomb64x64.png"));
 
     QTranslator appTranslator;
     appTranslator.load(a.applicationDirPath() + QDir::separator() + "lang" + QDir::separator() + QLocale::system().name());

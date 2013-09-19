@@ -50,7 +50,7 @@
          <x>0</x>
          <y>0</y>
          <width>498</width>
-         <height>615</height>
+         <height>603</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout_3">
@@ -81,7 +81,7 @@
      <x>0</x>
      <y>0</y>
      <width>765</width>
-     <height>25</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -110,6 +110,8 @@
     <property name="title">
      <string>&amp;Edit</string>
     </property>
+    <addaction name="actionReload"/>
+    <addaction name="separator"/>
     <addaction name="actionPreferences"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
@@ -155,6 +157,7 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="actionReload"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QDockWidget" name="dockWidget">
@@ -194,7 +197,7 @@
        <property name="editTriggers">
         <set>QAbstractItemView::NoEditTriggers</set>
        </property>
-       <property name="sortingEnabled">
+       <property name="alternatingRowColors">
         <bool>true</bool>
        </property>
       </widget>
@@ -293,15 +296,23 @@
     <string>&amp;Preferences</string>
    </property>
   </action>
+  <action name="actionReload">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Reload</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
  <connections>
   <connection>
    <sender>documentList</sender>
-   <signal>itemSelectionChanged()</signal>
+   <signal>currentRowChanged(int)</signal>
    <receiver>MainWindow</receiver>
-   <slot>onDocumentChanged()</slot>
+   <slot>onDocumentChanged(int)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>128</x>
@@ -505,9 +516,25 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionReload</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onReload()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>382</x>
+     <y>340</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
-  <slot>onDocumentChanged()</slot>
+  <slot>onDocumentChanged(int)</slot>
   <slot>onClose()</slot>
   <slot>onAboutQt()</slot>
   <slot>onPlugins()</slot>
@@ -520,5 +547,6 @@
   <slot>onSaveAs()</slot>
   <slot>onExit()</slot>
   <slot>onStyleChanged()</slot>
+  <slot>onReload()</slot>
  </slots>
 </ui>

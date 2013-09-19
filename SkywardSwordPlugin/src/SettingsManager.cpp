@@ -18,7 +18,6 @@
 #include "Constants.hpp"
 #include <QSettings>
 #include <QStringList>
-#include <QDebug>
 #include <QApplication>
 
 SettingsManager* SettingsManager::m_instance = NULL;

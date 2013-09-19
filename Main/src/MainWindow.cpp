@@ -21,15 +21,16 @@
 #include "AboutDialog.hpp"
 #include "PreferencesDialog.hpp"
 #include <Updater.hpp>
+#include <QDebug> // for qWarning
 
 #include <QLabel>
 #include <QMenu>
-#include <QDebug>
 #include <QFileInfo>
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QStyleFactory>
 #include <QDesktopWidget>
+#include <QCloseEvent>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -39,7 +40,8 @@ MainWindow::MainWindow(QWidget *parent) :
     m_aboutDialog(NULL),
     m_updater(new Updater(this)),
     m_preferencesDialog(new PreferencesDialog(this)),
-    m_updateMBox(this)
+    m_updateMBox(this),
+    m_cancelClose(false)
   #ifdef WK2_PREVIEW
   ,m_previewLayout(NULL),
     m_previewLabel(NULL)
@@ -47,14 +49,21 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+#ifndef DEBUG
     // lock Application
     if (checkLock())
     {
         qApp->quit();
         return;
     }
+#endif
 
     connect(&m_lockTimer, SIGNAL(timeout()), SLOT(onLockTimeout()));
+    // we set the timer to timeout every 58 seconds
+    // Since checkLock expects a stale cookie to be over 60 seconds old
+    // this ensures that there is never a race condition
+    // Since it's nearly impossible two instances to overlap
+    // such a time span (unless you get some REALLY bad lag, again, not likely)
     m_lockTimer.setInterval(58*1000);
     m_lockTimer.start();
 
@@ -114,11 +123,11 @@ MainWindow::~MainWindow()
     }
 #endif
 
-    QFile(QFileInfo(QSettings().fileName()).absolutePath() + "wk.lock").remove();
+    QFile(Constants::WIIKING2_LOCK_FILE).remove();
     QSettings settings;
     settings.setValue("mainWindowGeometry", saveGeometry());
     settings.setValue("mainWindowState", saveState());
-    onCloseAll();
+
 
     foreach (DocumentBase* file, m_documents.values())
     {
@@ -211,7 +220,8 @@ void MainWindow::addFileFilter(const QString& filter)
     if (m_fileFilters.contains(filter))
         return;
 
-    m_fileFilters << filter;
+    m_fileFilters.removeAll("All Files *.* (*.*)");
+    m_fileFilters << filter << "All Files *.* (*.*)";
 }
 
 void MainWindow::removeFileFilter(const QString& filter)
@@ -278,6 +288,16 @@ bool MainWindow::isPreviewBuild()
 #endif
 }
 
+void MainWindow::closeEvent(QCloseEvent* e)
+{
+    onCloseAll();
+
+    if (m_cancelClose)
+        e->ignore();
+    else
+        e->accept();
+}
+
 void MainWindow::openFile(const QString& currentFile)
 {
     // Change any '\' to '/' for maximum compatibility
@@ -314,7 +334,7 @@ void MainWindow::openFile(const QString& currentFile)
     }
     connect(file, SIGNAL(modified()), this, SLOT(updateWindowTitle()));
     m_documents[filePath] = file;
-    m_fileSystemWatcher.addPath(file->filePath());
+    m_fileSystemWatcher.addPath(filePath);
 
     QListWidgetItem* item = new QListWidgetItem();
     item->setData(FILENAME, m_documents[filePath]->fileName());
@@ -332,8 +352,11 @@ void MainWindow::openFile(const QString& currentFile)
     updateWindowTitle();
 }
 
-void MainWindow::onDocumentChanged()
+void MainWindow::onDocumentChanged(int row)
 {
+    ui->actionReload->setEnabled(ui->documentList->count() > 0);
+
+    Q_UNUSED(row);
     if (!ui->documentList->currentItem())
     {
         ui->actionClose->setEnabled(false);
@@ -379,6 +402,23 @@ void MainWindow::onClose()
     if (m_documents.count() <= 0)
         return;
 
+    if (m_currentFile->isDirty())
+    {
+        QMessageBox mbox(this);
+        mbox.setWindowTitle("File has been modified...");
+        mbox.setText(tr("'%1' has been modified, do you wish to save?").arg(m_currentFile->fileName()));
+        mbox.setStandardButtons(QMessageBox::Yes | QMessageBox::Cancel | QMessageBox::Discard);
+        mbox.exec();
+        if (mbox.result() == QMessageBox::Yes)
+            onSave();
+        else if (mbox.result() == QMessageBox::Cancel)
+        {
+            m_cancelClose = true;
+            return;
+        }
+    }
+
+    m_fileSystemWatcher.removePath(cleanPath(m_currentFile->filePath()));
     m_documents.remove(cleanPath(m_currentFile->filePath()));
     delete m_currentFile;
     m_currentFile = NULL;
@@ -386,11 +426,14 @@ void MainWindow::onClose()
 
     if (ui->documentList->count() <= 0)
         this->setWindowTitle(Constants::WIIKING2_TITLE);
+
+    ui->actionReload->setEnabled(ui->documentList->count() > 0);
 }
 
 void MainWindow::onCloseAll()
 {
-    while (m_documents.count() > 0)
+    m_cancelClose = false;
+    while (m_documents.count() > 0 && !m_cancelClose)
         onClose();
 }
 
@@ -427,6 +470,7 @@ void MainWindow::onSave()
     if (!m_currentFile || !m_currentFile->isDirty())
         return;
 
+    m_fileSystemWatcher.removePath(cleanPath(m_currentFile->filePath()));
     if (m_currentFile->filePath().isEmpty())
         onSaveAs();
 
@@ -435,6 +479,7 @@ void MainWindow::onSave()
     else
         statusBar()->showMessage(tr("Save failed"), 2000);
 
+    m_fileSystemWatcher.addPath(cleanPath(m_currentFile->filePath()));
     updateWindowTitle();
 }
 
@@ -484,6 +529,11 @@ void MainWindow::onSaveAs()
 
 void MainWindow::onExit()
 {
+    onCloseAll();
+
+    if (m_cancelClose)
+        return;
+
     qApp->quit();
 }
 
@@ -650,11 +700,10 @@ void MainWindow::onNoUpdate()
 
 void MainWindow::onLockTimeout()
 {
-    qDebug() << "locktimout";
     QString settingsDir = QFileInfo(QSettings().fileName()).absolutePath();
-    if (QFile::exists(settingsDir + "/wk.lck") && QSettings().value("singleInstance", false).toBool())
+    if (QSettings().value("singleInstance", false).toBool())
     {
-        QFile file(settingsDir + "/wk.lck");
+        QFile file(Constants::WIIKING2_LOCK_FILE);
         if (file.open(QFile::WriteOnly))
         {
             file.seek(0);
@@ -687,30 +736,41 @@ void MainWindow::showEvent(QShowEvent* se)
 // Checklock returns true if lock exists
 bool MainWindow::checkLock()
 {
-    QString settingsDir = QFileInfo(QSettings().fileName()).absolutePath();
-    if (QFile::exists(settingsDir + "/wk.lck") && QSettings().value("singleInstance", false).toBool())
+    // The lock file is pretty simple
+    // All the application does is output the current time
+    // of course if a malicious program decided to be a jerk
+    // it could output a date several years in the future
+    // But since we're using the temp directory
+    // theoretically the file should be deleted after every boot
+    // But some OSes don't abide by this (Windows I'm looking at you)
+    // So we should probably check that too but for now this'll do
+    // I COULD use some Qt magic and have it output the lock file, but
+    // that's neither here nor there, plus this is simple enough for our purposes
+    if (QFile::exists(Constants::WIIKING2_LOCK_FILE) && QSettings().value("singleInstance", false).toBool())
     {
-        QFile file(settingsDir + "/wk.lck");
+        QFile file(Constants::WIIKING2_LOCK_FILE);
         if (file.open(QFile::ReadOnly))
         {
             QDateTime time = QDateTime::fromString(QString(file.readLine()));
             quint64 msecs = time.msecsTo(QDateTime::currentDateTime());
-            qDebug() << msecs;
             if (msecs > (60*1000))
             {
-                qDebug() << "Found stale lock, ignoring";
+                // We have a stale lock, which means the old
+                // instance either crashed, or didn't have a chance
+                // to clean up after itself, we can safely ignore it.
+                qWarning() << "Found stale lock, ignoring";
                 return false;
             }
         }
         QMessageBox mbox(this);
-        mbox.setWindowTitle("An instance is already open");
-        mbox.setText("An instance is already running");
+        mbox.setWindowTitle(Constants::WIIKING2_INSTANCE_EXISTS);
+        mbox.setText(Constants::WIIKING2_INSTANCE_EXISTS_MSG);
         mbox.exec();
         return true;
     }
     else if (QSettings().value("singleInstance", false).toBool())
     {
-        QFile lock(settingsDir + "/wk.lck");
+        QFile lock(Constants::WIIKING2_LOCK_FILE);
         lock.open(QFile::WriteOnly);
         lock.write(QString(QDateTime::currentDateTime().toString() + "\n").toAscii());
         lock.close();
@@ -763,6 +823,36 @@ void MainWindow::onCheckUpdate()
 #endif
 }
 
+void MainWindow::onReload()
+{
+    if (!m_currentFile)
+        return;
+
+    if (!m_currentFile->reload())
+    {
+        m_documents.remove(cleanPath(m_currentFile->filePath()));
+        QListWidgetItem* item = NULL;
+        for (int i = 0; i < ui->documentList->count(); i++)
+        {
+            if (cleanPath(ui->documentList->item(i)->data(FILEPATH).toString()) == cleanPath(m_currentFile->filePath()))
+            {
+                item = ui->documentList->item(i);
+                break;
+            }
+        }
+
+        delete m_currentFile;
+        m_currentFile = NULL;
+
+        if (item)
+            delete item;
+
+        ui->statusBar->showMessage("Reload failed...", 2000);
+    }
+    else
+        ui->statusBar->showMessage("Reload successful...", 2000);
+}
+
 void MainWindow::onStyleChanged()
 {
     QAction* a = qobject_cast<QAction*>(sender());
@@ -793,20 +883,26 @@ void MainWindow::onStyleChanged()
 
 void MainWindow::onFileChanged(const QString& file)
 {
+    // Remove the path so we can reload the file.
+    m_fileSystemWatcher.removePath(file);
+
     QMessageBox mbox(this);
     mbox.setWindowTitle("Reload?");
-    mbox.setText(tr("File '%1' has been modified outside of the application, do you wish to reload?").arg(file));
+    mbox.setText(tr("<b>'%1'</b><br />"
+                    "Has been modified outside of the application, do you wish to reload?").arg(QFileInfo(file).fileName()));
     mbox.setStandardButtons(QMessageBox::Ok | QMessageBox::Ignore);
     mbox.exec();
 
     if (mbox.result() == QMessageBox::Ignore)
+    {
+        // The user chose to ignore the changes
+        // so we need to put the file back
+        m_fileSystemWatcher.addPath(file);
         return;
+    }
 
-    // Remove the path so we can reload the file.
-    // If we don't do this, the FS watcher won't know that the file
-    // has been reloaded
-    m_fileSystemWatcher.removePath(file);
     if (m_documents[cleanPath(file)]->reload())
+        // Now we need to put the file back in the FS watcher
         m_fileSystemWatcher.addPath(file);
     else
     {

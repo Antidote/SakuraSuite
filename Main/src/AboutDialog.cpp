@@ -22,7 +22,7 @@ AboutDialog::AboutDialog(QWidget *parent) :
     ui(new Ui::AboutDialog)
 {
     ui->setupUi(this);
-    this->setWindowTitle(Constants::WIIKING2_ABOUT_TITLE.arg(Constants::WIIKING2_TITLE));
+    this->setWindowTitle(Constants::WIIKING2_ABOUT_TITLE);
     ui->applicationNameLbl->setText(Constants::WIIKING2_APP_NAME);
     ui->applicationVersionLbl->setText(Constants::WIIKING2_APP_VERSION);
     ui->buildDateLbl->setText(Constants::WIIKING2_BUILD_DATE);

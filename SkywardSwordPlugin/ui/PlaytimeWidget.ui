@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>373</width>
+    <width>268</width>
     <height>25</height>
    </rect>
   </property>
@@ -47,15 +47,30 @@
    <property name="horizontalSpacing">
     <number>0</number>
    </property>
-   <item row="0" column="0">
-    <widget class="QLabel" name="playTimeLbl">
-     <property name="text">
-      <string>Play Time:</string>
+   <item row="0" column="1">
+    <widget class="QSpinBox" name="hoursSpinBox">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buttonSymbols">
+      <enum>QAbstractSpinBox::NoButtons</enum>
+     </property>
+     <property name="accelerated">
+      <bool>false</bool>
+     </property>
+     <property name="maximum">
+      <number>999</number>
      </property>
     </widget>
    </item>
    <item row="0" column="4">
-    <widget class="QLabel" name="minSepLbl">
+    <widget class="QLabel" name="secSepLbl">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
        <horstretch>0</horstretch>
@@ -67,7 +82,7 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="5">
+   <item row="0" column="3">
     <widget class="QSpinBox" name="minsSpinBox">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -89,55 +104,7 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="2">
-    <widget class="QLabel" name="hourSepLbl">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="text">
-      <string>:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="3">
-    <widget class="QSpinBox" name="hoursSpinBox">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-     <property name="buttonSymbols">
-      <enum>QAbstractSpinBox::NoButtons</enum>
-     </property>
-     <property name="accelerated">
-      <bool>false</bool>
-     </property>
-     <property name="maximum">
-      <number>24</number>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="6">
-    <widget class="QLabel" name="secSepLbl">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="text">
-      <string>:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="7">
+   <item row="0" column="5">
     <widget class="QSpinBox" name="secsSpinBox">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -159,29 +126,27 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="1">
-    <widget class="QSpinBox" name="daysSpinBox">
+   <item row="0" column="2">
+    <widget class="QLabel" name="minSepLbl">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-     <property name="buttonSymbols">
-      <enum>QAbstractSpinBox::NoButtons</enum>
-     </property>
-     <property name="accelerated">
-      <bool>false</bool>
-     </property>
-     <property name="maximum">
-      <number>999</number>
+     <property name="text">
+      <string>:</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="8">
+   <item row="0" column="0">
+    <widget class="QLabel" name="playTimeLbl">
+     <property name="text">
+      <string>Play Time:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="6">
     <widget class="QPushButton" name="clearTimePushButton">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">

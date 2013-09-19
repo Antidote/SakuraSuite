@@ -3,6 +3,8 @@
 #include "Constants.hpp"
 
 #include <QSettings>
+#include <QFile>
+#include <QDateTime>
 #include <QStyleFactory>
 #include <QApplication>
 #include <QMessageBox>
@@ -83,6 +85,17 @@ void PreferencesDialog::accept()
 
     settings.setValue(Constants::Settings::WIIKING2_CHECK_ON_START, ui->checkOnStart->isChecked());
     settings.setValue("singleInstance", m_singleInstance);
+
+    if (m_singleInstance && !QFile::exists(Constants::WIIKING2_LOCK_FILE))
+    {
+        QFile file(Constants::WIIKING2_LOCK_FILE);
+        if (file.open(QFile::WriteOnly))
+        {
+            file.seek(0);
+            file.write(QString(QDateTime::currentDateTime().toString() + "\n").toAscii());
+            file.resize(file.pos());
+        }
+    }
 
     QDialog::accept();
 }

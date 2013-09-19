@@ -17,9 +17,10 @@
 #define CONSTANTS_HPP
 
 #include <QSettings>
+#include <QDir>
 // Only ONE of these may be defined
-#define WK2_PREVIEW
-//#define WK2_INTERNAL
+//#define WK2_PREVIEW
+#define WK2_INTERNAL
 
 #if defined(WK2_PREVIEW) && defined(WK2_INTERNAL)
 #error "You can only define either WK2_PREVIEW or WK2_INTERNAL"
@@ -32,9 +33,10 @@ const int     WIIKING2_MAJOR                    = 0;
 const int     WIIKING2_MINOR                    = 1;
 const int     WIIKING2_PATCH                    = 1;
 const int     WIIKING2_VERSION                  = (WIIKING2_MAJOR << 16) | (WIIKING2_MINOR << 8) | WIIKING2_PATCH;
-const QString WIIKING2_VERSION_STR              = QString("%1.%2.%3").arg(WIIKING2_MAJOR)
-                                                                     .arg(WIIKING2_MINOR)
-                                                                     .arg(WIIKING2_PATCH);
+const QString WIIKING2_VERSION_STR              = QString("%1.%2.%3")
+                                                  .arg(WIIKING2_MAJOR)
+                                                  .arg(WIIKING2_MINOR)
+                                                  .arg(WIIKING2_PATCH);
 #ifdef WK2_PREVIEW
 const QString WIIKING2_APP_VERSION               = QString(WIIKING2_VERSION_STR + " PREVIEW 2");
 #elif defined(WK2_INTERNAL)
@@ -45,6 +47,7 @@ const QString WIIKING2_APP_VERSION               = QString(WIIKING2_VERSION_STR 
 const QString WIIKING2_APP_VERSION               = QString(WIIKING2_VERSION_STR);
 #endif
 
+const QString WIIKING2_LOCK_FILE                 = QString(QDir::temp().absolutePath() + "/wk.lck");
 const QString WIIKING2_TITLE                     = tr("WiiKing2 Editor");
 // Work around for Qt's retarded method of setWindowFilePath
 // It doesn't work if you set a custom window title
@@ -54,24 +57,36 @@ const QString WIIKING2_TITLE_FILE                = tr("%1%2 - Wiiking2 Editor");
 const QString WIIKING2_TITLE_DIRTY               = tr("*");
 const QString WIIKING2_APP_NAME                  = tr("wiiking2editor");
 const QString WIIKING2_UPDATE_CHECKING           = tr("Checking for updates please wait...");
-const QString WIIKING2_UPDATE_CHECKING_MSG       = tr("%1 is checking for updates, please wait.").arg(WIIKING2_TITLE);
+const QString WIIKING2_UPDATE_CHECKING_MSG       = tr("%1 is checking for updates, please wait.")
+                                                   .arg(WIIKING2_TITLE);
 const QString WIIKING2_UPDATE_CONTACT_ERROR      = tr("Unable to contact server");
 const QString WIIKING2_UPDATE_CONTACT_ERROR_MSG  = tr("%1 was unable to contact the update server.<br />"
-                                                     "check your network settings and try again.<br />"
-                                                     "If the issue persists, the server may not be available <br/>"
-                                                      "in that case try again later or contact a developer for assistance").arg(WIIKING2_TITLE);
+                                                      "check your network settings and try again.<br />"
+                                                      "If the issue persists, the server may not be available <br/>"
+                                                      "in that case try again later or contact a developer for assistance")
+                                                   .arg(WIIKING2_TITLE);
 const QString WIIKING2_UPDATE_PARSE_ERROR        = tr("Error while parsing...");
 const QString WIIKING2_UPDATE_PARSE_ERROR_MSG    = tr("Unable to parse update file <br />"
                                                       "Please contact a developer for assistance with this message:<br />%1");
-const QString WIIKING2_LATEST_VERSION            = tr("%1 is up to date...").arg(WIIKING2_TITLE);
+const QString WIIKING2_LATEST_VERSION            = tr("%1 is up to date...")
+                                                   .arg(WIIKING2_TITLE);
 const QString WIIKING2_LATEST_VERSION_MSG        = tr("%1 is at the latest version.<br />"
-                                                      "If you feel this is an error please contact a developer with your platform.").arg(WIIKING2_TITLE);
-const QString WIIKING2_NOT_LATEST_VERSION        = tr("%1 is out of date...").arg(WIIKING2_TITLE);
+                                                      "If you feel this is an error please contact a developer with your platform.")
+                                                   .arg(WIIKING2_TITLE);
+const QString WIIKING2_NOT_LATEST_VERSION        = tr("%1 is out of date...")
+                                                   .arg(WIIKING2_TITLE);
 const QString WIIKING2_NOT_LATEST_VERSION_MSG    = tr("An update is available for %1<br />"
-                                                     "You may download the update at: <a href=\"%2\">%2</a><br />"
-                                                     "MD5 %3<br />"
-                                                     "The changelog is available at: <a href=\"%4\">%4</a>");
-
+                                                      "You may download the update at: <a href=\"%2\">%2</a><br />"
+                                                      "MD5 %3<br />"
+                                                      "The changelog is available at: <a href=\"%4\">%4</a>")
+                                                   .arg(WIIKING2_TITLE);
+const QString WIIKING2_INSTANCE_EXISTS           = tr("Single Instance error...");
+const QString WIIKING2_INSTANCE_EXISTS_MSG       = tr("An instance %1 is already running<br />"
+                                                      "If this is an error you can delete the lock file at<br>"
+                                                      "%2<br/>"
+                                                      "%1 is designed to ignore locks older than 60 seconds, so you may also wait if you wish")
+                                                   .arg(WIIKING2_TITLE)
+                                                   .arg(WIIKING2_LOCK_FILE);
 const QString WIIKING2_BUILD_DATE                = tr(__DATE__ " " __TIME__);
 const QString WIIKING2_NO_PLUGINS_ERROR          = tr("Error Loading Plugins...");
 const QString WIIKING2_NO_PLUGINS_ERROR_MSG      = tr("No plugins were loaded.\n"
@@ -79,7 +94,8 @@ const QString WIIKING2_NO_PLUGINS_ERROR_MSG      = tr("No plugins were loaded.\n
 const QString WIIKING2_PLUGIN_RELOAD_WARNING     = tr("Reload plugin?");
 const QString WIIKING2_PLUGIN_RELOAD_WARNING_MSG = tr("You will lose <b>all</b> unsaved data associated with this plugin<br />"
                                                       "Are you sure you wish to reload?");
-const QString WIIKING2_ABOUT_TITLE               = tr("About %1...");
+const QString WIIKING2_ABOUT_TITLE               = tr("About %1...")
+                                                   .arg(WIIKING2_TITLE);
 const QString WIIKING2_ERROR_LOADING             = tr("Error loading file...");
 const QString WIIKING2_ERROR_LOADING_MSG         = tr("Error loading file '%1' please check that it exists");
 const QString WIIKING2_DIRTY_NAG                 = tr("File has been changed...");

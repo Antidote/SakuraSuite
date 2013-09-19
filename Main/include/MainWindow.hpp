@@ -62,8 +62,9 @@ public:
 
     bool isInternalBuild();
     bool isPreviewBuild();
+
 protected slots:
-    void onDocumentChanged();
+    void onDocumentChanged(int row);
     void onClose();
     void onCloseAll();
     void onOpen();
@@ -76,6 +77,7 @@ protected slots:
     void onClearRecent();
     void onRestoreDefault();
     void onCheckUpdate();
+    void onReload();
 
     void onStyleChanged();
 
@@ -94,7 +96,8 @@ protected slots:
     // Lock file
     void onLockTimeout();
 protected:
-    void showEvent(QShowEvent *se);
+    void showEvent(QShowEvent* se);
+    void closeEvent(QCloseEvent* e);
 private:
     bool checkLock();
     void initUpdater();
@@ -125,6 +128,7 @@ private:
     PreferencesDialog*       m_preferencesDialog;
     QMessageBox              m_updateMBox;
     QTimer                   m_lockTimer;
+    bool                     m_cancelClose;
 #if defined(WK2_PREVIEW) || defined(WK2_INTERNAL)
     QHBoxLayout*             m_previewLayout;
     QLabel*                  m_previewLabel;

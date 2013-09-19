@@ -21,7 +21,7 @@
 #include "Common.hpp"
 #include "TriforceWidget.hpp"
 
-class SkywardSwordGameFile;
+class SkywardSwordGameDocument;
 class SettingsManager;
 
 namespace Ui {
@@ -134,14 +134,19 @@ public:
         REGION_PAL   = 0x50
     };
 
-    explicit SkywardSwordEditorForm(SkywardSwordGameFile* file, const char* data, QWidget *parent = 0);
+    explicit SkywardSwordEditorForm(SkywardSwordGameDocument* file, const char* data, QWidget *parent = 0);
     ~SkywardSwordEditorForm();
 
+    void setGameData(const QByteArray& data);
     char* gameData();
+
+    int currentTab();
+    void setCurrentTab(int index);
 public slots:
     // Actions
     void onDelete();
     void onCreate();
+    void onCopy();
     void onModified();
 
     // Data
@@ -253,8 +258,10 @@ public slots:
     int checksum();
     void updateChecksum();
 
+
 signals:
     void modified();
+    void copy(SkywardSwordEditorForm*);
 
 private:
     void setQuantity(bool isRight, int offset, quint32 val);
@@ -265,7 +272,7 @@ private:
     void updateBugs();
     void updateMaterials();
     Ui::SkywardSwordEditorForm *ui;
-    SkywardSwordGameFile* m_gameFile;
+    SkywardSwordGameDocument* m_gameFile;
     char* m_gameData;
 };
 

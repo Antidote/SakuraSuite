@@ -13,38 +13,37 @@
 // You should have received a copy of the GNU General Public License
 // along with WiiKing2 Editor.  If not, see <http://www.gnu.org/licenses/>
 
-#ifndef COMMON_HPP
-#define COMMON_HPP
+#ifndef COPYWIDGET_HPP
+#define COPYWIDGET_HPP
 
-#include <QDateTime>
+#include <QDialog>
 
-struct Playtime
+namespace Ui {
+class CopyWidget;
+}
+
+class CopyWidget : public QDialog
 {
-    int Hours;
-    int Minutes;
-    int Seconds;
+    Q_OBJECT
 
-    bool operator ==(const Playtime& val)
+public:
+    explicit CopyWidget(QWidget *parent = 0);
+    ~CopyWidget();
+
+    enum Quest
     {
-        return (val.Hours == Hours && val.Minutes == Minutes && val.Seconds == Seconds);
-    }
+        Quest1,
+        Quest2,
+        Quest3
+    };
+
+    void setQuestEnabled(Quest quest, bool enabled);
+    bool questChecked(Quest quest);
+
+protected:
+    void showEvent(QShowEvent* e);
+private:
+    Ui::CopyWidget *ui;
 };
 
-struct Vector3
-{
-    float X;
-    float Y;
-    float Z;
-
-    Vector3(float x, float y, float z) : X(x), Y(y), Z(z)
-    {}
-};
-
-const quint64 SECONDS_TO_2000 = 946684800LL;
-const quint64 TICKS_PER_SECOND = 60750000LL;
-
-quint64 wiiTime();
-quint64 toWiiTime(QDateTime time);
-QDateTime fromWiiTime(quint64 wiiTime);
-
-#endif // COMMON_HPP
+#endif // COPYWIDGET_HPP

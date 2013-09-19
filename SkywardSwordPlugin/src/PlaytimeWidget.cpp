@@ -15,7 +15,6 @@
 
 #include "PlaytimeWidget.hpp"
 #include "ui_PlaytimeWidget.h"
-#include <QDebug>
 
 PlaytimeWidget::PlaytimeWidget(QWidget *parent) :
     QWidget(parent),
@@ -27,7 +26,6 @@ PlaytimeWidget::PlaytimeWidget(QWidget *parent) :
     m_blinkTimer.setInterval(qApp->cursorFlashTime()); // Blink according to the cursor's flash time
     m_blinkTimer.start();
     connect(&m_blinkTimer, SIGNAL(timeout()), this, SLOT(blinkText()));
-    connect(ui->daysSpinBox,  SIGNAL(valueChanged(int)), this, SLOT(valueChanged()));
     connect(ui->hoursSpinBox, SIGNAL(valueChanged(int)), this, SLOT(valueChanged()));
     connect(ui->minsSpinBox,  SIGNAL(valueChanged(int)), this, SLOT(valueChanged()));
     connect(ui->secsSpinBox,  SIGNAL(valueChanged(int)), this, SLOT(valueChanged()));
@@ -40,7 +38,6 @@ PlaytimeWidget::~PlaytimeWidget()
 
 void PlaytimeWidget::setPlaytime(Playtime val)
 {
-    ui->daysSpinBox ->setValue(val.Days);
     ui->hoursSpinBox->setValue(val.Hours);
     ui->minsSpinBox ->setValue(val.Minutes);
     ui->secsSpinBox ->setValue(val.Seconds);
@@ -52,10 +49,8 @@ void PlaytimeWidget::blinkText()
 
     if (this->isEnabled())
     {
-        ui->hourSepLbl->setProperty("blink", m_blink);
         ui->minSepLbl->setProperty("blink", m_blink);
         ui->secSepLbl->setProperty("blink", m_blink);
-        style()->polish(ui->hourSepLbl);
         style()->polish(ui->minSepLbl);
         style()->polish(ui->secSepLbl);
     }
@@ -63,13 +58,11 @@ void PlaytimeWidget::blinkText()
 
 void PlaytimeWidget::valueChanged()
 {
-    emit playtimeChanged((Playtime){ui->daysSpinBox->value(), ui->hoursSpinBox->value(),
-                                    ui->minsSpinBox->value(), ui->secsSpinBox->value()});
+    emit playtimeChanged((Playtime){ui->hoursSpinBox->value(), ui->minsSpinBox->value(), ui->secsSpinBox->value()});
 }
 
 void PlaytimeWidget::clearTime()
 {
-    ui->daysSpinBox->setValue(0);
     ui->hoursSpinBox->setValue(0);
     ui->minsSpinBox->setValue(0);
     ui->secsSpinBox->setValue(0);
