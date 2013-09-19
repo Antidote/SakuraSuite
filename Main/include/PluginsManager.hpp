@@ -33,7 +33,7 @@ public:
     void dialog();
 
     PluginInterface* plugin(const QString& name);
-    QMap<QString, PluginInterface*> plugins();
+    QList<PluginInterface*> plugins();
 
     PluginInterface* preferredPlugin(const QString& file);
     bool reloadByName(const QString& name);
@@ -49,7 +49,7 @@ private:
 
     MainWindow*             m_mainWindow;
     QMap<QString, QPluginLoader*> m_pluginLoaders;
-    QMap<QString, PluginInterface*> m_plugins;
+    QList<PluginInterface*> m_plugins;
 };
 
 #endif // PLUGINSMANAGER_HPP

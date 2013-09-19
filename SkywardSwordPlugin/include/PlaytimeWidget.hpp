@@ -42,6 +42,7 @@ signals:
 private slots:
     void blinkText();
     void valueChanged();
+    void clearTime();
 
 private:
     Ui::PlaytimeWidget *ui;

@@ -24,7 +24,8 @@ SOURCES += \
     src/SettingsManager.cpp \
     src/SettingsDialog.cpp \
     src/PlaytimeWidget.cpp \
-    src/Common.cpp
+    src/Common.cpp \
+    src/TriforceWidget.cpp
 
 INCLUDEPATH += \
     include \
@@ -66,7 +67,8 @@ HEADERS +=\
     include/SettingsDialog.hpp \
     include/PlaytimeWidget.hpp \
     include/Common.hpp \
-    include/Constants.hpp
+    include/Constants.hpp \
+    include/TriforceWidget.hpp
 
 RESOURCES += \
     resources/resources.qrc

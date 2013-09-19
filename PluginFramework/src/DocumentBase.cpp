@@ -13,12 +13,12 @@
 // You should have received a copy of the GNU General Public License
 // along with WiiKing2 Editor.  If not, see <http://www.gnu.org/licenses/>
 
-#include "GameFile.hpp"
+#include "DocumentBase.hpp"
 #include <QTabWidget>
 #include <QFileInfo>
 #include <QDir>
 
-GameFile::GameFile(const PluginInterface* loader, const QString &file)
+DocumentBase::DocumentBase(const PluginInterface* loader, const QString &file)
     : m_loader((PluginInterface*)loader),
       m_dirty(false),
       m_widget(NULL)
@@ -28,55 +28,55 @@ GameFile::GameFile(const PluginInterface* loader, const QString &file)
     m_path = fInfo.absolutePath();
 }
 
-GameFile::~GameFile()
+DocumentBase::~DocumentBase()
 {
     delete m_widget;
     m_widget = NULL;
 }
 
 
-QWidget* GameFile::widget() const
+QWidget* DocumentBase::widget() const
 {
     return (QWidget*)m_widget;
 }
 
-QString GameFile::fileName() const
+QString DocumentBase::fileName() const
 {
     return m_file;
 }
 
-QString GameFile::fileDir() const
+QString DocumentBase::fileDir() const
 {
     return m_path;
 }
 
-QString GameFile::filePath() const
+QString DocumentBase::filePath() const
 {
     return m_path + "/" + m_file;
 }
 
-PluginInterface* GameFile::loadedBy()
+PluginInterface* DocumentBase::loadedBy()
 {
     return m_loader;
 }
 
-void GameFile::setDirty(bool dirty)
+void DocumentBase::setDirty(bool dirty)
 {
     m_dirty = dirty;
 }
 
-bool GameFile::isDirty()
+bool DocumentBase::isDirty()
 {
     return m_dirty;
 }
 
-QString GameFile::game() const
-{
-    return "UNKNOWN";
-}
-
-bool GameFile::save(const QString &filename)
+bool DocumentBase::save(const QString &filename)
 {
     Q_UNUSED(filename);
     return false;
+}
+
+bool DocumentBase::reload()
+{
+    return true;
 }

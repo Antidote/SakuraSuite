@@ -43,7 +43,7 @@ public:
     bool enabled() const;
     void setEnabled(const bool enable);
 
-    GameFile* loadFile(const QString& file) const;
+    DocumentBase* loadFile(const QString& file) const;
     bool canLoad(const QString& filename);
 
     bool hasUpdater() const;

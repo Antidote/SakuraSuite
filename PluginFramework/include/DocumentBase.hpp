@@ -13,18 +13,18 @@
 // You should have received a copy of the GNU General Public License
 // along with WiiKing2 Editor.  If not, see <http://www.gnu.org/licenses/>
 
-#ifndef GAMEFILE_HPP
-#define GAMEFILE_HPP
+#ifndef DOCUMENTBASE_HPP
+#define DOCUMENTBASE_HPP
 
 #include <QWidget>
 class PluginInterface;
 
-class GameFile : public QObject
+class DocumentBase : public QObject
 {
     Q_OBJECT
 public:
-    GameFile(const PluginInterface* loader, const QString& file = QString());
-    virtual ~GameFile();
+    DocumentBase(const PluginInterface* loader, const QString& file = QString());
+    virtual ~DocumentBase();
 
     QWidget* widget() const;
 
@@ -39,10 +39,8 @@ public:
     void setDirty(bool dirty);
     virtual bool isDirty();
 
-    virtual QString game() const;
-
     virtual bool save(const QString& filename = QString());
-
+    virtual bool reload();
 signals:
     void modified();
     void enabledChanged();
@@ -54,4 +52,4 @@ protected:
     QWidget* m_widget;
 };
 
-#endif // GAMEFILE_HPP
+#endif // DOCUMENTBASE_HPP

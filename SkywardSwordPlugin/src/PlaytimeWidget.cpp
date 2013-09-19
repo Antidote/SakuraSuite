@@ -24,7 +24,7 @@ PlaytimeWidget::PlaytimeWidget(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    m_blinkTimer.setInterval(1000); // Blink every 2 seconds (needs to be tweaked)
+    m_blinkTimer.setInterval(qApp->cursorFlashTime()); // Blink according to the cursor's flash time
     m_blinkTimer.start();
     connect(&m_blinkTimer, SIGNAL(timeout()), this, SLOT(blinkText()));
     connect(ui->daysSpinBox,  SIGNAL(valueChanged(int)), this, SLOT(valueChanged()));
@@ -55,19 +55,22 @@ void PlaytimeWidget::blinkText()
         ui->hourSepLbl->setProperty("blink", m_blink);
         ui->minSepLbl->setProperty("blink", m_blink);
         ui->secSepLbl->setProperty("blink", m_blink);
-        style()->unpolish(ui->hourSepLbl);
         style()->polish(ui->hourSepLbl);
-        style()->unpolish(ui->minSepLbl);
         style()->polish(ui->minSepLbl);
-        style()->unpolish(ui->secSepLbl);
         style()->polish(ui->secSepLbl);
     }
-
-    m_blinkTimer.start((m_blink ? 500 : 1000));
 }
 
 void PlaytimeWidget::valueChanged()
 {
     emit playtimeChanged((Playtime){ui->daysSpinBox->value(), ui->hoursSpinBox->value(),
                                     ui->minsSpinBox->value(), ui->secsSpinBox->value()});
+}
+
+void PlaytimeWidget::clearTime()
+{
+    ui->daysSpinBox->setValue(0);
+    ui->hoursSpinBox->setValue(0);
+    ui->minsSpinBox->setValue(0);
+    ui->secsSpinBox->setValue(0);
 }

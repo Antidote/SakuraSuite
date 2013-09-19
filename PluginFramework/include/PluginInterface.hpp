@@ -20,7 +20,7 @@
 #include <QString>
 
 class Updater;
-class GameFile;
+class DocumentBase;
 class QDialog;
 
 class PluginInterface
@@ -43,7 +43,7 @@ public:
     virtual void setEnabled(const bool enable = true)=0;
     virtual bool canLoad(const QString& file)=0;
 
-    virtual GameFile* loadFile(const QString& file) const=0;
+    virtual DocumentBase* loadFile(const QString& file) const=0;
 
     virtual QDialog* settingsDialog()=0;
     virtual Updater* updater()=0;
@@ -54,5 +54,5 @@ public:
     virtual void doUpdate()=0;
 };
 
-Q_DECLARE_INTERFACE(PluginInterface, "org.wiiking2.PluginInterface/1.1")
+Q_DECLARE_INTERFACE(PluginInterface, "org.wiiking2.PluginInterface/1.1a")
 #endif // PLUGIN_HPP

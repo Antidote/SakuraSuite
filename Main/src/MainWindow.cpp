@@ -15,7 +15,7 @@
 
 #include "MainWindow.hpp"
 #include "ui_MainWindow.h"
-#include "GameFile.hpp"
+#include "DocumentBase.hpp"
 #include "PluginsManager.hpp"
 #include "PluginInterface.hpp"
 #include "AboutDialog.hpp"
@@ -47,24 +47,20 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    // lock Application
+    if (checkLock())
+    {
+        qApp->quit();
+        return;
+    }
+
+    connect(&m_lockTimer, SIGNAL(timeout()), SLOT(onLockTimeout()));
+    m_lockTimer.setInterval(58*1000);
+    m_lockTimer.start();
 
     setWindowIcon(QIcon(":/icon/Bomb64x64.png"));
     m_defaultWindowGeometry = this->saveGeometry();
     m_defaultWindowState = this->saveState();
-
-    // Setup the context menu for documentList
-    ui->documentList->addAction(ui->actionOpen);
-    ui->documentList->addAction(ui->actionNew);
-    QAction* separator = new QAction(this);
-    separator->setSeparator(true);
-    ui->documentList->addAction(separator);
-    ui->documentList->addAction(ui->actionSave);
-    ui->documentList->addAction(ui->actionSaveAs);
-    separator = new QAction(this);
-    separator->setSeparator(true);
-    ui->documentList->addAction(separator);
-    ui->documentList->addAction(ui->actionClose);
-    this->setWindowTitle(Constants::WIIKING2_TITLE);
 
     // lets load the plugins
     m_pluginsManager->loadPlugins();
@@ -76,46 +72,26 @@ MainWindow::MainWindow(QWidget *parent) :
     m_fileFilters << "All Files *.* (*.*)";
 
     // Setup the MRU list
-    m_recentFileSeparator = ui->menuRecentFiles->insertSeparator(ui->actionClearRecent);
+    initMRU();
 
-    for (int i = 0; i < MAXRECENT; ++i)
-    {
-        QAction* act = new QAction(this);
-        act->setText(tr("&%1 %2").arg(i + 1).arg("test"));
-        act->setVisible(false);
-        connect(act, SIGNAL(triggered()), this, SLOT(openRecentFile()));
-        m_recentFileActions.append(act);
-        ui->menuRecentFiles->insertAction(m_recentFileSeparator, m_recentFileActions[i]);
-    }
+    // Setup the context menu for documentList
+    initDocumentList();
 
-    // On preview and builds we inject a label into the menu bar to inform the user
+    // On preview and internal builds we inject a label into the menu bar to inform the user
 #if defined(WK2_PREVIEW) || defined(WK2_INTERNAL)
-    QMenuBar* bar = this->menuBar();
-    m_previewLayout = new QHBoxLayout(bar);
-    m_previewLayout->addStretch();
-    m_previewLabel  = new QLabel(bar);
-    m_previewLabel->setObjectName("previewLabel");
-#ifdef WK2_PREVIEW
-    m_previewLabel->setText("<b>PREVIEW BUILD</b>");
-#elif defined(WK2_INTERNAL)
-    m_previewLabel->setText("<b>INTERNAL BUILD</b>");
-#endif
-    m_previewLayout->setContentsMargins(150, 0, 6, 0);
-    m_previewLayout->addWidget(m_previewLabel);
-    bar->setLayout(m_previewLayout);
+    injectPreviewLabel();
 #endif
     // Now load the MRU
     updateRecentFileActions();
 
     // Restore window from saved states
-    QSettings settings;
-    restoreGeometry(settings.value("mainWindowGeometry").toByteArray());
-    restoreState(settings.value("mainWindowState").toByteArray());
+    restoreDefaultGeometry();
 
-    connect(m_updater, SIGNAL(done()), this, SLOT(onUpdateDone()));
-    connect(m_updater, SIGNAL(error(Updater::ErrorType)), this, SLOT(onUpdateError(Updater::ErrorType)));
-    connect(m_updater, SIGNAL(warning(QString)), this, SLOT(onUpdateWarning(QString)));
-    connect(m_updater, SIGNAL(noUpdate()), this, SLOT(onNoUpdate()));
+    // Setup the updater's connections
+    initUpdater();
+    // Setup the filesystem watcher
+    initFSWatcher();
+
 
     connect(ui->actionPreferences, SIGNAL(triggered()), m_preferencesDialog, SLOT(exec()));
     // Hide the toolbar if it has no actions
@@ -137,12 +113,14 @@ MainWindow::~MainWindow()
         m_previewLabel = NULL;
     }
 #endif
+
+    QFile(QFileInfo(QSettings().fileName()).absolutePath() + "wk.lock").remove();
     QSettings settings;
     settings.setValue("mainWindowGeometry", saveGeometry());
     settings.setValue("mainWindowState", saveState());
     onCloseAll();
 
-    foreach (GameFile* file, m_documents.values())
+    foreach (DocumentBase* file, m_documents.values())
     {
         delete file;
         file = NULL;
@@ -151,6 +129,81 @@ MainWindow::~MainWindow()
     delete m_pluginsManager;
     m_pluginsManager = NULL;
     delete ui;
+}
+void MainWindow::initUpdater()
+{
+    connect(m_updater, SIGNAL(done()), this, SLOT(onUpdateDone()));
+    connect(m_updater, SIGNAL(error(Updater::ErrorType)), this, SLOT(onUpdateError(Updater::ErrorType)));
+    connect(m_updater, SIGNAL(warning(QString)), this, SLOT(onUpdateWarning(QString)));
+    connect(m_updater, SIGNAL(noUpdate()), this, SLOT(onNoUpdate()));
+}
+
+void MainWindow::restoreDefaultGeometry()
+{
+    QSettings settings;
+    restoreGeometry(settings.value("mainWindowGeometry").toByteArray());
+    restoreState(settings.value("mainWindowState").toByteArray());
+}
+
+void MainWindow::injectPreviewLabel()
+{
+    QMenuBar* bar = this->menuBar();
+    m_previewLayout = new QHBoxLayout(bar);
+    m_previewLayout->addStretch();
+    m_previewLabel  = new QLabel(bar);
+    m_previewLabel->setObjectName("previewLabel");
+#ifdef WK2_PREVIEW
+    m_previewLabel->setText("<b>PREVIEW BUILD</b>");
+#elif defined(WK2_INTERNAL)
+    m_previewLabel->setText("<b>INTERNAL BUILD</b>");
+#endif
+    m_previewLayout->setContentsMargins(150, 0, 6, 0);
+    m_previewLayout->addWidget(m_previewLabel);
+    bar->setLayout(m_previewLayout);
+}
+
+void MainWindow::initDocumentList()
+{
+    ui->documentList->addAction(ui->actionOpen);
+    ui->documentList->addAction(ui->actionNew);
+    QAction* separator = new QAction(this);
+    separator->setSeparator(true);
+    ui->documentList->addAction(separator);
+    foreach(QAction* a, ui->menuRecentFiles->actions())
+    {
+        if (a != ui->actionClearRecent)
+            ui->documentList->addAction(a);
+    }
+
+    separator = new QAction(this);
+    separator->setSeparator(true);
+    ui->documentList->addAction(separator);
+    ui->documentList->addAction(ui->actionSave);
+    ui->documentList->addAction(ui->actionSaveAs);
+    separator = new QAction(this);
+    separator->setSeparator(true);
+    ui->documentList->addAction(separator);
+    ui->documentList->addAction(ui->actionClose);
+    this->setWindowTitle(Constants::WIIKING2_TITLE);
+}
+
+void MainWindow::initMRU()
+{
+    m_recentFileSeparator = ui->menuRecentFiles->insertSeparator(ui->actionClearRecent);
+
+    for (int i = 0; i < MAXRECENT; ++i)
+    {
+        QAction* act = new QAction(this);
+        act->setVisible(false);
+        connect(act, SIGNAL(triggered()), this, SLOT(openRecentFile()));
+        m_recentFileActions.append(act);
+        ui->menuRecentFiles->insertAction(m_recentFileSeparator, m_recentFileActions[i]);
+    }
+}
+
+void MainWindow::initFSWatcher()
+{
+    connect(&m_fileSystemWatcher, SIGNAL(fileChanged(QString)), this, SLOT(onFileChanged(QString)));
 }
 
 void MainWindow::addFileFilter(const QString& filter)
@@ -171,8 +224,8 @@ void MainWindow::removeFileFilter(const QString& filter)
 
 void MainWindow::closeFilesFromLoader(PluginInterface* loader)
 {
-    QList<GameFile*> targets;
-    foreach(GameFile* file, m_documents.values())
+    QList<DocumentBase*> targets;
+    foreach(DocumentBase* file, m_documents.values())
     {
         if (file->loadedBy() == loader)
         {
@@ -188,7 +241,7 @@ void MainWindow::closeFilesFromLoader(PluginInterface* loader)
         }
     }
 
-    foreach(GameFile* file, targets)
+    foreach(DocumentBase* file, targets)
     {
         m_documents.remove(cleanPath(file->filePath()));
         delete file;
@@ -229,26 +282,29 @@ void MainWindow::openFile(const QString& currentFile)
 {
     // Change any '\' to '/' for maximum compatibility
     QString filePath = cleanPath(currentFile);
-
+    QMessageBox msgBox(this);
+    msgBox.setStandardButtons(QMessageBox::Ok);
+    msgBox.setIcon(QMessageBox::Warning);
     if (m_documents.contains(filePath))
     {
-        QMessageBox msgBox(this);
         msgBox.setWindowTitle(Constants::WIIKING2_ALREADY_OPENED);
         msgBox.setText(Constants::WIIKING2_ALREADY_OPENED_MSG.arg(strippedName(filePath)));
-        msgBox.setStandardButtons(QMessageBox::Ok);
-        msgBox.setIcon(QMessageBox::Warning);
         msgBox.exec();
         return;
     }
     PluginInterface* loader = m_pluginsManager->preferredPlugin(filePath);
     if (!loader)
+    {
+        msgBox.setWindowTitle("Unable to find suitable loader...");
+        msgBox.setText(tr("%1 was unable to determine an appropriate plugin to load '%2' with.").arg(Constants::WIIKING2_TITLE).arg(filePath));
+        msgBox.exec();
         return;
+    }
 
-    GameFile* file = loader->loadFile(filePath);
+    DocumentBase* file = loader->loadFile(filePath);
 
     if (!file)
     {
-        QMessageBox msgBox(this);
         msgBox.setWindowTitle(Constants::WIIKING2_OPEN_FAILED);
         msgBox.setText(Constants::WIIKING2_OPEN_FAILED_MSG.arg(strippedName(filePath)).arg(loader->name()));
         msgBox.setStandardButtons(QMessageBox::Ok);
@@ -258,6 +314,7 @@ void MainWindow::openFile(const QString& currentFile)
     }
     connect(file, SIGNAL(modified()), this, SLOT(updateWindowTitle()));
     m_documents[filePath] = file;
+    m_fileSystemWatcher.addPath(file->filePath());
 
     QListWidgetItem* item = new QListWidgetItem();
     item->setData(FILENAME, m_documents[filePath]->fileName());
@@ -292,7 +349,7 @@ void MainWindow::onDocumentChanged()
 
     // First we need to store the old Widget so we can remove
     // it from the main layout.
-    GameFile* oldFile = m_currentFile;
+    DocumentBase* oldFile = m_currentFile;
     m_currentFile = m_documents[cleanPath(ui->documentList->currentItem()->data(FILEPATH).toString())];
 
     if (!m_currentFile)
@@ -591,6 +648,22 @@ void MainWindow::onNoUpdate()
     m_updateMBox.exec();
 }
 
+void MainWindow::onLockTimeout()
+{
+    qDebug() << "locktimout";
+    QString settingsDir = QFileInfo(QSettings().fileName()).absolutePath();
+    if (QFile::exists(settingsDir + "/wk.lck") && QSettings().value("singleInstance", false).toBool())
+    {
+        QFile file(settingsDir + "/wk.lck");
+        if (file.open(QFile::WriteOnly))
+        {
+            file.seek(0);
+            file.write(QString(QDateTime::currentDateTime().toString() + "\n").toAscii());
+            file.resize(file.pos());
+        }
+    }
+}
+
 void MainWindow::showEvent(QShowEvent* se)
 {
     QMainWindow::showEvent(se);
@@ -609,6 +682,42 @@ void MainWindow::showEvent(QShowEvent* se)
     QSettings settings;
     if (settings.value(Constants::Settings::WIIKING2_CHECK_ON_START, false).toBool())
         onCheckUpdate();
+}
+
+// Checklock returns true if lock exists
+bool MainWindow::checkLock()
+{
+    QString settingsDir = QFileInfo(QSettings().fileName()).absolutePath();
+    if (QFile::exists(settingsDir + "/wk.lck") && QSettings().value("singleInstance", false).toBool())
+    {
+        QFile file(settingsDir + "/wk.lck");
+        if (file.open(QFile::ReadOnly))
+        {
+            QDateTime time = QDateTime::fromString(QString(file.readLine()));
+            quint64 msecs = time.msecsTo(QDateTime::currentDateTime());
+            qDebug() << msecs;
+            if (msecs > (60*1000))
+            {
+                qDebug() << "Found stale lock, ignoring";
+                return false;
+            }
+        }
+        QMessageBox mbox(this);
+        mbox.setWindowTitle("An instance is already open");
+        mbox.setText("An instance is already running");
+        mbox.exec();
+        return true;
+    }
+    else if (QSettings().value("singleInstance", false).toBool())
+    {
+        QFile lock(settingsDir + "/wk.lck");
+        lock.open(QFile::WriteOnly);
+        lock.write(QString(QDateTime::currentDateTime().toString() + "\n").toAscii());
+        lock.close();
+        return false;
+    }
+
+    return false;
 }
 
 void MainWindow::onPlugins()
@@ -679,6 +788,42 @@ void MainWindow::onStyleChanged()
         QSettings().setValue(Constants::Settings::WIIKING2_CURRENT_STYLE, (style.contains("default") ?
                                                                                QSettings().value(Constants::Settings::WIIKING2_DEFAULT_STYLE).toString()
                                                                              : style));
+    }
+}
+
+void MainWindow::onFileChanged(const QString& file)
+{
+    QMessageBox mbox(this);
+    mbox.setWindowTitle("Reload?");
+    mbox.setText(tr("File '%1' has been modified outside of the application, do you wish to reload?").arg(file));
+    mbox.setStandardButtons(QMessageBox::Ok | QMessageBox::Ignore);
+    mbox.exec();
+
+    if (mbox.result() == QMessageBox::Ignore)
+        return;
+
+    // Remove the path so we can reload the file.
+    // If we don't do this, the FS watcher won't know that the file
+    // has been reloaded
+    m_fileSystemWatcher.removePath(file);
+    if (m_documents[cleanPath(file)]->reload())
+        m_fileSystemWatcher.addPath(file);
+    else
+    {
+        DocumentBase* f = m_documents.take(cleanPath(file));
+        delete f;
+        QListWidgetItem* item = NULL;
+        for (int i = 0; i < ui->documentList->count(); i++)
+        {
+            if (ui->documentList->item(i)->data(FILEPATH) == cleanPath(file))
+            {
+                item = ui->documentList->item(i);
+                break;
+            }
+        }
+
+        if (item)
+            delete item;
     }
 }
 

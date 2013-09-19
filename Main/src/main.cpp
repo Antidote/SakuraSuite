@@ -18,6 +18,7 @@
 #include "Constants.hpp"
 #include <QTranslator>
 #include <QDir>
+#include <QDebug>
 #include <QLocale>
 
 int main(int argc, char *argv[])

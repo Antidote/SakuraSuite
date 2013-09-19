@@ -18,16 +18,18 @@
 
 #include "Constants.hpp"
 
+#include <QFileSystemWatcher>
 #include <QMainWindow>
 #include <QMap>
 #include <QMessageBox>
 #include <QUrl>
+#include <QTimer>
 
 #include <Updater.hpp>
 
 class QLabel;
 class QHBoxLayout;
-class GameFile;
+class DocumentBase;
 class PluginsManager;
 class AboutDialog;
 class PreferencesDialog;
@@ -76,6 +78,8 @@ protected slots:
     void onCheckUpdate();
 
     void onStyleChanged();
+
+    void onFileChanged(const QString& file);
     void updateMRU(const QString& file);
     void openRecentFile();
 
@@ -86,9 +90,19 @@ protected slots:
     void onUpdateError(Updater::ErrorType);
     void onUpdateWarning(QString message);
     void onNoUpdate();
+
+    // Lock file
+    void onLockTimeout();
 protected:
     void showEvent(QShowEvent *se);
 private:
+    bool checkLock();
+    void initUpdater();
+    void restoreDefaultGeometry();
+    void injectPreviewLabel();
+    void initDocumentList();
+    void initMRU();
+    void initFSWatcher();
     void openFile(const QString& currentFile);
     QString strippedName(const QString& fullFileName) const;
     QString mostRecentDirectory();
@@ -96,11 +110,12 @@ private:
     void setupStyleActions();
 
     Ui::MainWindow *ui;
-    GameFile*                m_currentFile;
+    DocumentBase*                m_currentFile;
 
+    QFileSystemWatcher       m_fileSystemWatcher;
     QList<QAction*>          m_recentFileActions;
     QAction*                 m_recentFileSeparator;
-    QMap<QString, GameFile*> m_documents;
+    QMap<QString, DocumentBase*> m_documents;
     QStringList              m_fileFilters;
     PluginsManager*          m_pluginsManager;
     QByteArray               m_defaultWindowGeometry;
@@ -109,6 +124,7 @@ private:
     Updater*                 m_updater;
     PreferencesDialog*       m_preferencesDialog;
     QMessageBox              m_updateMBox;
+    QTimer                   m_lockTimer;
 #if defined(WK2_PREVIEW) || defined(WK2_INTERNAL)
     QHBoxLayout*             m_previewLayout;
     QLabel*                  m_previewLabel;

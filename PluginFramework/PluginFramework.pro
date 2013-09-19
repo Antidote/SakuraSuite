@@ -30,12 +30,14 @@ CONFIG(debug, debug|release) {
 }
 
 SOURCES += \
-    src/GameFile.cpp
+    src/DocumentBase.cpp \
+    src/GameDocument.cpp
 
 INCLUDEPATH += include
 
 HEADERS += \
-    include/GameFile.hpp \
-    include/PluginInterface.hpp
+    include/PluginInterface.hpp \
+    include/DocumentBase.hpp \
+    include/GameDocument.hpp
 
 

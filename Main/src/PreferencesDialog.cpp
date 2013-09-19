@@ -12,7 +12,8 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::PreferencesDialog),
     m_currentChanged(false),
-    m_defaultChanged(false)
+    m_defaultChanged(false),
+    m_singleInstance(false)
 {
     ui->setupUi(this);
 }
@@ -28,6 +29,7 @@ void PreferencesDialog::showEvent(QShowEvent* se)
     QSettings settings;
     m_currentStyle = settings.value(Constants::Settings::WIIKING2_CURRENT_STYLE).toString();
     m_defaultStyle = settings.value(Constants::Settings::WIIKING2_DEFAULT_STYLE).toString();
+    m_singleInstance = settings.value("singleInstance").toBool();
 
     ui->checkOnStart->setChecked(settings.value(Constants::Settings::WIIKING2_CHECK_ON_START, false).toBool());
 
@@ -46,6 +48,7 @@ void PreferencesDialog::showEvent(QShowEvent* se)
 
     ui->updateUrlLineEdit->setText(settings.value(Constants::Settings::WIIKING2_UPDATE_URL, Constants::Settings::WIIKING2_UPDATE_URL_DEFAULT).toString());
     //ui->updateUrlLineEdit->setModified(false);
+    ui->singleInstanceCheckBox->setChecked(QSettings().value("singleInstance", false).toBool());
     this->setUpdatesEnabled(true);
 }
 
@@ -79,6 +82,7 @@ void PreferencesDialog::accept()
     qApp->setStyle(ui->currentStyleCombo->currentText());
 
     settings.setValue(Constants::Settings::WIIKING2_CHECK_ON_START, ui->checkOnStart->isChecked());
+    settings.setValue("singleInstance", m_singleInstance);
 
     QDialog::accept();
 }
@@ -129,4 +133,9 @@ void PreferencesDialog::onTextChanged(QString text)
         if (text == QSettings().value(Constants::Settings::WIIKING2_UPDATE_URL, Constants::Settings::WIIKING2_UPDATE_URL).toString())
             ui->updateUrlLineEdit->setModified(false);
     }
+}
+
+void PreferencesDialog::onSingleInstanceToggled(bool checked)
+{
+    m_singleInstance = checked;
 }

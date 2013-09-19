@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>291</width>
+    <width>373</width>
     <height>25</height>
    </rect>
   </property>
@@ -44,16 +44,9 @@
    <property name="bottomMargin">
     <number>0</number>
    </property>
-   <property name="spacing">
+   <property name="horizontalSpacing">
     <number>0</number>
    </property>
-   <item row="0" column="7">
-    <widget class="QLabel" name="secSepLbl">
-     <property name="text">
-      <string>:</string>
-     </property>
-    </widget>
-   </item>
    <item row="0" column="0">
     <widget class="QLabel" name="playTimeLbl">
      <property name="text">
@@ -61,8 +54,27 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="6">
+   <item row="0" column="4">
+    <widget class="QLabel" name="minSepLbl">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="5">
     <widget class="QSpinBox" name="minsSpinBox">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
@@ -77,8 +89,27 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="4">
+   <item row="0" column="2">
+    <widget class="QLabel" name="hourSepLbl">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="3">
     <widget class="QSpinBox" name="hoursSpinBox">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
@@ -93,54 +124,27 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="2">
-    <widget class="QSpinBox" name="daysSpinBox">
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+   <item row="0" column="6">
+    <widget class="QLabel" name="secSepLbl">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
      </property>
-     <property name="buttonSymbols">
-      <enum>QAbstractSpinBox::NoButtons</enum>
-     </property>
-     <property name="accelerated">
-      <bool>false</bool>
-     </property>
-     <property name="maximum">
-      <number>999</number>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="3">
-    <widget class="QLabel" name="hourSepLbl">
      <property name="text">
       <string>:</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="1">
-    <spacer name="playTimeSpacer">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::MinimumExpanding</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>13</width>
-       <height>0</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="0" column="5">
-    <widget class="QLabel" name="minSepLbl">
-     <property name="text">
-      <string>:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="8">
+   <item row="0" column="7">
     <widget class="QSpinBox" name="secsSpinBox">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
@@ -155,8 +159,72 @@
      </property>
     </widget>
    </item>
+   <item row="0" column="1">
+    <widget class="QSpinBox" name="daysSpinBox">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buttonSymbols">
+      <enum>QAbstractSpinBox::NoButtons</enum>
+     </property>
+     <property name="accelerated">
+      <bool>false</bool>
+     </property>
+     <property name="maximum">
+      <number>999</number>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="8">
+    <widget class="QPushButton" name="clearTimePushButton">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">#clearTimePushButton {
+	margin: 0;
+	padding-top: 4px;
+	padding-left: 2px;
+	padding-right: 2px;
+	padding-bottom: 4px;
+}</string>
+     </property>
+     <property name="text">
+      <string>Clear</string>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>clearTimePushButton</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>PlaytimeWidget</receiver>
+   <slot>clearTime()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>353</x>
+     <y>14</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>119</x>
+     <y>-4</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>clearTime()</slot>
+ </slots>
 </ui>

@@ -4,6 +4,7 @@ CONFIG += ordered
 wiiking2.depends += PluginFramework \
         Updater
 SkywardSwordPlugin.depends += libzelda \
+        PluginFramework \
         Updater
 
 SUBDIRS += \

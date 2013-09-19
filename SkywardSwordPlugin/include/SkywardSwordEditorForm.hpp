@@ -19,6 +19,8 @@
 #include <QWidget>
 #include <QDateTime>
 #include "Common.hpp"
+#include "TriforceWidget.hpp"
+
 class SkywardSwordGameFile;
 class SettingsManager;
 
@@ -230,6 +232,9 @@ public slots:
     bool wallet(WalletType type);
     void setWallet(bool val);
 
+    // Triforce
+    bool triforce(TriforceWidget::TriforcePiece piece);
+    void triforceClicked();
     bool bug(BugType bug);
     void setBug(bool val);
     int bugAmount(BugType bug);

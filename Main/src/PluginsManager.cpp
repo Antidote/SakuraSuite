@@ -51,7 +51,7 @@ PluginInterface* PluginsManager::plugin(const QString& name)
 {
     foreach(PluginInterface* plugin, m_plugins)
     {
-        if (plugin->name() == name)
+        if (!QString::compare(plugin->name(), name, Qt::CaseInsensitive))
             return plugin;
     }
 
@@ -68,9 +68,9 @@ bool PluginsManager::reloadByName(const QString& name)
     QString pluginPath = plugin->path();
 
     m_mainWindow->closeFilesFromLoader(plugin);
-    QPluginLoader* loader = m_pluginLoaders.take(pluginPath);
+    QPluginLoader* loader = m_pluginLoaders.take(name.toLower());
 
-    m_plugins.remove(pluginPath);
+    m_plugins.removeAll(plugin);
 
     if (!loader)
         return false;
@@ -84,7 +84,7 @@ bool PluginsManager::reloadByName(const QString& name)
         loader = NULL;
         loader = new QPluginLoader(pluginPath);
 
-        m_pluginLoaders[pluginPath] = loader;
+        m_pluginLoaders[name.toLower()] = loader;
 
         if (loader->load())
         {
@@ -98,38 +98,44 @@ bool PluginsManager::reloadByName(const QString& name)
                 settings.beginGroup(newPlugin->name());
                 newPlugin->setEnabled(settings.value("enabled", true).toBool());
                 newPlugin->initialize();
-                m_plugins[pluginPath] = newPlugin;
+                m_plugins.append(newPlugin);
                 return true;
             }
             else
             {
-                mbox.setText(loader->errorString());
+                mbox.setText(tr("Error loading %1<br />%2")
+                             .arg(pluginPath)
+                             .arg(loader->errorString()));
                 mbox.exec();
                 return false;
             }
         }
         else
         {
-            mbox.setText(loader->errorString());
+            mbox.setText(tr("Error loading %1<br />%2")
+                         .arg(pluginPath)
+                         .arg(loader->errorString()));
             mbox.exec();
             return false;
         }
     }
 
-    m_pluginLoaders[pluginPath] = loader;
-    m_plugins[pluginPath] = plugin;
-    mbox.setText(loader->errorString());
+    m_pluginLoaders[name.toLower()] = loader;
+    m_plugins.append(plugin);
+    mbox.setText(tr("Error loading %1<br />%2")
+                 .arg(pluginPath)
+                 .arg(loader->errorString()));
     mbox.exec();
 
     return false;
 }
 
-QMap<QString, PluginInterface*> PluginsManager::plugins()
+QList<PluginInterface*> PluginsManager::plugins()
 {
     return m_plugins;
 }
 
-PluginInterface*PluginsManager::preferredPlugin(const QString& file)
+PluginInterface* PluginsManager::preferredPlugin(const QString& file)
 {
     foreach (PluginInterface* plugin, m_plugins)
     {
@@ -159,9 +165,12 @@ void PluginsManager::loadPlugins()
 #endif
     pluginsDir.cd("plugins");
 
+    QMessageBox mbox(m_mainWindow);
+    mbox.setWindowTitle("Error reloading plugin...");
+
     foreach (QString fileName, pluginsDir.entryList(QDir::Files)) {
-        QPluginLoader* pluginLoader = new QPluginLoader(pluginsDir.absoluteFilePath(fileName));
-        QObject *object = pluginLoader->instance();
+        QPluginLoader* loader = new QPluginLoader(pluginsDir.absoluteFilePath(fileName));
+        QObject *object = loader->instance();
 
         if (object)
         {
@@ -170,7 +179,7 @@ void PluginsManager::loadPlugins()
             {
                 if (!this->plugin(plugin->name()))
                 {
-                    m_plugins[pluginsDir.absoluteFilePath(fileName)] = plugin;
+                    m_plugins.append(plugin);
                     connect(plugin->object(), SIGNAL(enabledChanged()), this, SLOT(onEnabledChanged()));
                     plugin->object()->setParent(this->parent());
                     QSettings settings;
@@ -178,24 +187,32 @@ void PluginsManager::loadPlugins()
                     plugin->setPath(pluginsDir.absoluteFilePath(fileName));
                     plugin->setEnabled(settings.value("enabled", true).toBool());
                     plugin->initialize();
-                    m_pluginLoaders[pluginsDir.absoluteFilePath(fileName)] = pluginLoader;
+                    m_pluginLoaders[plugin->name().toLower()] = loader;
                 }
                 else
                 {
-                    pluginLoader->unload();
-                    delete pluginLoader;
+                    loader->unload();
+                    delete loader;
                 }
             }
             else
             {
-                delete pluginLoader;
-                pluginLoader = NULL;
+                mbox.setText(tr("Error loading %1<br />%2")
+                             .arg(fileName)
+                             .arg(loader->errorString()));
+                mbox.exec();
+                delete loader;
+                loader = NULL;
             }
         }
         else
         {
-            delete pluginLoader;
-            pluginLoader = NULL;
+            mbox.setText(tr("Error loading %1<br />%2")
+                         .arg(fileName)
+                         .arg(loader->errorString()));
+            mbox.exec();
+            delete loader;
+            loader = NULL;
         }
     }
 }

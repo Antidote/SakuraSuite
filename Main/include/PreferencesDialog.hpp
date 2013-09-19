@@ -24,12 +24,15 @@ protected slots:
 private slots:
     void onCurrentIndexChanged(QString style);
     void onTextChanged(QString text);
+    void onSingleInstanceToggled(bool checked);
+
 private:
     Ui::PreferencesDialog *ui;
     QString    m_currentStyle;
     bool       m_currentChanged;
     QString    m_defaultStyle;
     bool       m_defaultChanged;
+    bool       m_singleInstance;
 };
 
 #endif // PREFERENCESDIALOG_HPP

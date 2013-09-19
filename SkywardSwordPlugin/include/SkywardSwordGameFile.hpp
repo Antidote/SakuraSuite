@@ -16,10 +16,10 @@
 #ifndef SKYWARDSWORDGAMEFILE_HPP
 #define SKYWARDSWORDGAMEFILE_HPP
 
-#include <GameFile.hpp>
+#include <GameDocument.hpp>
 #include <QObject>
 
-class SkywardSwordGameFile : public GameFile
+class SkywardSwordGameFile : public GameDocument
 {
     Q_OBJECT
 public:

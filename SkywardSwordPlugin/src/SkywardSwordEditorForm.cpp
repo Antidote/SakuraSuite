@@ -77,6 +77,19 @@ void SkywardSwordEditorForm::onCreate()
 {
     memset(m_gameData, 0x00, 0x53C0);
     setPlayerName(SkywardSwordPlugin::instance()->settings()->defaultPlayerName());
+    setCurrentMap("F000");
+    setCurrentArea("F000");
+    setCurrentRoom("F000");
+    ui->playerXSpinBox->setValue(-4798.150391f);
+    ui->playerYSpinBox->setValue(1237.629517f);
+    ui->playerZSpinBox->setValue(-6573.722656f);
+    ui->cameraXSpinBox->setValue(-4798.150391f);
+    ui->cameraYSpinBox->setValue(1237.629517f);
+    ui->cameraZSpinBox->setValue(-6573.722656f);
+    ui->curHPSpinBox->setValue(24);
+    ui->unkHPSpinBox->setValue(24);
+    ui->totalHPSpinBox->setValue(24);
+    ui->introViewedChkBox->setChecked(true);
     emit modified();
 }
 
@@ -95,11 +108,6 @@ Playtime SkywardSwordEditorForm::playtime() const
 
 void SkywardSwordEditorForm::setPlaytime(Playtime val)
 {
-    if (!m_gameData)
-        return;
-    if (val == playtime())
-        return;
-
     quint64 totalSeconds = 0;
     totalSeconds += ((val.Days    * 60) * 60) * 24;
     totalSeconds += ( val.Hours   * 60) * 60;
@@ -252,7 +260,7 @@ float SkywardSwordEditorForm::camera(Coord coord)
         case RollCoord: return zelda::utility::swapFloat(*(float*)(m_gameData + 0x0034));
         case PitchCoord:return zelda::utility::swapFloat(*(float*)(m_gameData + 0x0038));
         case YawCoord:  return zelda::utility::swapFloat(*(float*)(m_gameData + 0x003C));
-        default: return 0.f;
+        default:        return 0.f;
     }
 }
 
@@ -587,6 +595,34 @@ void SkywardSwordEditorForm::setWallet(bool val)
         setFlag(0x09EF, 0x10, val);
     else if (sender() == ui->tycoonWalletChkBox)
         setFlag(0x09Ef, 0x20, val);
+}
+
+bool SkywardSwordEditorForm::triforce(TriforceWidget::TriforcePiece piece)
+{
+    switch(piece)
+    {
+        case TriforceWidget::Courage:return flag(0x09ED, 0x20);
+        case TriforceWidget::Power:  return flag(0x09ED, 0x40);
+        case TriforceWidget::Wisdom: return flag(0x09ED, 0x80);
+        default: return false;
+    }
+}
+
+void SkywardSwordEditorForm::triforceClicked()
+{
+    if (!updatesEnabled())
+        return;
+
+    TriforceWidget* tw = qobject_cast<TriforceWidget*>(ui->triforceWidget);
+    if (tw)
+    {
+        if (tw->isPowerChecked() != triforce(TriforceWidget::Power))
+            setFlag(0x09ED, 0x40, tw->isPowerChecked());
+        else if (tw->isCourageChecked() != triforce(TriforceWidget::Courage))
+            setFlag(0x09ED, 0x20, tw->isCourageChecked());
+        else if ((tw->isWisdomChecked() != triforce(TriforceWidget::Wisdom)))
+            setFlag(0x09ED, 0x80, tw->isWisdomChecked());
+    }
 }
 
 
@@ -1287,6 +1323,15 @@ void SkywardSwordEditorForm::updateData()
     ui->whiteSwdChkBox->setChecked(goddessWhiteSword());
     ui->masterSwdChkBox->setChecked(masterSword());
     ui->trueMasterSwdChkBox->setChecked(trueMasterSword());
+
+    // Triforce
+    TriforceWidget* tri = qobject_cast<TriforceWidget*>(ui->triforceWidget);
+    if (tri)
+    {
+        tri->setCourageChecked(triforce(TriforceWidget::Courage));
+        tri->setWisdomChecked(triforce(TriforceWidget::Wisdom));
+        tri->setPowerChecked(triforce(TriforceWidget::Power));
+    }
 
     // Bugs
     updateBugs();

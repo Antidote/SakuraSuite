@@ -60,6 +60,7 @@ QString SettingsManager::defaultPlayerNameForRegion(quint32 region) const
 void SettingsManager::setDefaultPlayerNameForRegion(quint32 region, const QString &name)
 {
     m_defaultNameList[region] = name;
+    saveSettings();
 }
 
 QString SettingsManager::defaultPlayerName() const
@@ -78,6 +79,7 @@ void SettingsManager::setDefaultRegion(const quint32 region)
         return;
 
     m_defaultRegion = region;
+    saveSettings();
 }
 
 QString SettingsManager::updateUrl() const
@@ -88,6 +90,7 @@ QString SettingsManager::updateUrl() const
 void SettingsManager::setUpdateUrl(const QString& updateUrl)
 {
     m_updateUrl = updateUrl;
+    saveSettings();
 }
 
 bool SettingsManager::updateCheckOnStart() const
@@ -98,6 +101,7 @@ bool SettingsManager::updateCheckOnStart() const
 void SettingsManager::setUpdateCheckOnStart(bool updateOnStart)
 {
     m_updateCheckOnStart = updateOnStart;
+    saveSettings();
 }
 
 void SettingsManager::saveSettings()

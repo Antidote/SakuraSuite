@@ -28,7 +28,7 @@
 #include <QFileInfo>
 
 SkywardSwordGameFile::SkywardSwordGameFile(const PluginInterface *loader, const QString &file)
-    : GameFile(loader, file)
+    : GameDocument(loader, file)
 {
 
     m_widget = new QTabWidget;
@@ -109,6 +109,7 @@ QString SkywardSwordGameFile::game() const
 
 bool SkywardSwordGameFile::save(const QString& filename)
 {
+#ifndef SS_PREVIEW
     if (!filename.isEmpty())
     {
         m_file = QFileInfo(filename).fileName();
@@ -148,6 +149,7 @@ bool SkywardSwordGameFile::save(const QString& filename)
     {
     }
     return false;
+#endif
 }
 
 void SkywardSwordGameFile::onModified()

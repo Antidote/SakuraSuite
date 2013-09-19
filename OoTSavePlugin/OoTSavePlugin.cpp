@@ -14,7 +14,7 @@
 // along with WiiKing2 Editor.  If not, see <http://www.gnu.org/licenses/>
 
 #include "OoTSavePlugin.hpp"
-#include "GameFile.hpp"
+#include "DocumentBase.hpp"
 
 
 OoTSavePlugin::OoTSavePlugin()
@@ -102,9 +102,9 @@ void OoTSavePlugin::setEnabled(const bool enable)
     emit enabledChanged();
 }
 
-GameFile* OoTSavePlugin::loadFile(const QString& file) const
+DocumentBase* OoTSavePlugin::loadFile(const QString& file) const
 {
-    return new GameFile(this, file);
+    return new DocumentBase(this, file);
 }
 
 bool OoTSavePlugin::canLoad(const QString& filename)

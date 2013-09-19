@@ -16,9 +16,9 @@
 #include "SkywardSwordPlugin.hpp"
 #include "SkywardSwordGameFile.hpp"
 #include "SettingsManager.hpp"
-#include "GameFile.hpp"
 #include "SettingsDialog.hpp"
 #include "Constants.hpp"
+#include <DocumentBase.hpp>
 
 #include <QFileInfo>
 #include <QIcon>
@@ -126,7 +126,7 @@ void SkywardSwordPlugin::setEnabled(const bool enable)
     emit enabledChanged();
 }
 
-GameFile* SkywardSwordPlugin::loadFile(const QString& file) const
+DocumentBase* SkywardSwordPlugin::loadFile(const QString& file) const
 {
     return new SkywardSwordGameFile(this, file);
 }
