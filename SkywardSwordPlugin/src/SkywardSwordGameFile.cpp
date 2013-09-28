@@ -79,9 +79,18 @@ bool SkywardSwordGameDocument::loadFile()
     {
         try
         {
+            QMessageBox msg((QWidget*)m_widget->parent());
+            msg.setWindowTitle("Loading WiiSave...");
+            msg.setText("Loading WiiSave please wait....");
+            msg.setStandardButtons(QMessageBox::NoButton);
+            // This prevents the user from clicking away
+            msg.setWindowModality(Qt::WindowModal);
+            msg.show();
+            qApp->setOverrideCursor(Qt::WaitCursor);
             zelda::io::WiiSaveReader reader(filePath().toStdString());
             zelda::WiiSave* file = reader.readSave();
-
+            qApp->restoreOverrideCursor();
+            msg.hide();
             if (file->file("/wiiking2.sav"))
             {
                 Uint8* data = file->file("/wiiking2.sav")->data();

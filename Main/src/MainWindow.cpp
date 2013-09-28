@@ -550,6 +550,10 @@ void MainWindow::onSaveAs()
         return;
     QString MRD = mostRecentDirectory();
     QString file = QFileDialog::getSaveFileName(this, "Save file as...", MRD, m_fileFilters.join(";;").trimmed());
+
+    if (file.isEmpty())
+        return;
+
     cleanPath(file);
     if (cleanPath(m_currentFile->filePath()) != file)
     {
