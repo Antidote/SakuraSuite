@@ -19,6 +19,9 @@
 #include "CopyWidget.hpp"
 
 
+#include <WiiSaveReader.hpp>
+#include <WiiSave.hpp>
+#include <WiiFile.hpp>
 #include <BinaryReader.hpp>
 #include <BinaryWriter.hpp>
 #include <Exception.hpp>
@@ -33,7 +36,8 @@
 #include <QDebug>
 
 SkywardSwordGameDocument::SkywardSwordGameDocument(const PluginInterface *loader, const QString &file)
-    : GameDocument(loader, file)
+    : GameDocument(loader, file),
+      m_skipData(NULL)
 {
 
     m_widget = new SkywardSwordTabWidget;
@@ -57,64 +61,47 @@ SkywardSwordGameDocument::SkywardSwordGameDocument(const PluginInterface *loader
         }
         return;
     }
-
-    loadFile();
 }
 
 SkywardSwordGameDocument::~SkywardSwordGameDocument()
 {
-    delete[] m_skipData;
-    m_skipData = NULL;
+    if (m_skipData)
+    {
+        delete[] m_skipData;
+        m_skipData = NULL;
+    }
 }
 
 
 bool SkywardSwordGameDocument::loadFile()
 {
-    QMessageBox mbox;
-    mbox.setParent(qApp->topLevelWidgets()[0]);
-    SkywardSwordTabWidget* tw = qobject_cast<SkywardSwordTabWidget*>(m_widget);
-    Q_ASSERT(tw);
-    tw->clear();
-    if (filePath().isEmpty())
-        return true;
+    if (QFileInfo(filePath()).suffix() == "bin")
+    {
+        try
+        {
+            zelda::io::WiiSaveReader reader(filePath().toStdString());
+            zelda::WiiSave* file = reader.readSave();
+
+            if (file->file("/wiiking2.sav"))
+            {
+                Uint8* data = file->file("/wiiking2.sav")->data();
+                m_isWiiSave = true;
+                return loadData(zelda::io::BinaryReader(data, (Uint64)file->file("/wiiking2.sav")->length()));
+            }
+        }
+        catch (...)
+        {
+        }
+    }
 
     try
     {
-        zelda::io::BinaryReader reader(filePath().toStdString());
-        reader.setEndianess(zelda::BigEndian);
-        Uint32 magic = reader.readUInt32();
-        m_region = magic & 0x000000FF;
-        magic &= 0xFFFFFF00;
-
-        if (magic != 0x534F5500)
-            throw zelda::error::InvalidOperationException("Not a valid Skyward Sword file");
-
-        reader.seek(0x1C, zelda::io::BinaryReader::Beginning);
-
-        Uint32 headerSize = reader.readUInt32();
-        if (headerSize != 0x1D)
-            throw zelda::error::InvalidOperationException("Invalid header size");
-
-
-        for (int i = 0; i < 3; i++)
-        {
-            char* data = (char*)reader.readBytes(0x53C0);
-            SkywardSwordEditorForm* sw = new SkywardSwordEditorForm(this, data);
-            connect(sw, SIGNAL(modified()), this, SLOT(onModified()));
-            connect(sw, SIGNAL(copy(SkywardSwordEditorForm*)), this, SLOT(onCopy(SkywardSwordEditorForm*)));
-            if (!sw->isNew())
-                tw->addTab(sw, QIcon(QString(":/icon/Game%1").arg(i+1)), QString("&%1 %2").arg(i+1).arg(sw->playerName()));
-            else
-                tw->addTab(sw, QIcon(QString(":/icon/Game%1").arg(i+1)), tr("&%1 New Game").arg(i + 1));
-        }
-        m_skipData = (char*)reader.readBytes(0x80);
-        return true;
+        return loadData(zelda::io::BinaryReader(filePath().toStdString()));
     }
-    catch (...)
+    catch(...)
     {
+        return false;
     }
-
-    return false;
 }
 
 bool SkywardSwordGameDocument::reload()
@@ -146,6 +133,19 @@ bool SkywardSwordGameDocument::reload()
 
     // Finally inform Main that we're done
     return ret;
+}
+
+bool SkywardSwordGameDocument::supportsWiiSave() const
+{
+    return true;
+}
+
+bool SkywardSwordGameDocument::exportWiiSave()
+{
+    QByteArray banner;
+    qDebug() << QChar(m_region);
+
+    return false;
 }
 
 QString SkywardSwordGameDocument::game() const
@@ -189,6 +189,7 @@ bool SkywardSwordGameDocument::save(const QString& filename)
         writer.writeBytes((Int8*)m_skipData, 0x80);
         writer.save();
         m_dirty = false;
+        m_isWiiSave = false;
         return true;
     }
     catch (...)
@@ -235,7 +236,7 @@ void SkywardSwordGameDocument::onCopy(SkywardSwordEditorForm* source)
         QMessageBox mbox(source);
         mbox.setWindowTitle("Copy data...");
         mbox.setText("Are you sure you wish to copy this data?<br />"
-                     "The data in the destinations you selected <b>will be lost</b>");
+                     "The data at the destination(s) you selected <b>will be lost</b>");
         mbox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
         mbox.exec();
         if (mbox.result() == QMessageBox::No)
@@ -244,21 +245,21 @@ void SkywardSwordGameDocument::onCopy(SkywardSwordEditorForm* source)
         SkywardSwordEditorForm* dest = NULL;
         if (m_copyWidget->questChecked(CopyWidget::Quest1) && source != tw->widget(0))
         {
-            dest = qobject_cast<SkywardSwordEditorForm*>(tw->widget(0));
+            dest = qobject_cast<SkywardSwordEditorForm*>(tw->widget(CopyWidget::Quest1));
             if (dest)
                 dest->setGameData(QByteArray(source->gameData(), 0x53C0));
             dest = NULL;
         }
-        if (m_copyWidget->questChecked(CopyWidget::Quest2) && source != tw->widget(1))
+        if (m_copyWidget->questChecked(CopyWidget::Quest2) && source != tw->widget(CopyWidget::Quest2))
         {
-            dest = qobject_cast<SkywardSwordEditorForm*>(tw->widget(1));
+            dest = qobject_cast<SkywardSwordEditorForm*>(tw->widget(CopyWidget::Quest2));
             if (dest)
                 dest->setGameData(QByteArray(source->gameData(), 0x53C0));
             dest = NULL;
         }
-        if (m_copyWidget->questChecked(CopyWidget::Quest3) && source != tw->widget(2))
+        if (m_copyWidget->questChecked(CopyWidget::Quest3) && source != tw->widget(CopyWidget::Quest3))
         {
-            dest = qobject_cast<SkywardSwordEditorForm*>(tw->widget(2));
+            dest = qobject_cast<SkywardSwordEditorForm*>(tw->widget(CopyWidget::Quest3));
             if (dest)
                 dest->setGameData(QByteArray(source->gameData(), 0x53C0));
             dest = NULL;
@@ -271,5 +272,54 @@ void SkywardSwordGameDocument::onTabMoved(int from, int to)
     Q_UNUSED(from);
     Q_UNUSED(to);
     onModified();
+}
+
+bool SkywardSwordGameDocument::loadData(zelda::io::BinaryReader reader)
+{
+    SkywardSwordTabWidget* tw = qobject_cast<SkywardSwordTabWidget*>(m_widget);
+    Q_ASSERT(tw);
+    tw->clear();
+    if (filePath().isEmpty())
+        return true;
+
+    try
+    {
+        reader.setEndianess(zelda::BigEndian);
+
+        Uint32 magic = reader.readUInt32();
+        m_region = magic & 0x000000FF;
+        magic &= 0xFFFFFF00;
+
+        if (magic != 0x534F5500)
+            throw zelda::error::InvalidOperationException("Not a valid Skyward Sword file");
+
+        reader.seek(0x1C, zelda::io::BinaryReader::Beginning);
+
+        Uint32 headerSize = reader.readUInt32();
+        if (headerSize != 0x1D)
+            throw zelda::error::InvalidOperationException("Invalid header size");
+
+
+        for (int i = 0; i < 3; i++)
+        {
+            char* data = (char*)reader.readBytes(0x53C0);
+            SkywardSwordEditorForm* sw = new SkywardSwordEditorForm(this, data);
+            connect(sw, SIGNAL(modified()), this, SLOT(onModified()));
+            connect(sw, SIGNAL(copy(SkywardSwordEditorForm*)), this, SLOT(onCopy(SkywardSwordEditorForm*)));
+            if (!sw->isNew())
+                tw->addTab(sw, QIcon(QString(":/icon/Game%1").arg(i+1)), QString("&%1 %2").arg(i+1).arg(sw->playerName()));
+            else
+                tw->addTab(sw, QIcon(QString(":/icon/Game%1").arg(i+1)), tr("&%1 New Game").arg(i + 1));
+        }
+        m_skipData = (char*)reader.readBytes(0x80);
+        return true;
+    }
+    catch (...)
+    {
+        return false;
+    }
+
+    // Shouldn't happen, but just in case
+    return false;
 }
 

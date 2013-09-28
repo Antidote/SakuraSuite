@@ -18,7 +18,7 @@
 
 quint64 wiiTime()
 {
-    time_t sysTime, tzDiff, tzDST;
+    time_t sysTime, tzDiff;
     struct tm * gmTime;
 
     time(&sysTime);
@@ -35,7 +35,7 @@ quint64 wiiTime()
 
 quint64 toWiiTime(QDateTime time)
 {
-    time_t sysTime, tzDiff, tzDST;
+    time_t sysTime, tzDiff;
     struct tm * gmTime;
 
     sysTime = time.toTime_t();

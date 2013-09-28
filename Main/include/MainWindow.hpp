@@ -98,6 +98,8 @@ protected slots:
 protected:
     void showEvent(QShowEvent* se);
     void closeEvent(QCloseEvent* e);
+    void dragEnterEvent(QDragEnterEvent* e);
+    void dropEvent(QDropEvent* e);
 private:
     bool checkLock();
     void initUpdater();

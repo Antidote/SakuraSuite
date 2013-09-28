@@ -35,6 +35,8 @@ INCLUDEPATH += \
     ../libzelda/include \
     ../Updater/include
 
+QMAKE_CXXFLAGS = -std=c++0x
+
 LIBS += \
     -L../PluginFramework -lpluginframework \
     -L../Updater -lupdater

@@ -15,14 +15,22 @@
 
 #include "MainWindow.hpp"
 #include "ui_MainWindow.h"
-#include "DocumentBase.hpp"
 #include "PluginsManager.hpp"
-#include "PluginInterface.hpp"
 #include "AboutDialog.hpp"
 #include "PreferencesDialog.hpp"
-#include <Updater.hpp>
-#include <QDebug> // for qWarning
 
+// Updater Includes
+#include <Updater.hpp>
+
+// PluginFramework includes
+#include <PluginInterface.hpp>
+#include <DocumentBase.hpp>
+#ifdef WK2_INTERNAL
+#include <GameDocument.hpp>
+#endif
+
+// Qt Includes
+#include <QDebug> // for qWarning
 #include <QLabel>
 #include <QMenu>
 #include <QFileInfo>
@@ -56,6 +64,10 @@ MainWindow::MainWindow(QWidget *parent) :
         qApp->quit();
         return;
     }
+#endif
+
+#ifndef WK2_INTERNAL
+    ui->actionExportWiiSave->setVisible(false);
 #endif
 
     connect(&m_lockTimer, SIGNAL(timeout()), SLOT(onLockTimeout()));
@@ -220,8 +232,7 @@ void MainWindow::addFileFilter(const QString& filter)
     if (m_fileFilters.contains(filter))
         return;
 
-    m_fileFilters.removeAll("All Files *.* (*.*)");
-    m_fileFilters << filter << "All Files *.* (*.*)";
+    m_fileFilters.push_front(filter);
 }
 
 void MainWindow::removeFileFilter(const QString& filter)
@@ -298,6 +309,28 @@ void MainWindow::closeEvent(QCloseEvent* e)
         e->accept();
 }
 
+void MainWindow::dragEnterEvent(QDragEnterEvent* e)
+{
+    foreach (QUrl url, e->mimeData()->urls())
+    {
+        PluginInterface* plugin = m_pluginsManager->preferredPlugin(url.toLocalFile());
+
+        if (plugin)
+            e->acceptProposedAction();
+    }
+}
+
+void MainWindow::dropEvent(QDropEvent* e)
+{
+    foreach (QUrl url, e->mimeData()->urls())
+    {
+        PluginInterface* plugin = m_pluginsManager->preferredPlugin(url.toLocalFile());
+
+        if (plugin)
+            openFile(url.toLocalFile());
+    }
+}
+
 void MainWindow::openFile(const QString& currentFile)
 {
     // Change any '\' to '/' for maximum compatibility
@@ -362,6 +395,9 @@ void MainWindow::onDocumentChanged(int row)
         ui->actionClose->setEnabled(false);
         ui->actionSave->setEnabled(false);
         ui->actionSaveAs->setEnabled(false);
+#ifdef WK2_INTERNAL
+        ui->actionExportWiiSave->setEnabled(false);
+#endif
         m_currentFile = NULL;
         return;
     }
@@ -377,6 +413,10 @@ void MainWindow::onDocumentChanged(int row)
 
     if (!m_currentFile)
         return;
+#ifdef WK2_INTERNAL
+    GameDocument* gd = qobject_cast<GameDocument*>(m_currentFile);
+    ui->actionExportWiiSave->setEnabled((gd && gd->supportsWiiSave()));
+#endif
 
     if (oldFile)
     {
@@ -471,7 +511,10 @@ void MainWindow::onSave()
         return;
 
     m_fileSystemWatcher.removePath(cleanPath(m_currentFile->filePath()));
-    if (m_currentFile->filePath().isEmpty())
+
+    GameDocument* gd = qobject_cast<GameDocument*>(m_currentFile);
+
+    if (m_currentFile->filePath().isEmpty() || (gd && gd->isWiiSave()))
         onSaveAs();
 
     if (m_currentFile->save())

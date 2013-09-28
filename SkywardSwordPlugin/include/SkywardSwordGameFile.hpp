@@ -21,6 +21,13 @@
 
 class CopyWidget;
 class SkywardSwordEditorForm;
+namespace zelda
+{
+namespace io
+{
+class BinaryReader;
+}
+}
 
 class SkywardSwordGameDocument : public GameDocument
 {
@@ -34,11 +41,14 @@ public:
     bool loadFile();
 
     bool reload();
+    bool supportsWiiSave() const;
+    bool exportWiiSave();
 private slots:
     void onModified();
     void onCopy(SkywardSwordEditorForm* source);
     void onTabMoved(int left, int right);
 private:
+    bool loadData(zelda::io::BinaryReader reader);
     char*       m_skipData;
     char        m_region;
     CopyWidget* m_copyWidget;

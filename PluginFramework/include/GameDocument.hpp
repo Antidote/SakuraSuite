@@ -24,6 +24,11 @@ class GameDocument : public DocumentBase
 public:
     GameDocument(const PluginInterface* loader, const QString& file = QString());
     virtual QString game() const;
+    virtual bool supportsWiiSave() const;
+    virtual bool exportWiiSave() const;
+    virtual bool isWiiSave() const;
+protected:
+    bool m_isWiiSave;
 };
 
 #endif // GAMEDOCUMENT_HPP

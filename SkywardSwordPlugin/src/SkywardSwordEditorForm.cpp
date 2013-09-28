@@ -1096,7 +1096,10 @@ void SkywardSwordEditorForm::setCurrentMap(const QString& map)
     if (map == currentMap())
         return;
 
-    memcpy(m_gameData + 0x531C, map.toAscii().data(), 32);
+    memcpy(m_gameData + 0x531C, map.toAscii().data(), map.length());
+    if (map.length() < 32)
+        memset(m_gameData + (0x531C + map.length()), 0, 32 - map.length());
+
     emit modified();
 }
 
@@ -1110,7 +1113,10 @@ void SkywardSwordEditorForm::setCurrentArea(const QString& area)
     if (area == currentArea())
         return;
 
-    memcpy(m_gameData + 0x533C, area.toAscii().data(), 32);
+    memcpy(m_gameData + 0x533C, area.toAscii().data(), area.length());
+    if (area.length() < 32)
+        memset(m_gameData + (0x533C + area.length()), 0, 32 - area.length());
+
     emit modified();
 }
 
@@ -1124,7 +1130,9 @@ void SkywardSwordEditorForm::setCurrentRoom(const QString& room)
     if (room == currentRoom())
         return;
 
-    memcpy(m_gameData + 0x535C, room.toAscii().data(), 32);
+    memcpy(m_gameData + 0x535C, room.toAscii().data(), room.length());
+    if (room.length() < 32)
+        memset(m_gameData + (0x535C + room.length()), 0, 32 - room.length());
     emit modified();
 }
 
@@ -1365,7 +1373,7 @@ void SkywardSwordEditorForm::updateData()
     ui->gratitudeCrystalsLabel->setEnabled(gratitudeCrystals() > 0);
     ui->gratitudeCrystalsSpinBox->setValue(gratitudeCrystals());
     this->setUpdatesEnabled(true);
-    this->update();
+    //this->update();
 }
 
 void SkywardSwordEditorForm::updateBugs()

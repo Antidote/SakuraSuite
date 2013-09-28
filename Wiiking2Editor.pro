@@ -13,5 +13,5 @@ SUBDIRS += \
     PluginFramework \
     Main \
     OoTSavePlugin \
-    SkywardSwordPlugin
+    SkywardSwordPlugin 
 

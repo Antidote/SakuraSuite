@@ -19,6 +19,7 @@
 #include "SettingsDialog.hpp"
 #include "Constants.hpp"
 #include <DocumentBase.hpp>
+#include <Exception.hpp>
 
 #include <QFileInfo>
 #include <QIcon>
@@ -26,13 +27,14 @@
 #include <BinaryReader.hpp>
 #include <Updater.hpp>
 #include <QMessageBox>
+#include <QDebug>
 
 SkywardSwordPlugin* SkywardSwordPlugin::m_instance = NULL;
 SkywardSwordPlugin::SkywardSwordPlugin()
-    : m_icon(QIcon(":/icon/Bomb64x64.png")),
-      m_updater(new Updater(this)),
-      m_enabled(true),
-      m_settingsDialog(NULL)
+    : m_enabled(true),
+      m_icon(QIcon(":/icon/Bomb64x64.png")),
+      m_settingsDialog(NULL),
+      m_updater(new Updater(this))
 {
     m_instance = this;
 }
@@ -111,7 +113,7 @@ QString SkywardSwordPlugin::license() const
 
 QString SkywardSwordPlugin::description() const
 {
-    return "Plugin for loading and editing Skyward Sword save files <b>BETA</b>";
+    return "Plugin for (char)0xing and editing Skyward Sword save files <b>BETA</b>";
 }
 
 bool SkywardSwordPlugin::enabled() const
@@ -132,24 +134,57 @@ void SkywardSwordPlugin::setEnabled(const bool enable)
 DocumentBase* SkywardSwordPlugin::loadFile(const QString& file) const
 {
     SkywardSwordGameDocument* ret = new SkywardSwordGameDocument(this, file);
-    return (ret->loadFile() ? ret: NULL);
+    if (ret->loadFile())
+        return ret;
+
+    delete ret;
+    return NULL;
 }
 
 bool SkywardSwordPlugin::canLoad(const QString& filename)
 {
-    try
+    Int32 gameId = -1;
+#ifdef SS_INTERNAL
+    if (QFileInfo(filename).suffix() == "bin")
     {
-        zelda::io::BinaryReader reader(filename.toStdString());
-        reader.setEndianess(zelda::BigEndian);
-        Uint32 magic = reader.readUInt32() & 0xFFFFFF00;
+        try
+        {
+            zelda::io::BinaryReader reader(filename.toStdString());
+            reader.setEndianess(zelda::BigEndian);
+            if (reader.length() > 0xF0C0)
+            {
+                reader.seek(0xF124);
+                gameId = reader.readUInt32();
+                if ((gameId & 0xFFFFFF00) == 0x534F5500)
+                    return true;
+                else
+                    gameId = -1;
+            }
+        }
+        catch(...)
+        {
+            // Hide errors
+        }
+    }
+#endif // SS_INTERNAL
 
-        if (magic == 0x534F5500)
-            return true;
-    }
-    catch(...)
+    if (gameId == -1)
     {
-        // hide errors
+        try
+        {
+            zelda::io::BinaryReader reader(filename.toStdString());
+            reader.setEndianess(zelda::BigEndian);
+            gameId = reader.readUInt32();
+
+        }
+        catch(zelda::error::Exception e)
+        {
+            // Hide errors
+        }
     }
+
+    if (gameId != -1 && ((gameId & 0xFFFFFF00) == 0x534F5500))
+        return true;
 
     return false;
 }

@@ -21,7 +21,7 @@
 
 // Only ONE of these may be defined
 //#define SS_PREVIEW
-//#define SS_INTERNAL
+#define SS_INTERNAL
 
 #if defined(SS_PREVIEW) && defined(SS_INTERNAL)
 #error "You can only define either SS_PREVIEW or SS_INTERNAL"

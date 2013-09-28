@@ -74,10 +74,10 @@ private:
     bool                       m_enabled;
     QString                    m_path;
     QIcon                      m_icon;
-    Updater*                   m_updater;
     SettingsDialog*            m_settingsDialog;
     static SkywardSwordPlugin* m_instance;
     QMessageBox                m_updateMBox;
+    Updater*                   m_updater;
 };
 
 #endif // TESTPLUGIN_HPP
