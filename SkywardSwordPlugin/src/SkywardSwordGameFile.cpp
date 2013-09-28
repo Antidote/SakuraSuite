@@ -16,18 +16,23 @@
 #include "SkywardSwordGameFile.hpp"
 #include "SkywardSwordEditorForm.hpp"
 #include "SkywardSwordTabWidget.hpp"
+#include "SkywardSwordPlugin.hpp"
 #include "CopyWidget.hpp"
 
 
 #include <WiiSaveReader.hpp>
+#include <WiiSaveWriter.hpp>
 #include <WiiSave.hpp>
 #include <WiiFile.hpp>
+#include <WiiBanner.hpp>
+#include <WiiImage.hpp>
 #include <BinaryReader.hpp>
 #include <BinaryWriter.hpp>
 #include <Exception.hpp>
 #include <FileNotFoundException.hpp>
 #include <InvalidOperationException.hpp>
 
+#include <WiiKeyManagerBase.hpp>
 #include <QMessageBox>
 #include <QtEndian>
 #include <QApplication>
@@ -100,6 +105,7 @@ bool SkywardSwordGameDocument::loadFile()
         }
         catch (...)
         {
+            qApp->restoreOverrideCursor();
         }
     }
 
@@ -151,10 +157,130 @@ bool SkywardSwordGameDocument::supportsWiiSave() const
 
 bool SkywardSwordGameDocument::exportWiiSave()
 {
-    QByteArray banner;
-    qDebug() << QChar(m_region);
+    if (!m_keyManager->isValid())
+        return false;
 
-    return false;
+    QTabWidget* tw = qobject_cast<QTabWidget*>(m_widget);
+    Q_ASSERT(tw);
+
+    QFile tmp(":/BannerData/banner.tpl");
+
+    zelda::WiiSave* save = new zelda::WiiSave;
+
+    int gameId = ('S' << 24) | ('O' << 16) | ('U' << 8) | (int)m_region;
+    quint64 titleId = 0x00010000;
+    titleId = (qToBigEndian((quint64)gameId)) | (qToBigEndian(titleId) >> 32);
+
+    qDebug() << hex << qFromBigEndian(titleId);
+    zelda::WiiBanner* banner = new zelda::WiiBanner();
+    banner->setGameID(qFromBigEndian(titleId));
+    if (tmp.open(QFile::ReadOnly))
+    {
+        QDataStream dataStream(&tmp);
+        char* bannerData = new char[192*64*2];
+        dataStream.readRawData(bannerData, 192*64*2);
+        banner->setBannerImage(new zelda::WiiImage(192, 64, (Uint8*)bannerData));
+        tmp.close();
+    }
+    else
+    {
+        delete save;
+        return false;
+    }
+
+    tmp.setFileName(":/BannerData/icon.tpl");
+
+    if (tmp.open(QFile::ReadOnly))
+    {
+        QDataStream dataStream(&tmp);
+        char* iconData = new char[48*48*2];
+        dataStream.readRawData(iconData, 48*48*2);
+        banner->addIcon(new zelda::WiiImage(48, 48, (Uint8*)iconData));
+        tmp.close();
+    }
+    else
+    {
+        delete save;
+        return false;
+    }
+
+    tmp.setFileName(QString(":/BannerData/%1/title.bin").arg(m_region));
+    if (tmp.open(QFile::ReadOnly))
+    {
+        QString titleString = QString::fromUtf16((ushort*)tmp.readAll().data());
+        banner->setTitle(titleString.toUtf8().data());
+        tmp.close();
+    }
+    else
+    {
+        delete save;
+        return false;
+    }
+
+    tmp.setFileName(QString(":/BannerData/%1/subtitle.bin").arg(m_region));
+    if (tmp.open(QFile::ReadOnly))
+    {
+        QString subtitleString = QString::fromUtf16((ushort*)tmp.readAll().data());
+        banner->setSubtitle(subtitleString.toUtf8().data());
+        tmp.close();
+    }
+    else
+    {
+        delete save;
+        return false;
+    }
+    banner->setPermissions(zelda::WiiFile::GroupRW | zelda::WiiFile::OwnerRW);
+    banner->setAnimationSpeed(0);
+    save->setBanner(banner);
+
+    try
+    {
+        zelda::io::BinaryWriter writer(QString(QDir::temp().tempPath() + "/tmp.sav").toStdString());
+        writer.setEndianess(zelda::BigEndian);
+        writer.writeUInt32(0x534F5500);
+        writer.seek(-1);
+        writer.writeByte(m_region);
+        writer.seek(0x1C, zelda::io::BinaryWriter::Beginning);
+        writer.writeUInt32(0x1D);
+
+        for (int i = 0; i < 3; i++)
+        {
+            SkywardSwordEditorForm* ef = qobject_cast<SkywardSwordEditorForm*>(tw->widget(i));
+            if (!ef)
+                return false;
+            else
+            {
+                // Let's be sure we have a proper checksum
+                ef->updateChecksum();
+                writer.writeBytes((Int8*)ef->gameData(), 0x53C0);
+            }
+        }
+        writer.writeBytes((Int8*)m_skipData, 0x80);
+        writer.save();
+
+        save->addFile("/wiiking2.sav", new zelda::WiiFile("wiiking2.sav", zelda::WiiFile::GroupRW | zelda::WiiFile::OwnerRW, writer.data(), writer.length()));
+        save->addFile("/skip.dat", new zelda::WiiFile("skip.dat", zelda::WiiFile::GroupRW | zelda::WiiFile::OwnerRW, (Uint8*)m_skipData, 0x80));
+    }
+    catch(...)
+    {
+        delete save;
+        return false;
+    }
+
+    try
+    {
+        zelda::io::WiiSaveWriter writer("./test.bin");
+        if (writer.writeSave(save, (Uint8*)keyManager()->macAddr().data(), keyManager()->ngId(), (Uint8*)keyManager()->ngPriv().data(), (Uint8*)keyManager()->ngSig().data(), keyManager()->ngKeyId()))
+            qDebug() << "export successful";
+    }
+    catch(...)
+    {
+        delete save;
+        return false;
+    }
+
+    delete save;
+    return true;
 }
 
 QString SkywardSwordGameDocument::game() const

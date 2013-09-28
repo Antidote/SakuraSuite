@@ -34,7 +34,7 @@ class SKYWARDSWORDPLUGGIN_EXPORT SkywardSwordPlugin : public QObject, public Plu
 public:
     SkywardSwordPlugin();
     ~SkywardSwordPlugin();
-    void initialize();
+    void initialize(MainWindowBase *mainWindow);
     QString filter()      const;
     QString extension()   const;
     QString name()        const;
@@ -47,17 +47,18 @@ public:
     QString description() const;
     bool enabled() const;
     void setEnabled(const bool enable);
-
-    DocumentBase* loadFile(const QString& file) const;
     bool canLoad(const QString& filename);
 
-    bool hasUpdater() const;
-    void doUpdate();
-    Updater* updater();
+    DocumentBase* loadFile(const QString& file) const;
+
     QDialog* settingsDialog();
+    Updater* updater();
     QObject* object();
 
     QIcon icon() const;
+    bool hasUpdater() const;
+    void doUpdate();
+    MainWindowBase* mainWindow() const;
 
     static SkywardSwordPlugin* instance();
     static SettingsManager* settings();
@@ -78,6 +79,7 @@ private:
     static SkywardSwordPlugin* m_instance;
     QMessageBox                m_updateMBox;
     Updater*                   m_updater;
+    MainWindowBase*            m_mainWindow;
 };
 
 #endif // TESTPLUGIN_HPP

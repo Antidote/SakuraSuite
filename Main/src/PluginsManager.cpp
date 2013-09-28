@@ -97,7 +97,7 @@ bool PluginsManager::reloadByName(const QString& name)
                 QSettings settings;
                 settings.beginGroup(newPlugin->name());
                 newPlugin->setEnabled(settings.value("enabled", true).toBool());
-                newPlugin->initialize();
+                newPlugin->initialize(m_mainWindow);
                 m_plugins.append(newPlugin);
                 return true;
             }
@@ -187,7 +187,7 @@ void PluginsManager::loadPlugins()
                     settings.beginGroup(plugin->name());
                     plugin->setPath(pluginsDir.absoluteFilePath(fileName));
                     plugin->setEnabled(settings.value("enabled", true).toBool());
-                    plugin->initialize();
+                    plugin->initialize(m_mainWindow);
                     m_pluginLoaders[plugin->name().toLower()] = loader;
                 }
                 else

@@ -7,51 +7,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>488</width>
-    <height>242</height>
+    <width>671</width>
+    <height>487</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <item row="4" column="1">
-    <widget class="QDialogButtonBox" name="okCancelButtonBox">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="1">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="4" column="0">
-    <widget class="QLabel" name="statusLabel">
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0" colspan="2">
+  <layout class="QGridLayout" name="gridLayout_4">
+   <item row="2" column="0" colspan="4">
     <widget class="QGroupBox" name="updateGroupBox">
      <property name="title">
       <string>Update Settings</string>
@@ -94,7 +58,219 @@
      </layout>
     </widget>
    </item>
-   <item row="0" column="0" colspan="2">
+   <item row="4" column="2">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="5" column="0">
+    <widget class="QLabel" name="statusLabel">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="2" colspan="2">
+    <widget class="QDialogButtonBox" name="okCancelButtonBox">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="4">
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Wii Keys</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="5" column="3" rowspan="2">
+       <widget class="QPushButton" name="macLoadBtn">
+        <property name="text">
+         <string>Load &amp;MAC</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="5" rowspan="2">
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="ngKeyIDLbl">
+        <property name="text">
+         <string>NG Key ID:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="ngIDLbl">
+        <property name="text">
+         <string>NG ID: </string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="ngPrivLbl">
+        <property name="text">
+         <string>NG Private: </string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="4" rowspan="2">
+       <widget class="QPushButton" name="loadKeysBtn">
+        <property name="text">
+         <string>Load &amp;Keys</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0" rowspan="3">
+       <widget class="QLabel" name="macAddrLbl">
+        <property name="text">
+         <string>Wii MAC Address:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" colspan="5">
+       <widget class="QLineEdit" name="ngIDLineEdit">
+        <property name="font">
+         <font>
+          <family>Courier New</family>
+         </font>
+        </property>
+        <property name="maxLength">
+         <number>8</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" colspan="5">
+       <widget class="QLineEdit" name="ngKeyIDLineEdit">
+        <property name="font">
+         <font>
+          <family>Courier New</family>
+         </font>
+        </property>
+        <property name="maxLength">
+         <number>8</number>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" colspan="6">
+       <widget class="QGroupBox" name="groupBox_2">
+        <property name="title">
+         <string>NG Signature</string>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_5">
+         <property name="leftMargin">
+          <number>2</number>
+         </property>
+         <property name="topMargin">
+          <number>2</number>
+         </property>
+         <property name="rightMargin">
+          <number>2</number>
+         </property>
+         <property name="bottomMargin">
+          <number>2</number>
+         </property>
+         <property name="spacing">
+          <number>2</number>
+         </property>
+         <item row="0" column="0">
+          <layout class="QVBoxLayout" name="verticalLayout">
+           <property name="spacing">
+            <number>2</number>
+           </property>
+           <item>
+            <widget class="QLineEdit" name="ngSigPt1LineEdit">
+             <property name="font">
+              <font>
+               <family>Courier New</family>
+              </font>
+             </property>
+             <property name="maxLength">
+              <number>60</number>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="ngSigPt2LineEdit">
+             <property name="font">
+              <font>
+               <family>Courier New</family>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="maxLength">
+              <number>60</number>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="3" column="1" colspan="5">
+       <widget class="QLineEdit" name="ngPrivLineEdit">
+        <property name="font">
+         <font>
+          <family>Courier New</family>
+         </font>
+        </property>
+        <property name="maxLength">
+         <number>60</number>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1" rowspan="2" colspan="2">
+       <widget class="QLineEdit" name="macAddrLineEdit">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>18</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <family>Courier New</family>
+         </font>
+        </property>
+        <property name="maxLength">
+         <number>12</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="0" column="0" colspan="4">
     <widget class="QGroupBox" name="styleGroupBox">
      <property name="title">
       <string>Style</string>
@@ -146,8 +322,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>266</x>
-     <y>228</y>
+     <x>474</x>
+     <y>477</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -162,8 +338,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>334</x>
-     <y>228</y>
+     <x>474</x>
+     <y>477</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
@@ -210,8 +386,8 @@
    <slot>onTextChanged(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>140</x>
-     <y>147</y>
+     <x>245</x>
+     <y>401</y>
     </hint>
     <hint type="destinationlabel">
      <x>125</x>
@@ -226,12 +402,44 @@
    <slot>onSingleInstanceToggled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>380</x>
-     <y>172</y>
+     <x>572</x>
+     <y>427</y>
     </hint>
     <hint type="destinationlabel">
      <x>243</x>
      <y>120</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>macLoadBtn</sender>
+   <signal>clicked()</signal>
+   <receiver>PreferencesDialog</receiver>
+   <slot>onLoadMac()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>342</x>
+     <y>319</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>583</x>
+     <y>324</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>loadKeysBtn</sender>
+   <signal>clicked()</signal>
+   <receiver>PreferencesDialog</receiver>
+   <slot>onLoadKeys()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>438</x>
+     <y>312</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>589</x>
+     <y>290</y>
     </hint>
    </hints>
   </connection>
@@ -240,5 +448,7 @@
   <slot>onCurrentIndexChanged(QString)</slot>
   <slot>onTextChanged(QString)</slot>
   <slot>onSingleInstanceToggled(bool)</slot>
+  <slot>onLoadMac()</slot>
+  <slot>onLoadKeys()</slot>
  </slots>
 </ui>

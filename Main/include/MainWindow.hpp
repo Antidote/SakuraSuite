@@ -26,6 +26,7 @@
 #include <QTimer>
 
 #include <Updater.hpp>
+#include <MainWindowBase.hpp>
 
 class QLabel;
 class QHBoxLayout;
@@ -33,6 +34,7 @@ class DocumentBase;
 class PluginsManager;
 class AboutDialog;
 class PreferencesDialog;
+class WiiKeyManager;
 
 namespace Ui {
 class MainWindow;
@@ -40,7 +42,7 @@ class MainWindow;
 
 class PluginInterface;
 
-class MainWindow : public QMainWindow
+class MainWindow : public QMainWindow, public MainWindowBase
 {
     Q_OBJECT
 
@@ -63,6 +65,14 @@ public:
     bool isInternalBuild();
     bool isPreviewBuild();
 
+    QMenu* fileMenu() const;
+    QMenu* editMenu() const;
+    QMenu* helpMenu() const;
+    QMenu* viewMenu() const;
+    QMenuBar* menuBar() const;
+    QStatusBar* statusBar() const;
+    QToolBar* toolBar() const;
+    QMainWindow* mainWindow();
 protected slots:
     void onDocumentChanged(int row);
     void onClose();
@@ -78,6 +88,7 @@ protected slots:
     void onRestoreDefault();
     void onCheckUpdate();
     void onReload();
+    void onExportWiiSave();
 
     void onStyleChanged();
 
@@ -101,6 +112,7 @@ protected:
     void dragEnterEvent(QDragEnterEvent* e);
     void dropEvent(QDropEvent* e);
 private:
+    void loadWiiKeys();
     bool checkLock();
     void initUpdater();
     void restoreDefaultGeometry();
@@ -131,6 +143,7 @@ private:
     QMessageBox              m_updateMBox;
     QTimer                   m_lockTimer;
     bool                     m_cancelClose;
+    WiiKeyManager*           m_keyManager;
 #if defined(WK2_PREVIEW) || defined(WK2_INTERNAL)
     QHBoxLayout*             m_previewLayout;
     QLabel*                  m_previewLabel;

@@ -18,6 +18,8 @@
 
 #include "DocumentBase.hpp"
 
+class WiiKeyManagerBase;
+
 class GameDocument : public DocumentBase
 {
     Q_OBJECT
@@ -25,10 +27,13 @@ public:
     GameDocument(const PluginInterface* loader, const QString& file = QString());
     virtual QString game() const;
     virtual bool supportsWiiSave() const;
-    virtual bool exportWiiSave() const;
+    virtual bool exportWiiSave();
     virtual bool isWiiSave() const;
+    virtual WiiKeyManagerBase* keyManager();
+    virtual void setKeyManager(WiiKeyManagerBase* manager);
 protected:
     bool m_isWiiSave;
+    WiiKeyManagerBase* m_keyManager;
 };
 
 #endif // GAMEDOCUMENT_HPP

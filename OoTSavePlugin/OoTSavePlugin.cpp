@@ -28,8 +28,9 @@ OoTSavePlugin::~OoTSavePlugin()
 
 }
 
-void OoTSavePlugin::initialize()
+void OoTSavePlugin::initialize(MainWindowBase *mainWindow)
 {
+    m_mainWindow = mainWindow;
 }
 
 QString OoTSavePlugin::filter() const
@@ -120,6 +121,11 @@ bool OoTSavePlugin::hasUpdater() const
 void OoTSavePlugin::doUpdate()
 {
 
+}
+
+MainWindowBase*OoTSavePlugin::mainWindow() const
+{
+    return m_mainWindow;
 }
 
 Updater* OoTSavePlugin::updater()

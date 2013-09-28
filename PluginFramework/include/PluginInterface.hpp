@@ -21,14 +21,16 @@
 
 class Updater;
 class DocumentBase;
+class WiiKeyManagerBase;
 class QDialog;
+class MainWindowBase;
 
 class PluginInterface
 {
 public:
     virtual ~PluginInterface(){}
 
-    virtual void initialize()=0;
+    virtual void initialize(MainWindowBase* mainWindow)=0;
     virtual QString filter()      const=0;
     virtual QString extension()   const=0;
     virtual QString name() const=0;
@@ -52,6 +54,7 @@ public:
     virtual QIcon icon() const=0;
     virtual bool hasUpdater() const=0;
     virtual void doUpdate()=0;
+    virtual MainWindowBase* mainWindow() const=0;
 };
 
 Q_DECLARE_INTERFACE(PluginInterface, "org.wiiking2.PluginInterface/1.1a")

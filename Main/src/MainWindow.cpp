@@ -18,7 +18,7 @@
 #include "PluginsManager.hpp"
 #include "AboutDialog.hpp"
 #include "PreferencesDialog.hpp"
-
+#include "WiiKeyManager.hpp"
 // Updater Includes
 #include <Updater.hpp>
 
@@ -47,9 +47,9 @@ MainWindow::MainWindow(QWidget *parent) :
     m_pluginsManager(new PluginsManager(this)),
     m_aboutDialog(NULL),
     m_updater(new Updater(this)),
-    m_preferencesDialog(new PreferencesDialog(this)),
     m_updateMBox(this),
-    m_cancelClose(false)
+    m_cancelClose(false),
+    m_keyManager(new WiiKeyManager)
   #ifdef WK2_PREVIEW
   ,m_previewLayout(NULL),
     m_previewLabel(NULL)
@@ -69,8 +69,10 @@ MainWindow::MainWindow(QWidget *parent) :
 #ifndef WK2_INTERNAL
     ui->actionExportWiiSave->setVisible(false);
 #endif
-
+    m_preferencesDialog = new PreferencesDialog(m_keyManager, this);
     connect(&m_lockTimer, SIGNAL(timeout()), SLOT(onLockTimeout()));
+
+    loadWiiKeys();
     // we set the timer to timeout every 58 seconds
     // Since checkLock expects a stale cookie to be over 60 seconds old
     // this ensures that there is never a race condition
@@ -147,6 +149,8 @@ MainWindow::~MainWindow()
         file = NULL;
     }
 
+    m_keyManager->saveKeys();
+    delete m_keyManager;
     delete m_pluginsManager;
     m_pluginsManager = NULL;
     delete ui;
@@ -299,6 +303,46 @@ bool MainWindow::isPreviewBuild()
 #endif
 }
 
+QMenu* MainWindow::fileMenu() const
+{
+    return ui->menuFile;
+}
+
+QMenu* MainWindow::editMenu() const
+{
+    return ui->menuEdit;
+}
+
+QMenu* MainWindow::helpMenu() const
+{
+    return ui->menuHelp;
+}
+
+QMenu* MainWindow::viewMenu() const
+{
+    return ui->menuView;
+}
+
+QMenuBar* MainWindow::menuBar() const
+{
+    return QMainWindow::menuBar();
+}
+
+QStatusBar* MainWindow::statusBar() const
+{
+    return ui->statusBar;
+}
+
+QToolBar* MainWindow::toolBar() const
+{
+    return ui->mainToolBar;
+}
+
+QMainWindow* MainWindow::mainWindow()
+{
+    return this;
+}
+
 void MainWindow::closeEvent(QCloseEvent* e)
 {
     onCloseAll();
@@ -328,6 +372,16 @@ void MainWindow::dropEvent(QDropEvent* e)
 
         if (plugin)
             openFile(url.toLocalFile());
+    }
+}
+
+void MainWindow::loadWiiKeys()
+{
+    if (!m_keyManager->loadKeys())
+    {
+        qWarning() << "Unable to load keys from registry, attempting to load from file";
+        if (!m_keyManager->open(qApp->applicationDirPath() + "/keys.bin"))
+            qWarning() << "Unable to load keys from file";
     }
 }
 
@@ -368,6 +422,13 @@ void MainWindow::openFile(const QString& currentFile)
     connect(file, SIGNAL(modified()), this, SLOT(updateWindowTitle()));
     m_documents[filePath] = file;
     m_fileSystemWatcher.addPath(filePath);
+
+    // If the document is a game document, check for WiiSave support;
+    // If the document supports wiisaves give the instance of the key manager
+    // this way we can have one global instance that Main maintains.
+    GameDocument* gd = qobject_cast<GameDocument*>(file);
+    if (gd && gd->supportsWiiSave())
+        gd->setKeyManager(m_keyManager);
 
     QListWidgetItem* item = new QListWidgetItem();
     item->setData(FILENAME, m_documents[filePath]->fileName());
@@ -894,10 +955,37 @@ void MainWindow::onReload()
         if (item)
             delete item;
 
-        ui->statusBar->showMessage("Reload failed...", 2000);
+        ui->statusBar->showMessage(tr("Reload failed..."), 2000);
     }
     else
-        ui->statusBar->showMessage("Reload successful...", 2000);
+        ui->statusBar->showMessage(tr("Reload successful..."), 2000);
+}
+
+void MainWindow::onExportWiiSave()
+{
+    if (!m_currentFile)
+        return;
+
+    if (!m_keyManager->isValid())
+    {
+        QMessageBox mbox(this);
+        mbox.setWindowTitle("Unable to export WiiSave...");
+        mbox.setText(tr("There are no keys specified for WiiSaves<br />"
+                        "Please set your keys in Edit->Preferences in order to export WiiSaves (data.bin)"));
+        mbox.exec();
+        return;
+    }
+
+
+    GameDocument* gd = qobject_cast<GameDocument*>(m_currentFile);
+
+    if (!gd || !gd->supportsWiiSave())
+        return;
+
+    if (gd->exportWiiSave())
+        ui->statusBar->showMessage(tr("Export successful..."), 2000);
+    else
+        ui->statusBar->showMessage(tr("Export failed..."), 2000);
 }
 
 void MainWindow::onStyleChanged()

@@ -43,7 +43,8 @@ SOURCES += \
     src/PluginsManager.cpp \
     src/main.cpp \
     src/AboutDialog.cpp \
-    src/PreferencesDialog.cpp
+    src/PreferencesDialog.cpp \
+    src/WiiKeyManager.cpp
 
 HEADERS += \
     include/Constants.hpp \
@@ -51,7 +52,8 @@ HEADERS += \
     include/PluginsDialog.hpp \
     include/PluginsManager.hpp \
     include/AboutDialog.hpp \
-    include/PreferencesDialog.hpp
+    include/PreferencesDialog.hpp \
+    include/WiiKeyManager.hpp
 
 FORMS += \
     ui/MainWindow.ui \

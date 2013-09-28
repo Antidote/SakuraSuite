@@ -18,6 +18,7 @@
 #include "SettingsManager.hpp"
 #include "SettingsDialog.hpp"
 #include "Constants.hpp"
+#include <MainWindowBase.hpp>
 #include <DocumentBase.hpp>
 #include <Exception.hpp>
 
@@ -49,8 +50,10 @@ SkywardSwordPlugin::~SkywardSwordPlugin()
         delete settings();
 }
 
-void SkywardSwordPlugin::initialize()
+void SkywardSwordPlugin::initialize(MainWindowBase *mainWindow)
 {
+    m_mainWindow = mainWindow;
+
     m_settingsDialog = new SettingsDialog(qApp->topLevelWidgets()[0]);
     connect(m_updater, SIGNAL(done()), this, SLOT(onUpdaterDone()));
     connect(m_updater, SIGNAL(error(Updater::ErrorType)), this, SLOT(onUpdaterError(Updater::ErrorType)));
@@ -144,7 +147,6 @@ DocumentBase* SkywardSwordPlugin::loadFile(const QString& file) const
 bool SkywardSwordPlugin::canLoad(const QString& filename)
 {
     Int32 gameId = -1;
-#ifdef SS_INTERNAL
     if (QFileInfo(filename).suffix() == "bin")
     {
         try
@@ -166,7 +168,6 @@ bool SkywardSwordPlugin::canLoad(const QString& filename)
             // Hide errors
         }
     }
-#endif // SS_INTERNAL
 
     if (gameId == -1)
     {
@@ -220,6 +221,11 @@ void SkywardSwordPlugin::doUpdate()
 #else
     m_updater->checkForUpdate(settings.value(Constants::Settings::SKYWARDSWORD_UPDATE_URL).toString(), Constants::SKYWARDSWORD_PLUGIN_VERSION, Constants::SKYWARDSWORD_VERSION);
 #endif
+}
+
+MainWindowBase* SkywardSwordPlugin::mainWindow() const
+{
+    return m_mainWindow;
 }
 
 Updater* SkywardSwordPlugin::updater()

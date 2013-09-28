@@ -29,7 +29,7 @@ public:
     OoTSavePlugin();
     ~OoTSavePlugin();
 
-    void initialize();
+    void initialize(MainWindowBase *mainWindow);
     QString filter()      const;
     QString extension()   const;
     QString name()        const;
@@ -46,13 +46,14 @@ public:
     DocumentBase* loadFile(const QString& file) const;
     bool canLoad(const QString& filename);
 
-    bool hasUpdater() const;
-    void doUpdate();
-    Updater* updater();
     QDialog* settingsDialog();
+    Updater* updater();
     QObject* object();
 
     QIcon icon() const;
+    bool hasUpdater() const;
+    void doUpdate();
+    MainWindowBase* mainWindow() const;
 signals:
     void enabledChanged();
 public slots:
@@ -61,6 +62,7 @@ private:
     bool m_enabled;
     QString m_path;
     QIcon m_icon;
+    MainWindowBase* m_mainWindow;
 };
 
 #endif // OOTSAVEPLUGIN_HPP

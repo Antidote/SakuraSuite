@@ -38,6 +38,8 @@ INCLUDEPATH += include
 HEADERS += \
     include/PluginInterface.hpp \
     include/DocumentBase.hpp \
-    include/GameDocument.hpp
+    include/GameDocument.hpp \
+    include/WiiKeyManagerBase.hpp \
+    include/MainWindowBase.hpp
 
 
