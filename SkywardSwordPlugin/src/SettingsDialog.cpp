@@ -68,7 +68,6 @@ void SettingsDialog::onTextChanged(QString text)
             ui->updateUrlLineEdit->setProperty("valid", true);
             ui->statusLabel->clear();
         }
-        style()->unpolish(ui->updateUrlLineEdit);
         style()->polish(ui->updateUrlLineEdit);
 
         // If the text matches what is currently stored

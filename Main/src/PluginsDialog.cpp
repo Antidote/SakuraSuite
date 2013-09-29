@@ -60,6 +60,7 @@ void PluginsDialog::updatePluginData()
             continue;
 
         QTreeWidgetItem* item = new QTreeWidgetItem;
+        item->setIcon(NameColumn, plugin->icon());
         item->setText(NameColumn, plugin->name());
         item->setText(VersionColumn, plugin->version());
         item->setText(ExtensionColumn, plugin->extension());

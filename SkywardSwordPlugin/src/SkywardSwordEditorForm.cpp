@@ -1088,7 +1088,7 @@ void SkywardSwordEditorForm::onModified()
 
 QString SkywardSwordEditorForm::currentMap() const
 {
-    return QString::fromAscii(m_gameData + 0x531C);
+    return QString::fromLatin1(m_gameData + 0x531C);
 }
 
 void SkywardSwordEditorForm::setCurrentMap(const QString& map)
@@ -1096,7 +1096,7 @@ void SkywardSwordEditorForm::setCurrentMap(const QString& map)
     if (map == currentMap())
         return;
 
-    memcpy(m_gameData + 0x531C, map.toAscii().data(), map.length());
+    memcpy(m_gameData + 0x531C, map.toLatin1().data(), map.length());
     if (map.length() < 32)
         memset(m_gameData + (0x531C + map.length()), 0, 32 - map.length());
 
@@ -1105,7 +1105,7 @@ void SkywardSwordEditorForm::setCurrentMap(const QString& map)
 
 QString SkywardSwordEditorForm::currentArea() const
 {
-    return QString::fromAscii(m_gameData + 0x533C);
+    return QString::fromLatin1(m_gameData + 0x533C);
 }
 
 void SkywardSwordEditorForm::setCurrentArea(const QString& area)
@@ -1113,7 +1113,7 @@ void SkywardSwordEditorForm::setCurrentArea(const QString& area)
     if (area == currentArea())
         return;
 
-    memcpy(m_gameData + 0x533C, area.toAscii().data(), area.length());
+    memcpy(m_gameData + 0x533C, area.toLatin1().data(), area.length());
     if (area.length() < 32)
         memset(m_gameData + (0x533C + area.length()), 0, 32 - area.length());
 
@@ -1122,7 +1122,7 @@ void SkywardSwordEditorForm::setCurrentArea(const QString& area)
 
 QString SkywardSwordEditorForm::currentRoom() const
 {
-    return QString::fromAscii(m_gameData + 0x535C);
+    return QString::fromLatin1(m_gameData + 0x535C);
 }
 
 void SkywardSwordEditorForm::setCurrentRoom(const QString& room)
@@ -1130,7 +1130,7 @@ void SkywardSwordEditorForm::setCurrentRoom(const QString& room)
     if (room == currentRoom())
         return;
 
-    memcpy(m_gameData + 0x535C, room.toAscii().data(), room.length());
+    memcpy(m_gameData + 0x535C, room.toLatin1().data(), room.length());
     if (room.length() < 32)
         memset(m_gameData + (0x535C + room.length()), 0, 32 - room.length());
     emit modified();

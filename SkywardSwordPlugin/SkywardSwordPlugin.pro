@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT    += core gui network
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = skywardswordplugin
 TEMPLATE = lib
@@ -43,7 +44,7 @@ LIBS += \
 
 CONFIG(release, release|debug){
     LIBS += -L../libzelda/lib -lzelda
-    DEFINES -= WK2_DEBUG
+    DEFINES -= SS_DEBUG
     # We don't want the objects, or MOC sources
     # in the project directory, so tell qmake
     # where to put them
@@ -54,7 +55,7 @@ CONFIG(release, release|debug){
 
 CONFIG(debug, debug|release){
     LIBS += -L../libzelda/lib -lzelda-d
-    DEFINES += WK2_DEBUG
+    DEFINES += SS_DEBUG
     # We don't want the objects, or MOC sources
     # in the project directory, so tell qmake
     # where to put them
@@ -79,7 +80,8 @@ HEADERS +=\
 RESOURCES += \
     resources/resources.qrc
 OTHER_FILES += \
-    resources/resource.rc
+    resources/resource.rc \
+    skywardswordplugin.json
 
 FORMS += \
     ui/SkywardSwordEditorForm.ui \

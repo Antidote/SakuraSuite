@@ -16,8 +16,8 @@
 #ifndef OOTSAVEPLUGIN_HPP
 #define OOTSAVEPLUGIN_HPP
 
-#include "ootsaveplugin_global.hpp"
 #include <QObject>
+#include "ootsaveplugin_global.hpp"
 #include <QIcon>
 #include "PluginInterface.hpp"
 
@@ -25,6 +25,9 @@ class OOTSAVEPLUGINSHARED_EXPORT OoTSavePlugin : public QObject, public PluginIn
 {
     Q_OBJECT
     Q_INTERFACES(PluginInterface)
+#if QT_VERSION >= 0x050000
+    Q_PLUGIN_METADATA(IID "org.wiiking2.ootplugin" FILE "ootsaveplugin.json")
+#endif
 public:
     OoTSavePlugin();
     ~OoTSavePlugin();

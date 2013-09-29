@@ -28,6 +28,8 @@
 #include <BinaryReader.hpp>
 #include <Updater.hpp>
 #include <QMessageBox>
+#include <QMenuBar>
+#include <QAction>
 #include <QDebug>
 
 SkywardSwordPlugin* SkywardSwordPlugin::m_instance = NULL;
@@ -116,7 +118,7 @@ QString SkywardSwordPlugin::license() const
 
 QString SkywardSwordPlugin::description() const
 {
-    return "Plugin for (char)0xing and editing Skyward Sword save files <b>BETA</b>";
+    return "Plugin for editing and editing Skyward Sword save files <b>BETA</b>";
 }
 
 bool SkywardSwordPlugin::enabled() const
@@ -203,7 +205,7 @@ void SkywardSwordPlugin::doUpdate()
         settings.setValue(Constants::Settings::SKYWARDSWORD_UPDATE_URL, Constants::Settings::SKYWARDSWORD_UPDATE_URL_DEFAULT);
 
     if (!m_updateMBox.parent())
-        m_updateMBox.setParent((QWidget*)parent());
+        m_updateMBox.setParent((QWidget*)m_mainWindow->mainWindow());
 
     m_updateMBox.setWindowTitle(Constants::SKYWARDSWORD_UPDATE_CHECKING);
     m_updateMBox.setText(Constants::SKYWARDSWORD_UPDATE_CHECKING_MSG);
@@ -308,11 +310,8 @@ void SkywardSwordPlugin::onNoUpdate()
 {
     ((QWidget*)parent())->setEnabled(true);
     m_updateMBox.hide();
-    m_updateMBox.setWindowTitle(Constants::SKYWARDSWORD_LATEST_VERSION);
-    m_updateMBox.setText(Constants::SKYWARDSWORD_LATEST_VERSION_MSG);
-    m_updateMBox.setStandardButtons(QMessageBox::Ok);
-    m_updateMBox.setWindowModality(Qt::NonModal);
-    m_updateMBox.exec();
 }
 
+#if QT_VERSION < 0x050000
 Q_EXPORT_PLUGIN(SkywardSwordPlugin)
+#endif

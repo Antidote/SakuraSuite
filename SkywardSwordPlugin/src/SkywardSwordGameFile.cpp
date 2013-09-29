@@ -44,7 +44,6 @@ SkywardSwordGameDocument::SkywardSwordGameDocument(const PluginInterface *loader
     : GameDocument(loader, file),
       m_skipData(NULL)
 {
-
     m_widget = new SkywardSwordTabWidget;
     m_copyWidget = new CopyWidget(m_widget);
     SkywardSwordTabWidget* tw = qobject_cast<SkywardSwordTabWidget*>(m_widget);
@@ -86,7 +85,7 @@ bool SkywardSwordGameDocument::loadFile()
         {
             QMessageBox msg((QWidget*)m_widget->parent());
             msg.setWindowTitle("Loading WiiSave...");
-            msg.setText("Loading WiiSave please wait....");
+            msg.setText(tr("Loading WiiSave please wait...."));
             msg.setStandardButtons(QMessageBox::NoButton);
             // This prevents the user from clicking away
             msg.setWindowModality(Qt::WindowModal);

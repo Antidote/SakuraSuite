@@ -13,5 +13,6 @@ SUBDIRS += \
     PluginFramework \
     Main \
     OoTSavePlugin \
-    SkywardSwordPlugin 
+    SkywardSwordPlugin \ 
+    SpriteEditorPlugin
 

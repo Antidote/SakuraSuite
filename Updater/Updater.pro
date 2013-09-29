@@ -4,7 +4,8 @@
 #
 #-------------------------------------------------
 
-QT       += network gui
+QT       += core network gui
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = updater
 TEMPLATE = lib

@@ -13,8 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with WiiKing2 Editor.  If not, see <http://www.gnu.org/licenses/>
 
-#ifndef TESTPLUGIN_HPP
-#define TESTPLUGIN_HPP
+#ifndef SKYWARDSWORDPLUGGIN_HPP
+#define SKYWARDSWORDPLUGGIN_HPP
 
 #include "skywardswordplugin_global.hpp"
 #include "PluginInterface.hpp"
@@ -27,10 +27,15 @@
 class SettingsDialog;
 class SettingsManager;
 
+class QMenu;
+
 class SKYWARDSWORDPLUGGIN_EXPORT SkywardSwordPlugin : public QObject, public PluginInterface
 {
     Q_OBJECT
     Q_INTERFACES(PluginInterface)
+#if QT_VERSION >= 0x050000
+    Q_PLUGIN_METADATA(IID "org.wiiking2.skywardswordplugin" FILE "skywardswordplugin.json")
+#endif
 public:
     SkywardSwordPlugin();
     ~SkywardSwordPlugin();
@@ -82,4 +87,4 @@ private:
     MainWindowBase*            m_mainWindow;
 };
 
-#endif // TESTPLUGIN_HPP
+#endif // SKYWARDSWORDPLUGGIN_HPP

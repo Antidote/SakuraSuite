@@ -18,8 +18,8 @@
 
 
 OoTSavePlugin::OoTSavePlugin()
-    : m_icon(QIcon(":/icon/Ocarina64x64.png")),
-      m_enabled(true)
+    : m_enabled(true),
+      m_icon(QIcon(":/icon/Ocarina64x64.png"))
 {
 }
 
@@ -148,4 +148,7 @@ QIcon OoTSavePlugin::icon() const
     return m_icon;
 }
 
+#if QT_VERSION < 0x050000
 Q_EXPORT_PLUGIN(OoTSavePlugin)
+#endif
+

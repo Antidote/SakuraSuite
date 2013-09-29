@@ -162,7 +162,7 @@ void PreferencesDialog::accept()
         if (file.open(QFile::WriteOnly))
         {
             file.seek(0);
-            file.write(QString(QDateTime::currentDateTime().toString() + "\n").toAscii());
+            file.write(QString(QDateTime::currentDateTime().toString() + "\n").toLatin1());
             file.resize(file.pos());
         }
     }

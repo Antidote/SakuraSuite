@@ -268,6 +268,7 @@ void MainWindow::closeFilesFromLoader(PluginInterface* loader)
 
     foreach(DocumentBase* file, targets)
     {
+        m_fileSystemWatcher.removePath(cleanPath(file->filePath()));
         m_documents.remove(cleanPath(file->filePath()));
         delete file;
     }
@@ -799,23 +800,17 @@ void MainWindow::onNoUpdate()
 {
     this->setEnabled(true);
     m_updateMBox.hide();
-    m_updateMBox.setWindowTitle(Constants::WIIKING2_LATEST_VERSION);
-    m_updateMBox.setText(Constants::WIIKING2_LATEST_VERSION_MSG);
-    m_updateMBox.setStandardButtons(QMessageBox::Ok);
-    m_updateMBox.setWindowModality(Qt::NonModal);
-    m_updateMBox.exec();
 }
 
 void MainWindow::onLockTimeout()
 {
-    QString settingsDir = QFileInfo(QSettings().fileName()).absolutePath();
     if (QSettings().value("singleInstance", false).toBool())
     {
         QFile file(Constants::WIIKING2_LOCK_FILE);
         if (file.open(QFile::WriteOnly))
         {
             file.seek(0);
-            file.write(QString(QDateTime::currentDateTime().toString() + "\n").toAscii());
+            file.write(QString(QDateTime::currentDateTime().toString() + "\n").toLatin1());
             file.resize(file.pos());
         }
     }
@@ -880,7 +875,7 @@ bool MainWindow::checkLock()
     {
         QFile lock(Constants::WIIKING2_LOCK_FILE);
         lock.open(QFile::WriteOnly);
-        lock.write(QString(QDateTime::currentDateTime().toString() + "\n").toAscii());
+        lock.write(QString(QDateTime::currentDateTime().toString() + "\n").toLatin1());
         lock.close();
         return false;
     }

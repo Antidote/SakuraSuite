@@ -5,6 +5,8 @@
 #-------------------------------------------------
 
 QT    += core gui
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+
 
 TARGET = ootsaveplugin
 TEMPLATE = lib
@@ -49,4 +51,7 @@ HEADERS +=\
 
 RESOURCES += \
     resources/resources.qrc
+
+OTHER_FILES += \
+    ootsaveplugin.json
 
