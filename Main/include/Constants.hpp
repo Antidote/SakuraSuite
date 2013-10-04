@@ -1,17 +1,17 @@
-// This file is part of WiiKing2 Editor.
+// This file is part of Sakura Suite.
 //
-// WiiKing2 Editor is free software: you can redistribute it and/or modify
+// Sakura Suite is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// Wiiking2 Editor is distributed in the hope that it will be useful,
+// Sakura Suite is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with WiiKing2 Editor.  If not, see <http://www.gnu.org/licenses/>
+// along with Sakura Suite.  If not, see <http://www.gnu.org/licenses/>
 
 #ifndef CONSTANTS_HPP
 #define CONSTANTS_HPP
@@ -20,7 +20,7 @@
 #include <QDir>
 // Only ONE of these may be defined
 //#define SS_PREVIEW
-#define SS_INTERNAL
+//#define SS_INTERNAL
 
 #if defined(SS_PREVIEW) && defined(SS_INTERNAL)
 #error "You can only define either SS_PREVIEW or SS_INTERNAL"
@@ -31,7 +31,7 @@ namespace Constants
 #define tr QObject::tr
 const int     SAKURASUITE_MAJOR                    = 0;
 const int     SAKURASUITE_MINOR                    = 1;
-const int     SAKURASUITE_PATCH                    = 1;
+const int     SAKURASUITE_PATCH                    = 2;
 const int     SAKURASUITE_VERSION                  = (SAKURASUITE_MAJOR << 16) | (SAKURASUITE_MINOR << 8) | SAKURASUITE_PATCH;
 const QString SAKURASUITE_VERSION_STR              = QString("%1.%2.%3")
                                                   .arg(SAKURASUITE_MAJOR)

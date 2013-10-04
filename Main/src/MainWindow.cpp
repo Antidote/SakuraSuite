@@ -1,17 +1,17 @@
-// This file is part of WiiKing2 Editor.
+// This file is part of Sakura Suite.
 //
-// WiiKing2 Editor is free software: you can redistribute it and/or modify
+// Sakura Suite is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// Wiiking2 Editor is distributed in the hope that it will be useful,
+// Sakura Suite is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with WiiKing2 Editor.  If not, see <http://www.gnu.org/licenses/>
+// along with Sakura Suite.  If not, see <http://www.gnu.org/licenses/>
 
 #include "MainWindow.hpp"
 #include "ui_MainWindow.h"
@@ -25,9 +25,7 @@
 // PluginFramework includes
 #include <PluginInterface.hpp>
 #include <DocumentBase.hpp>
-#ifdef SS_INTERNAL
 #include <GameDocument.hpp>
-#endif
 
 // Qt Includes
 #include <QDebug> // for qWarning
@@ -67,9 +65,7 @@ MainWindow::MainWindow(QWidget *parent) :
     }
 #endif
 
-#ifndef WK2_INTERNAL
     ui->actionExportWiiSave->setVisible(false);
-#endif
     m_preferencesDialog = new PreferencesDialog(m_keyManager, this);
     connect(&m_lockTimer, SIGNAL(timeout()), SLOT(onLockTimeout()));
 
@@ -102,7 +98,7 @@ MainWindow::MainWindow(QWidget *parent) :
     initDocumentList();
 
     // On preview and internal builds we inject a label into the menu bar to inform the user
-#if defined(WK2_PREVIEW) || defined(WK2_INTERNAL)
+#if defined(SS_PREVIEW) || defined(SS_INTERNAL)
     injectPreviewLabel();
 #endif
     // Now load the MRU
@@ -124,7 +120,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-#if defined(WK2_PREVIEW) || defined(WK2_INTERNAL)
+#if defined(SS_PREVIEW) || defined(SS_INTERNAL)
     if (m_previewLayout)
     {
         delete m_previewLayout;
@@ -173,6 +169,7 @@ void MainWindow::restoreDefaultGeometry()
 
 void MainWindow::injectPreviewLabel()
 {
+#if defined(SS_PREVIEW) || defined(SS_INTERNAL)
     QMenuBar* bar = this->menuBar();
     m_previewLayout = new QHBoxLayout(bar);
     m_previewLayout->addStretch();
@@ -186,6 +183,7 @@ void MainWindow::injectPreviewLabel()
     m_previewLayout->setContentsMargins(150, 0, 6, 0);
     m_previewLayout->addWidget(m_previewLabel);
     bar->setLayout(m_previewLayout);
+#endif
 }
 
 void MainWindow::initDocumentList()
@@ -285,7 +283,7 @@ QString MainWindow::cleanPath(const QString& currentFile)
 
 bool MainWindow::isInternalBuild()
 {
-#ifdef WK2_INTERNAL
+#ifdef SS_INTERNAL
     return true;
 #else
     return false;
@@ -485,9 +483,7 @@ void MainWindow::onDocumentChanged(int row)
         ui->actionClose->setEnabled(false);
         ui->actionSave->setEnabled(false);
         ui->actionSaveAs->setEnabled(false);
-#ifdef WK2_INTERNAL
         ui->actionExportWiiSave->setEnabled(false);
-#endif
         m_currentFile = NULL;
         return;
     }
@@ -503,10 +499,9 @@ void MainWindow::onDocumentChanged(int row)
 
     if (!m_currentFile)
         return;
-#ifdef WK2_INTERNAL
+
     GameDocument* gd = qobject_cast<GameDocument*>(m_currentFile);
     ui->actionExportWiiSave->setEnabled((gd && gd->supportsWiiSave()));
-#endif
 
     if (oldFile)
     {
@@ -581,21 +576,6 @@ void MainWindow::onOpen()
 
 void MainWindow::onSave()
 {
-#if 0
-#ifdef WK2_PREVIEW
-    QMessageBox mbox(this);
-    mbox.setWindowTitle("Saving disabled");
-    mbox.setText("<center>Saving has been disabled in this preview build.<br />"
-                 "The application is far too unstable for everyday use.<br />"
-                 "<br />"
-                 "But your interest and support are much appreciated. <br />"
-                 "<br />"
-                 "<strong>Thank you for checking out this preview build.<strong></center>");
-    mbox.setStandardButtons(QMessageBox::Ok);
-    mbox.exec();
-    return;
-#endif // WK2_PREVIEW
-#endif // 0
     if (m_documents.count() <= 0)
         return;
     if (!m_currentFile || !m_currentFile->isDirty())
@@ -621,22 +601,6 @@ void MainWindow::onSave()
 
 void MainWindow::onSaveAs()
 {
-#if 0
-#ifdef WK2_PREVIEW
-    QMessageBox mbox(this);
-    mbox.setWindowTitle("Saving disabled");
-    mbox.setText("<center>Saving has been disabled in this preview build.<br />"
-                 "The application is far too unstable for everyday use.<br />"
-                 "<br />"
-                 "But your interest and support are much appreciated. <br />"
-                 "<br />"
-                 "<strong>Thank you for checking out this preview build.<strong></center>");
-    mbox.setStandardButtons(QMessageBox::Ok);
-    mbox.exec();
-    return;
-#endif // WK2_PREVIEW
-#endif // 0
-
     if (m_documents.count() <= 0)
         return;
     if (!m_currentFile)
@@ -789,7 +753,6 @@ void MainWindow::onUpdateDone()
     m_updateMBox.hide();
     m_updateMBox.setWindowTitle(Constants::SAKURASUITE_NOT_LATEST_VERSION);
     m_updateMBox.setText(Constants::SAKURASUITE_NOT_LATEST_VERSION_MSG
-                         .arg(Constants::SAKURASUITE_APP_NAME)
                          .arg(m_updater->updateUrl())
                          .arg(m_updater->md5Sum())
                          .arg(m_updater->changelogUrl()));
@@ -951,7 +914,7 @@ void MainWindow::onCheckUpdate()
     // Using exec blocks everything, is there a work around?
     m_updateMBox.show();
 
-#ifdef WK2_INTERNAL
+#ifdef SS_INTERNAL
     m_updater->checkForUpdate(Constants::Settings::SAKURASUITE_UPDATE_URL_DEFAULT, Constants::SAKURASUITE_APP_VERSION, Constants::SAKURASUITE_VERSION);
 #else
     m_updater->checkForUpdate(settings.value(Constants::Settings::SAKURASUITE_UPDATE_URL).toString(), Constants::SAKURASUITE_APP_VERSION, Constants::SAKURASUITE_VERSION);
