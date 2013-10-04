@@ -22,10 +22,10 @@ AboutDialog::AboutDialog(QWidget *parent) :
     ui(new Ui::AboutDialog)
 {
     ui->setupUi(this);
-    this->setWindowTitle(Constants::WIIKING2_ABOUT_TITLE);
-    ui->applicationNameLbl->setText(Constants::WIIKING2_APP_NAME);
-    ui->applicationVersionLbl->setText(Constants::WIIKING2_APP_VERSION);
-    ui->buildDateLbl->setText(Constants::WIIKING2_BUILD_DATE);
+    this->setWindowTitle(Constants::SAKURASUITE_ABOUT_TITLE);
+    ui->applicationNameLbl->setText(Constants::SAKURASUITE_APP_NAME);
+    ui->applicationVersionLbl->setText(Constants::SAKURASUITE_APP_VERSION);
+    ui->buildDateLbl->setText(Constants::SAKURASUITE_BUILD_DATE);
 }
 
 AboutDialog::~AboutDialog()

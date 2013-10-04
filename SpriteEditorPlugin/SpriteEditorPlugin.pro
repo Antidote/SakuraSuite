@@ -51,11 +51,13 @@ CONFIG(debug, debug|release){
 
 
 SOURCES += src/SpriteEditorPlugin.cpp \
-    src/SpriteDocument.cpp
+    src/SpriteDocument.cpp \
+    src/SpriteCanvas.cpp
 
 HEADERS += include/SpriteEditorPlugin.hpp\
         include/spriteeditorplugin_global.hpp \
-    include/SpriteDocument.hpp
+    include/SpriteDocument.hpp \
+    include/SpriteCanvas.hpp
 
 OTHER_FILES += \
     spriteeditor.json

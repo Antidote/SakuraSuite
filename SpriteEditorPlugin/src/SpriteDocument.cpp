@@ -1,8 +1,8 @@
 #include "SpriteDocument.hpp"
-#include <QGLWidget>
+#include "SpriteCanvas.hpp"
 
 SpriteDocument::SpriteDocument(const PluginInterface* loader, const QString& file)
     : DocumentBase(loader, file)
 {
-    m_widget = new QGLWidget();
+    m_widget = new SpriteCanvas();
 }

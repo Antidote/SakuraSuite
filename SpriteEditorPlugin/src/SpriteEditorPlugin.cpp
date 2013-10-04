@@ -14,7 +14,7 @@
 // along with WiiKing2 Editor.  If not, see <http://www.gnu.org/licenses/>
 
 #include "SpriteEditorPlugin.hpp"
-#include "DocumentBase.hpp"
+#include "SpriteDocument.hpp"
 
 
 SpriteEditorPlugin::SpriteEditorPlugin()
@@ -104,7 +104,7 @@ void SpriteEditorPlugin::setEnabled(const bool enable)
 
 DocumentBase* SpriteEditorPlugin::loadFile(const QString& file) const
 {
-    return new DocumentBase(this, file);
+    return new SpriteDocument(this, file);
 }
 
 bool SpriteEditorPlugin::canLoad(const QString& filename)

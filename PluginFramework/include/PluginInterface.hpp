@@ -55,6 +55,9 @@ public:
     virtual bool hasUpdater() const=0;
     virtual void doUpdate()=0;
     virtual MainWindowBase* mainWindow() const=0;
+
+protected:
+    virtual void newDocument(DocumentBase*)=0;
 };
 
 Q_DECLARE_INTERFACE(PluginInterface, "org.wiiking2.PluginInterface/1.1a")

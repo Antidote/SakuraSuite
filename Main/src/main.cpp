@@ -30,8 +30,8 @@ int main(int argc, char *argv[])
     a.setLibraryPaths(QStringList() << a.libraryPaths() << "plugins");
     a.setOrganizationName("org.wiiking2.com");
     a.setOrganizationDomain("http://wiiking2.com");
-    a.setApplicationName(Constants::WIIKING2_APP_NAME);
-    a.setApplicationVersion(Constants::WIIKING2_APP_VERSION);
+    a.setApplicationName(Constants::SAKURASUITE_APP_NAME);
+    a.setApplicationVersion(Constants::SAKURASUITE_APP_VERSION);
     a.setWindowIcon(QIcon(":/icon/Bomb64x64.png"));
 
     QTranslator appTranslator;

@@ -21,6 +21,8 @@
 #include <QIcon>
 #include "PluginInterface.hpp"
 
+class QAction;
+
 class OOTSAVEPLUGINSHARED_EXPORT OoTSavePlugin : public QObject, public PluginInterface
 {
     Q_OBJECT
@@ -58,10 +60,12 @@ public:
     void doUpdate();
     MainWindowBase* mainWindow() const;
 signals:
+    void newDocument(DocumentBase *);
     void enabledChanged();
 public slots:
 
 private:
+    QAction* m_actionNewDocument;
     bool m_enabled;
     QString m_path;
     QIcon m_icon;

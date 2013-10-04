@@ -50,7 +50,7 @@
          <x>0</x>
          <y>0</y>
          <width>498</width>
-         <height>599</height>
+         <height>588</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout_3">
@@ -92,10 +92,25 @@
      <property name="title">
       <string>Recent &amp;Files</string>
      </property>
+     <property name="icon">
+      <iconset theme="document-open-recent">
+       <normaloff/>
+      </iconset>
+     </property>
      <addaction name="actionClearRecent"/>
     </widget>
+    <widget class="QMenu" name="menuNew">
+     <property name="title">
+      <string>&amp;New</string>
+     </property>
+     <property name="icon">
+      <iconset theme="document-new">
+       <normaloff/>
+      </iconset>
+     </property>
+    </widget>
     <addaction name="actionOpen"/>
-    <addaction name="actionNew"/>
+    <addaction name="menuNew"/>
     <addaction name="separator"/>
     <addaction name="menuRecentFiles"/>
     <addaction name="separator"/>
@@ -159,10 +174,18 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="actionOpen"/>
+   <addaction name="separator"/>
+   <addaction name="actionSave"/>
+   <addaction name="actionSaveAs"/>
+   <addaction name="separator"/>
    <addaction name="actionReload"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QDockWidget" name="dockWidget">
+   <property name="allowedAreas">
+    <set>Qt::AllDockWidgetAreas</set>
+   </property>
    <property name="windowTitle">
     <string>Documents</string>
    </property>
@@ -211,6 +234,11 @@
    <property name="enabled">
     <bool>false</bool>
    </property>
+   <property name="icon">
+    <iconset theme="window-close">
+     <normaloff/>
+    </iconset>
+   </property>
    <property name="text">
     <string>&amp;Close</string>
    </property>
@@ -219,6 +247,11 @@
    </property>
   </action>
   <action name="actionOpen">
+   <property name="icon">
+    <iconset theme="document-open">
+     <normaloff/>
+    </iconset>
+   </property>
    <property name="text">
     <string>&amp;Open</string>
    </property>
@@ -226,14 +259,14 @@
     <string>Ctrl+O</string>
    </property>
   </action>
-  <action name="actionNew">
-   <property name="text">
-    <string>&amp;New</string>
-   </property>
-  </action>
   <action name="actionSave">
    <property name="enabled">
     <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset theme="document-save">
+     <normaloff/>
+    </iconset>
    </property>
    <property name="text">
     <string>&amp;Save</string>
@@ -246,6 +279,11 @@
    <property name="enabled">
     <bool>false</bool>
    </property>
+   <property name="icon">
+    <iconset theme="document-save-as">
+     <normaloff/>
+    </iconset>
+   </property>
    <property name="text">
     <string>Save &amp;As</string>
    </property>
@@ -254,11 +292,21 @@
    </property>
   </action>
   <action name="actionExit">
+   <property name="icon">
+    <iconset theme="application-exit">
+     <normaloff/>
+    </iconset>
+   </property>
    <property name="text">
     <string>&amp;Exit</string>
    </property>
   </action>
   <action name="actionClearRecent">
+   <property name="icon">
+    <iconset theme="edit-clear">
+     <normaloff/>
+    </iconset>
+   </property>
    <property name="text">
     <string>&amp;Clear</string>
    </property>
@@ -269,6 +317,11 @@
    </property>
   </action>
   <action name="actionAbout">
+   <property name="icon">
+    <iconset theme="help-about">
+     <normaloff/>
+    </iconset>
+   </property>
    <property name="text">
     <string>&amp;About</string>
    </property>
@@ -294,6 +347,11 @@
    </property>
   </action>
   <action name="actionPreferences">
+   <property name="icon">
+    <iconset theme="preferences-desktop">
+     <normaloff/>
+    </iconset>
+   </property>
    <property name="text">
     <string>&amp;Preferences</string>
    </property>
@@ -301,6 +359,11 @@
   <action name="actionReload">
    <property name="enabled">
     <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset theme="view-refresh">
+     <normaloff/>
+    </iconset>
    </property>
    <property name="text">
     <string>&amp;Reload</string>

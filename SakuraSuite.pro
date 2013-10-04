@@ -1,7 +1,7 @@
 TEMPLATE = subdirs
 CONFIG += ordered
 
-wiiking2.depends += PluginFramework \
+Main.depends += PluginFramework \
         Updater
 SkywardSwordPlugin.depends += libzelda \
         PluginFramework \

@@ -33,9 +33,12 @@
 #include <InvalidOperationException.hpp>
 
 #include <WiiKeyManagerBase.hpp>
+#include <MainWindowBase.hpp>
+
 #include <QMessageBox>
 #include <QtEndian>
 #include <QApplication>
+#include <QMainWindow>
 #include <QFileInfo>
 #include <QTabBar>
 #include <QDebug>
@@ -55,15 +58,17 @@ SkywardSwordGameDocument::SkywardSwordGameDocument(const PluginInterface *loader
 
     if (file.isEmpty())
     {
+        m_skipData = new char[0x80];
         for (int i = 0; i < 3; i++)
         {
             char* data = new char[0x53C0];
+            memset(data, 0, 0x53C0);
             SkywardSwordEditorForm* sw = new SkywardSwordEditorForm(this, data);
             sw->setNew(true);
             tw->addTab(sw, QIcon(QString(":/icon/Game%1").arg(i+1)), tr("&%1 New Game").arg(i + 1));
             connect(sw, SIGNAL(modified()), this, SLOT(onModified()));
         }
-        return;
+        setDirty(true);
     }
 }
 
@@ -83,12 +88,10 @@ bool SkywardSwordGameDocument::loadFile()
     {
         try
         {
-            QMessageBox msg((QWidget*)m_widget->parent());
+            QMessageBox msg(qApp->topLevelWidgets()[0]);
             msg.setWindowTitle("Loading WiiSave...");
             msg.setText(tr("Loading WiiSave please wait...."));
             msg.setStandardButtons(QMessageBox::NoButton);
-            // This prevents the user from clicking away
-            msg.setWindowModality(Qt::WindowModal);
             msg.show();
             qApp->setOverrideCursor(Qt::WaitCursor);
             zelda::io::WiiSaveReader reader(filePath().toStdString());

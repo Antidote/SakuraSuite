@@ -14,6 +14,9 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
+  <property name="windowIcon">
+   <iconset theme="preferences-other"/>
+  </property>
   <layout class="QGridLayout" name="gridLayout_4">
    <item row="2" column="0" colspan="4">
     <widget class="QGroupBox" name="updateGroupBox">

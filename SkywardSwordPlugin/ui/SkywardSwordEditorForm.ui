@@ -53,7 +53,7 @@
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <property name="documentMode">
       <bool>true</bool>
@@ -882,6 +882,9 @@
             </item>
             <item row="1" column="0">
              <widget class="QCheckBox" name="sacredBowChkBox">
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Sacred Bow&lt;/span&gt;&lt;/p&gt;&lt;p&gt;A mighty bow, enhanced by the power of the&lt;br/&gt;goddess, that delivers devastating damage.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
               <property name="text">
                <string/>
               </property>
@@ -1354,7 +1357,7 @@
           <item row="8" column="1">
            <widget class="QCheckBox" name="bombChkBox">
             <property name="toolTip">
-             <string>Bombs</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Bomb Bag&lt;/span&gt;&lt;/p&gt;&lt;p&gt;You can carry bombs in this handy bag.&lt;br/&gt;Rember to refill the bag when you can!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="statusTip">
              <string>Bombs</string>
@@ -1461,7 +1464,7 @@
           <item row="1" column="3">
            <widget class="QCheckBox" name="trueMasterSwdChkBox">
             <property name="toolTip">
-             <string>True Master Sword</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;True Master Sword&lt;/span&gt;&lt;/p&gt;&lt;p&gt;This sword, blessed by the goddess herself,&lt;br/&gt;can only be wielded by the hero of legend.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="statusTip">
              <string>True Master Sword</string>

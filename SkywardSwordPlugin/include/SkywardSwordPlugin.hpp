@@ -69,14 +69,17 @@ public:
     static SettingsManager* settings();
 signals:
     void enabledChanged();
+    void newDocument(DocumentBase*);
 public slots:
 
 private slots:
+    void onNewDocument();
     void onUpdaterDone();
     void onUpdaterError(Updater::ErrorType error);
     void onUpdaterWarning(QString warning);
     void onNoUpdate();
 private:
+    QAction*                   m_actionNewDocument;
     bool                       m_enabled;
     QString                    m_path;
     QIcon                      m_icon;

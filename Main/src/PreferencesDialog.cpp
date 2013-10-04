@@ -60,14 +60,14 @@ void PreferencesDialog::showEvent(QShowEvent* se)
     QDialog::showEvent(se);
     QSettings settings;
 
-    m_currentStyle = settings.value(Constants::Settings::WIIKING2_CURRENT_STYLE).toString();
-    m_defaultStyle = settings.value(Constants::Settings::WIIKING2_DEFAULT_STYLE).toString();
+    m_currentStyle = settings.value(Constants::Settings::SAKURASUITE_CURRENT_STYLE).toString();
+    m_defaultStyle = settings.value(Constants::Settings::SAKURASUITE_DEFAULT_STYLE).toString();
 
     updateKeys();
 
     m_singleInstance = settings.value("singleInstance").toBool();
 
-    ui->checkOnStart->setChecked(settings.value(Constants::Settings::WIIKING2_CHECK_ON_START, false).toBool());
+    ui->checkOnStart->setChecked(settings.value(Constants::Settings::SAKURASUITE_CHECK_ON_START, false).toBool());
 
     int index = 0;
     this->setUpdatesEnabled(false);
@@ -82,7 +82,7 @@ void PreferencesDialog::showEvent(QShowEvent* se)
         index++;
     }
 
-    ui->updateUrlLineEdit->setText(settings.value(Constants::Settings::WIIKING2_UPDATE_URL, Constants::Settings::WIIKING2_UPDATE_URL_DEFAULT).toString());
+    ui->updateUrlLineEdit->setText(settings.value(Constants::Settings::SAKURASUITE_UPDATE_URL, Constants::Settings::SAKURASUITE_UPDATE_URL_DEFAULT).toString());
     //ui->updateUrlLineEdit->setModified(false);
     ui->singleInstanceCheckBox->setChecked(QSettings().value("singleInstance", false).toBool());
     this->setUpdatesEnabled(true);
@@ -96,7 +96,7 @@ void PreferencesDialog::accept()
     if (ui->updateUrlLineEdit->isModified() && !ui->updateUrlLineEdit->text().isEmpty())
     {
         if (ui->updateUrlLineEdit->property("valid").toBool())
-            settings.setValue(Constants::Settings::WIIKING2_UPDATE_URL, ui->updateUrlLineEdit->text());
+            settings.setValue(Constants::Settings::SAKURASUITE_UPDATE_URL, ui->updateUrlLineEdit->text());
         else
         {
             QMessageBox mbox(this);
@@ -112,9 +112,9 @@ void PreferencesDialog::accept()
 
 
     if (m_currentChanged)
-        settings.setValue(Constants::Settings::WIIKING2_CURRENT_STYLE, ui->currentStyleCombo->currentText());
+        settings.setValue(Constants::Settings::SAKURASUITE_CURRENT_STYLE, ui->currentStyleCombo->currentText());
     if (m_defaultChanged)
-        settings.setValue(Constants::Settings::WIIKING2_DEFAULT_STYLE, ui->defaultStyleCombo->currentText());
+        settings.setValue(Constants::Settings::SAKURASUITE_DEFAULT_STYLE, ui->defaultStyleCombo->currentText());
 
     qApp->setStyle(ui->currentStyleCombo->currentText());
 
@@ -153,12 +153,12 @@ void PreferencesDialog::accept()
         m_keyManager->setMacAddr(macAddr);
     }
 
-    settings.setValue(Constants::Settings::WIIKING2_CHECK_ON_START, ui->checkOnStart->isChecked());
+    settings.setValue(Constants::Settings::SAKURASUITE_CHECK_ON_START, ui->checkOnStart->isChecked());
     settings.setValue("singleInstance", m_singleInstance);
 
-    if (m_singleInstance && !QFile::exists(Constants::WIIKING2_LOCK_FILE))
+    if (m_singleInstance && !QFile::exists(Constants::SAKURASUITE_LOCK_FILE))
     {
-        QFile file(Constants::WIIKING2_LOCK_FILE);
+        QFile file(Constants::SAKURASUITE_LOCK_FILE);
         if (file.open(QFile::WriteOnly))
         {
             file.seek(0);
@@ -213,7 +213,7 @@ void PreferencesDialog::onTextChanged(QString text)
 
         // If the text matches what is currently stored
         // Set the line edit is unmodified
-        if (text == QSettings().value(Constants::Settings::WIIKING2_UPDATE_URL, Constants::Settings::WIIKING2_UPDATE_URL).toString())
+        if (text == QSettings().value(Constants::Settings::SAKURASUITE_UPDATE_URL, Constants::Settings::SAKURASUITE_UPDATE_URL).toString())
             ui->updateUrlLineEdit->setModified(false);
     }
 }

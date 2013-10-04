@@ -23,9 +23,12 @@ DocumentBase::DocumentBase(const PluginInterface* loader, const QString &file)
       m_dirty(false),
       m_widget(NULL)
 {
-    QFileInfo fInfo(file);
-    m_file = fInfo.fileName();
-    m_path = fInfo.absolutePath();
+    if (!file.isEmpty())
+    {
+        QFileInfo fInfo(file);
+        m_file = fInfo.fileName();
+        m_path = fInfo.absolutePath();
+    }
 }
 
 DocumentBase::~DocumentBase()
@@ -52,7 +55,10 @@ QString DocumentBase::fileDir() const
 
 QString DocumentBase::filePath() const
 {
-    return m_path + "/" + m_file;
+    if (!m_path.isEmpty() && !m_file.isEmpty())
+        return m_path + "/" + m_file;
+
+    return QString();
 }
 
 PluginInterface* DocumentBase::loadedBy()

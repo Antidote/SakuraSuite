@@ -16,21 +16,29 @@
 #include "OoTSavePlugin.hpp"
 #include "DocumentBase.hpp"
 
+#include <MainWindowBase.hpp>
+#include <QAction>
+#include <QMenu>
+#include <QMainWindow>
 
 OoTSavePlugin::OoTSavePlugin()
-    : m_enabled(true),
+    : m_actionNewDocument(new QAction("Ocarina of Time Document", this)),
+      m_enabled(true),
       m_icon(QIcon(":/icon/Ocarina64x64.png"))
 {
+    m_actionNewDocument->setIcon(m_icon);
 }
 
 OoTSavePlugin::~OoTSavePlugin()
 {
-
+    m_mainWindow->newDocumentMenu()->removeAction(m_actionNewDocument);
+    delete m_actionNewDocument;
 }
 
 void OoTSavePlugin::initialize(MainWindowBase *mainWindow)
 {
     m_mainWindow = mainWindow;
+    m_mainWindow->newDocumentMenu()->addAction(m_actionNewDocument);
 }
 
 QString OoTSavePlugin::filter() const

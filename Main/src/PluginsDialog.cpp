@@ -134,8 +134,8 @@ void PluginsDialog::onReloadPlugin()
         return;
 
     QMessageBox mbox;
-    mbox.setWindowTitle(Constants::WIIKING2_PLUGIN_RELOAD_WARNING);
-    mbox.setText(Constants::WIIKING2_PLUGIN_RELOAD_WARNING_MSG);
+    mbox.setWindowTitle(Constants::SAKURASUITE_PLUGIN_RELOAD_WARNING);
+    mbox.setText(Constants::SAKURASUITE_PLUGIN_RELOAD_WARNING_MSG);
     mbox.setStandardButtons(QMessageBox::Cancel | QMessageBox::Ok);
     mbox.exec();
 

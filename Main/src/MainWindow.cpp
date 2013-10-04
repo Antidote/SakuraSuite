@@ -25,7 +25,7 @@
 // PluginFramework includes
 #include <PluginInterface.hpp>
 #include <DocumentBase.hpp>
-#ifdef WK2_INTERNAL
+#ifdef SS_INTERNAL
 #include <GameDocument.hpp>
 #endif
 
@@ -49,7 +49,8 @@ MainWindow::MainWindow(QWidget *parent) :
     m_updater(new Updater(this)),
     m_updateMBox(this),
     m_cancelClose(false),
-    m_keyManager(new WiiKeyManager)
+    m_keyManager(new WiiKeyManager),
+    m_untitledDocs(0)
   #ifdef WK2_PREVIEW
   ,m_previewLayout(NULL),
     m_previewLabel(NULL)
@@ -137,7 +138,7 @@ MainWindow::~MainWindow()
     }
 #endif
 
-    QFile(Constants::WIIKING2_LOCK_FILE).remove();
+    QFile(Constants::SAKURASUITE_LOCK_FILE).remove();
     QSettings settings;
     settings.setValue("mainWindowGeometry", saveGeometry());
     settings.setValue("mainWindowState", saveState());
@@ -177,9 +178,9 @@ void MainWindow::injectPreviewLabel()
     m_previewLayout->addStretch();
     m_previewLabel  = new QLabel(bar);
     m_previewLabel->setObjectName("previewLabel");
-#ifdef WK2_PREVIEW
+#ifdef SS_PREVIEW
     m_previewLabel->setText("<b>PREVIEW BUILD</b>");
-#elif defined(WK2_INTERNAL)
+#elif defined(SS_INTERNAL)
     m_previewLabel->setText("<b>INTERNAL BUILD</b>");
 #endif
     m_previewLayout->setContentsMargins(150, 0, 6, 0);
@@ -190,15 +191,11 @@ void MainWindow::injectPreviewLabel()
 void MainWindow::initDocumentList()
 {
     ui->documentList->addAction(ui->actionOpen);
-    ui->documentList->addAction(ui->actionNew);
+    ui->documentList->addAction(ui->menuNew->menuAction());
     QAction* separator = new QAction(this);
     separator->setSeparator(true);
     ui->documentList->addAction(separator);
-    foreach(QAction* a, ui->menuRecentFiles->actions())
-    {
-        if (a != ui->actionClearRecent)
-            ui->documentList->addAction(a);
-    }
+    ui->documentList->addAction(ui->menuRecentFiles->menuAction());
 
     separator = new QAction(this);
     separator->setSeparator(true);
@@ -209,7 +206,7 @@ void MainWindow::initDocumentList()
     separator->setSeparator(true);
     ui->documentList->addAction(separator);
     ui->documentList->addAction(ui->actionClose);
-    this->setWindowTitle(Constants::WIIKING2_TITLE);
+    this->setWindowTitle(Constants::SAKURASUITE_TITLE);
 }
 
 void MainWindow::initMRU()
@@ -309,6 +306,11 @@ QMenu* MainWindow::fileMenu() const
     return ui->menuFile;
 }
 
+QMenu* MainWindow::newDocumentMenu() const
+{
+    return ui->menuNew;
+}
+
 QMenu* MainWindow::editMenu() const
 {
     return ui->menuEdit;
@@ -339,9 +341,35 @@ QToolBar* MainWindow::toolBar() const
     return ui->mainToolBar;
 }
 
-QMainWindow* MainWindow::mainWindow()
+QMainWindow* MainWindow::mainWindow() const
 {
-    return this;
+    return (QMainWindow*)this;
+}
+
+void MainWindow::onNewDocument(DocumentBase* document)
+{
+    if (!document)
+        return;
+
+    GameDocument* gd = qobject_cast<GameDocument*>(document);
+    if (gd && gd->supportsWiiSave())
+        gd->setKeyManager(m_keyManager);
+
+    QString filePath = QString("/tmp/Untitled %1 Document %2").arg(document->loadedBy()->name()).arg(++m_untitledDocs);
+    m_documents[cleanPath(filePath)] = document;
+    PluginInterface* loader = document->loadedBy();
+    QListWidgetItem* item = new QListWidgetItem();
+    item->setData(FILENAME, QFileInfo(filePath).fileName());
+    item->setData(FILEPATH, cleanPath(filePath));
+    item->setText(item->data(FILENAME).toString());
+    if (!loader->icon().isNull())
+        item->setIcon(loader->icon());
+
+    ui->documentList->addItem(item);
+    ui->documentList->setCurrentItem(item);
+    m_currentFile = document;
+    updateWindowTitle();
+
 }
 
 void MainWindow::closeEvent(QCloseEvent* e)
@@ -395,8 +423,8 @@ void MainWindow::openFile(const QString& currentFile)
     msgBox.setIcon(QMessageBox::Warning);
     if (m_documents.contains(filePath))
     {
-        msgBox.setWindowTitle(Constants::WIIKING2_ALREADY_OPENED);
-        msgBox.setText(Constants::WIIKING2_ALREADY_OPENED_MSG.arg(strippedName(filePath)));
+        msgBox.setWindowTitle(Constants::SAKURASUITE_ALREADY_OPENED);
+        msgBox.setText(Constants::SAKURASUITE_ALREADY_OPENED_MSG.arg(strippedName(filePath)));
         msgBox.exec();
         return;
     }
@@ -404,7 +432,7 @@ void MainWindow::openFile(const QString& currentFile)
     if (!loader)
     {
         msgBox.setWindowTitle("Unable to find suitable loader...");
-        msgBox.setText(tr("%1 was unable to determine an appropriate plugin to load '%2' with.").arg(Constants::WIIKING2_TITLE).arg(filePath));
+        msgBox.setText(tr("%1 was unable to determine an appropriate plugin to load '%2' with.").arg(Constants::SAKURASUITE_TITLE).arg(filePath));
         msgBox.exec();
         return;
     }
@@ -413,8 +441,8 @@ void MainWindow::openFile(const QString& currentFile)
 
     if (!file)
     {
-        msgBox.setWindowTitle(Constants::WIIKING2_OPEN_FAILED);
-        msgBox.setText(Constants::WIIKING2_OPEN_FAILED_MSG.arg(strippedName(filePath)).arg(loader->name()));
+        msgBox.setWindowTitle(Constants::SAKURASUITE_OPEN_FAILED);
+        msgBox.setText(Constants::SAKURASUITE_OPEN_FAILED_MSG.arg(strippedName(filePath)).arg(loader->name()));
         msgBox.setStandardButtons(QMessageBox::Ok);
         msgBox.setIcon(QMessageBox::Warning);
         msgBox.exec();
@@ -443,7 +471,7 @@ void MainWindow::openFile(const QString& currentFile)
     m_currentFile = file;
     updateMRU(filePath);
     QSettings settings;
-    settings.setValue(Constants::Settings::WIIKING2_RECENT_DIRECTORY, cleanPath(QFileInfo(filePath).absolutePath()));
+    settings.setValue(Constants::Settings::SAKURASUITE_RECENT_DIRECTORY, cleanPath(QFileInfo(filePath).absolutePath()));
     updateWindowTitle();
 }
 
@@ -508,7 +536,7 @@ void MainWindow::onClose()
     {
         QMessageBox mbox(this);
         mbox.setWindowTitle("File has been modified...");
-        mbox.setText(tr("'%1' has been modified, do you wish to save?").arg(m_currentFile->fileName()));
+        mbox.setText(tr("'%1' has been modified, do you wish to save?").arg(ui->documentList->currentItem()->data(FILENAME).toString()));
         mbox.setStandardButtons(QMessageBox::Yes | QMessageBox::Cancel | QMessageBox::Discard);
         mbox.exec();
         if (mbox.result() == QMessageBox::Yes)
@@ -520,14 +548,15 @@ void MainWindow::onClose()
         }
     }
 
-    m_fileSystemWatcher.removePath(cleanPath(m_currentFile->filePath()));
-    m_documents.remove(cleanPath(m_currentFile->filePath()));
+    QString filePath = cleanPath(ui->documentList->currentItem()->data(FILEPATH).toString());
+    m_fileSystemWatcher.removePath(cleanPath(filePath));
+    m_documents.remove(cleanPath(filePath));
     delete m_currentFile;
     m_currentFile = NULL;
     delete ui->documentList->currentItem();
 
     if (ui->documentList->count() <= 0)
-        this->setWindowTitle(Constants::WIIKING2_TITLE);
+        this->setWindowTitle(Constants::SAKURASUITE_TITLE);
 
     ui->actionReload->setEnabled(ui->documentList->count() > 0);
 }
@@ -572,11 +601,13 @@ void MainWindow::onSave()
     if (!m_currentFile || !m_currentFile->isDirty())
         return;
 
-    m_fileSystemWatcher.removePath(cleanPath(m_currentFile->filePath()));
+    if (!m_currentFile->fileName().isEmpty())
+        m_fileSystemWatcher.removePath(cleanPath(m_currentFile->filePath()));
+
 
     GameDocument* gd = qobject_cast<GameDocument*>(m_currentFile);
 
-    if (m_currentFile->filePath().isEmpty() || (gd && gd->isWiiSave()))
+    if (m_currentFile->fileName().isEmpty() || (gd && gd->isWiiSave()))
         onSaveAs();
 
     if (m_currentFile->save())
@@ -662,14 +693,14 @@ void MainWindow::onAboutQt()
 void MainWindow::updateMRU(const QString& file)
 {
     QSettings settings;
-    QStringList files = settings.value(Constants::Settings::WIIKING2_RECENT_FILES).toStringList();
+    QStringList files = settings.value(Constants::Settings::SAKURASUITE_RECENT_FILES).toStringList();
     files.removeAll(cleanPath(file));
     files.prepend(cleanPath(file));
 
     while (files.size() > MAXRECENT)
         files.removeLast();
 
-    settings.setValue(Constants::Settings::WIIKING2_RECENT_FILES, files);
+    settings.setValue(Constants::Settings::SAKURASUITE_RECENT_FILES, files);
     updateRecentFileActions();
 
     foreach (QWidget* widget, QApplication::topLevelWidgets())
@@ -683,7 +714,7 @@ void MainWindow::updateMRU(const QString& file)
 void MainWindow::updateRecentFileActions()
 {
     QSettings settings;
-    QStringList files = settings.value(Constants::Settings::WIIKING2_RECENT_FILES).toStringList();
+    QStringList files = settings.value(Constants::Settings::SAKURASUITE_RECENT_FILES).toStringList();
 
     int numRecentFiles = qMin(files.size(), (int)MAXRECENT);
 
@@ -704,18 +735,18 @@ void MainWindow::updateRecentFileActions()
 
 void MainWindow::setupStyleActions()
 {
-    if (!QSettings().value(Constants::Settings::WIIKING2_DEFAULT_STYLE).isValid())
+    if (!QSettings().value(Constants::Settings::SAKURASUITE_DEFAULT_STYLE).isValid())
     {
         if(qApp->style())
-            QSettings().setValue(Constants::Settings::WIIKING2_DEFAULT_STYLE, qApp->style()->objectName());
+            QSettings().setValue(Constants::Settings::SAKURASUITE_DEFAULT_STYLE, qApp->style()->objectName());
         else
-            QSettings().setValue(Constants::Settings::WIIKING2_DEFAULT_STYLE, qApp->desktop()->style()->objectName());
+            QSettings().setValue(Constants::Settings::SAKURASUITE_DEFAULT_STYLE, qApp->desktop()->style()->objectName());
     }
     QStringList styles = QStyleFactory::keys();
     QActionGroup* actionGroup = new QActionGroup(this);
     actionGroup->addAction(ui->actionDefaultStyle);
 
-    QString currentStyle = QSettings().value(Constants::Settings::WIIKING2_CURRENT_STYLE).toString();
+    QString currentStyle = QSettings().value(Constants::Settings::SAKURASUITE_CURRENT_STYLE).toString();
     qApp->setStyle(currentStyle);
 
     foreach (QString style, styles)
@@ -741,6 +772,7 @@ void MainWindow::openRecentFile()
 
 void MainWindow::updateWindowTitle()
 {
+    QString filename = ui->documentList->currentItem()->data(FILENAME).toString();
     if (m_currentFile->isDirty() && !ui->documentList->currentItem()->text().contains("*"))
         ui->documentList->currentItem()->setText(ui->documentList->currentItem()->text() + "*");
     else if (!m_currentFile->isDirty() && ui->documentList->currentItem()->text().contains("*"))
@@ -748,16 +780,16 @@ void MainWindow::updateWindowTitle()
         ui->documentList->currentItem()->setText(ui->documentList->currentItem()->data(FILENAME).toString());
     }
 
-    setWindowTitle(Constants::WIIKING2_TITLE_FILE.arg(m_currentFile->fileName()).arg(m_currentFile->isDirty() ? Constants::WIIKING2_TITLE_DIRTY : ""));
+    setWindowTitle(Constants::SAKURASUITE_TITLE_FILE.arg(filename).arg(m_currentFile->isDirty() ? Constants::SAKURASUITE_TITLE_DIRTY : ""));
 }
 
 void MainWindow::onUpdateDone()
 {
     this->setEnabled(true);
     m_updateMBox.hide();
-    m_updateMBox.setWindowTitle(Constants::WIIKING2_NOT_LATEST_VERSION);
-    m_updateMBox.setText(Constants::WIIKING2_NOT_LATEST_VERSION_MSG
-                         .arg(Constants::WIIKING2_APP_NAME)
+    m_updateMBox.setWindowTitle(Constants::SAKURASUITE_NOT_LATEST_VERSION);
+    m_updateMBox.setText(Constants::SAKURASUITE_NOT_LATEST_VERSION_MSG
+                         .arg(Constants::SAKURASUITE_APP_NAME)
                          .arg(m_updater->updateUrl())
                          .arg(m_updater->md5Sum())
                          .arg(m_updater->changelogUrl()));
@@ -776,16 +808,16 @@ void MainWindow::onUpdateError(Updater::ErrorType et)
     switch(et)
     {
         case Updater::UnableToConnect:
-            m_updateMBox.setWindowTitle(Constants::WIIKING2_UPDATE_CONTACT_ERROR);
-            m_updateMBox.setText(Constants::WIIKING2_UPDATE_CONTACT_ERROR_MSG);
+            m_updateMBox.setWindowTitle(Constants::SAKURASUITE_UPDATE_CONTACT_ERROR);
+            m_updateMBox.setText(Constants::SAKURASUITE_UPDATE_CONTACT_ERROR_MSG);
             break;
         case Updater::ParseError:
-            m_updateMBox.setWindowTitle(Constants::WIIKING2_UPDATE_PARSE_ERROR);
-            m_updateMBox.setText(Constants::WIIKING2_UPDATE_PARSE_ERROR_MSG.arg(m_updater->errorString()));
+            m_updateMBox.setWindowTitle(Constants::SAKURASUITE_UPDATE_PARSE_ERROR);
+            m_updateMBox.setText(Constants::SAKURASUITE_UPDATE_PARSE_ERROR_MSG.arg(m_updater->errorString()));
             break;
         case Updater::NoPlatform:
-            m_updateMBox.setWindowTitle(Constants::WIIKING2_UPDATE_PLATFORM);
-            m_updateMBox.setText(Constants::WIIKING2_UPDATE_PLATFORM_MSG);
+            m_updateMBox.setWindowTitle(Constants::SAKURASUITE_UPDATE_PLATFORM);
+            m_updateMBox.setText(Constants::SAKURASUITE_UPDATE_PLATFORM_MSG);
             break;
     }
     m_updateMBox.exec();
@@ -806,7 +838,7 @@ void MainWindow::onLockTimeout()
 {
     if (QSettings().value("singleInstance", false).toBool())
     {
-        QFile file(Constants::WIIKING2_LOCK_FILE);
+        QFile file(Constants::SAKURASUITE_LOCK_FILE);
         if (file.open(QFile::WriteOnly))
         {
             file.seek(0);
@@ -823,8 +855,8 @@ void MainWindow::showEvent(QShowEvent* se)
     if (m_pluginsManager->plugins().count() <= 0)
     {
         QMessageBox mbox;
-        mbox.setWindowTitle(Constants::WIIKING2_NO_PLUGINS_ERROR);
-        mbox.setText(Constants::WIIKING2_NO_PLUGINS_ERROR_MSG);
+        mbox.setWindowTitle(Constants::SAKURASUITE_NO_PLUGINS_ERROR);
+        mbox.setText(Constants::SAKURASUITE_NO_PLUGINS_ERROR_MSG);
         mbox.setStandardButtons(QMessageBox::Ok);
         mbox.exec();
         exit(1);
@@ -832,7 +864,7 @@ void MainWindow::showEvent(QShowEvent* se)
     }
 
     QSettings settings;
-    if (settings.value(Constants::Settings::WIIKING2_CHECK_ON_START, false).toBool())
+    if (settings.value(Constants::Settings::SAKURASUITE_CHECK_ON_START, false).toBool())
         onCheckUpdate();
 }
 
@@ -849,9 +881,9 @@ bool MainWindow::checkLock()
     // So we should probably check that too but for now this'll do
     // I COULD use some Qt magic and have it output the lock file, but
     // that's neither here nor there, plus this is simple enough for our purposes
-    if (QFile::exists(Constants::WIIKING2_LOCK_FILE) && QSettings().value("singleInstance", false).toBool())
+    if (QFile::exists(Constants::SAKURASUITE_LOCK_FILE) && QSettings().value("singleInstance", false).toBool())
     {
-        QFile file(Constants::WIIKING2_LOCK_FILE);
+        QFile file(Constants::SAKURASUITE_LOCK_FILE);
         if (file.open(QFile::ReadOnly))
         {
             QDateTime time = QDateTime::fromString(QString(file.readLine()));
@@ -866,14 +898,14 @@ bool MainWindow::checkLock()
             }
         }
         QMessageBox mbox(this);
-        mbox.setWindowTitle(Constants::WIIKING2_INSTANCE_EXISTS);
-        mbox.setText(Constants::WIIKING2_INSTANCE_EXISTS_MSG);
+        mbox.setWindowTitle(Constants::SAKURASUITE_INSTANCE_EXISTS);
+        mbox.setText(Constants::SAKURASUITE_INSTANCE_EXISTS_MSG);
         mbox.exec();
         return true;
     }
     else if (QSettings().value("singleInstance", false).toBool())
     {
-        QFile lock(Constants::WIIKING2_LOCK_FILE);
+        QFile lock(Constants::SAKURASUITE_LOCK_FILE);
         lock.open(QFile::WriteOnly);
         lock.write(QString(QDateTime::currentDateTime().toString() + "\n").toLatin1());
         lock.close();
@@ -891,7 +923,7 @@ void MainWindow::onPlugins()
 void MainWindow::onClearRecent()
 {
     QSettings settings;
-    settings.setValue(Constants::Settings::WIIKING2_RECENT_FILES, QVariant());
+    settings.setValue(Constants::Settings::SAKURASUITE_RECENT_FILES, QVariant());
 
     updateRecentFileActions();
 }
@@ -905,11 +937,11 @@ void MainWindow::onRestoreDefault()
 void MainWindow::onCheckUpdate()
 {
     QSettings settings;
-    if (!settings.value(Constants::Settings::WIIKING2_UPDATE_URL).isValid())
-        settings.setValue(Constants::Settings::WIIKING2_UPDATE_URL, Constants::Settings::WIIKING2_UPDATE_URL_DEFAULT);
+    if (!settings.value(Constants::Settings::SAKURASUITE_UPDATE_URL).isValid())
+        settings.setValue(Constants::Settings::SAKURASUITE_UPDATE_URL, Constants::Settings::SAKURASUITE_UPDATE_URL_DEFAULT);
 
-    m_updateMBox.setWindowTitle(Constants::WIIKING2_UPDATE_CHECKING);
-    m_updateMBox.setText(Constants::WIIKING2_UPDATE_CHECKING_MSG);
+    m_updateMBox.setWindowTitle(Constants::SAKURASUITE_UPDATE_CHECKING);
+    m_updateMBox.setText(Constants::SAKURASUITE_UPDATE_CHECKING_MSG);
     m_updateMBox.setStandardButtons(QMessageBox::NoButton);
     // This prevents the user from clicking away
     m_updateMBox.setWindowModality(Qt::WindowModal);
@@ -920,9 +952,9 @@ void MainWindow::onCheckUpdate()
     m_updateMBox.show();
 
 #ifdef WK2_INTERNAL
-    m_updater->checkForUpdate(Constants::Settings::WIIKING2_UPDATE_URL_DEFAULT, Constants::WIIKING2_APP_VERSION, Constants::WIIKING2_VERSION);
+    m_updater->checkForUpdate(Constants::Settings::SAKURASUITE_UPDATE_URL_DEFAULT, Constants::SAKURASUITE_APP_VERSION, Constants::SAKURASUITE_VERSION);
 #else
-    m_updater->checkForUpdate(settings.value(Constants::Settings::WIIKING2_UPDATE_URL).toString(), Constants::WIIKING2_APP_VERSION, Constants::WIIKING2_VERSION);
+    m_updater->checkForUpdate(settings.value(Constants::Settings::SAKURASUITE_UPDATE_URL).toString(), Constants::SAKURASUITE_APP_VERSION, Constants::SAKURASUITE_VERSION);
 #endif
 }
 
@@ -992,7 +1024,7 @@ void MainWindow::onStyleChanged()
         a->setChecked(true);
         if (style.contains("default"))
         {
-            QString tmp = QSettings().value(Constants::Settings::WIIKING2_DEFAULT_STYLE).toString();
+            QString tmp = QSettings().value(Constants::Settings::SAKURASUITE_DEFAULT_STYLE).toString();
             qApp->setStyle(tmp);
             foreach (QAction* action, a->actionGroup()->actions())
             {
@@ -1005,8 +1037,8 @@ void MainWindow::onStyleChanged()
         }
         else
             qApp->setStyle(a->text());
-        QSettings().setValue(Constants::Settings::WIIKING2_CURRENT_STYLE, (style.contains("default") ?
-                                                                               QSettings().value(Constants::Settings::WIIKING2_DEFAULT_STYLE).toString()
+        QSettings().setValue(Constants::Settings::SAKURASUITE_CURRENT_STYLE, (style.contains("default") ?
+                                                                               QSettings().value(Constants::Settings::SAKURASUITE_DEFAULT_STYLE).toString()
                                                                              : style));
     }
 }
@@ -1061,5 +1093,5 @@ QString MainWindow::strippedName(const QString& fullFileName) const
 QString MainWindow::mostRecentDirectory()
 {
     QSettings settings;
-    return settings.value(Constants::Settings::WIIKING2_RECENT_DIRECTORY).toString();
+    return settings.value(Constants::Settings::SAKURASUITE_RECENT_DIRECTORY).toString();
 }

@@ -79,7 +79,7 @@ const QString SKYWARDSWORD_UPDATE_PLATFORM_MSG       = tr("The updater currently
 namespace Settings
 {
 #ifdef SS_INTERNAL
-const QString SKYWARDSWORD_UPDATE_URL_DEFAULT = "http://update.local/skywardswordplugin/latest.update";
+const QString SKYWARDSWORD_UPDATE_URL_DEFAULT = "http://localhost/update/skywardswordplugin/latest.update";
 #else
 const QString SKYWARDSWORD_UPDATE_URL_DEFAULT = "http://update.wiiking2.com/skywardswordplugin/latest.update";
 #endif

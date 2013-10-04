@@ -98,6 +98,7 @@ bool PluginsManager::reloadByName(const QString& name)
                 settings.beginGroup(newPlugin->name());
                 newPlugin->setEnabled(settings.value("enabled", true).toBool());
                 newPlugin->initialize(m_mainWindow);
+                connect(plugin->object(), SIGNAL(newDocument(DocumentBase*)), m_mainWindow, SLOT(onNewDocument(DocumentBase*)));
                 m_plugins.append(newPlugin);
                 return true;
             }
@@ -188,6 +189,7 @@ void PluginsManager::loadPlugins()
                     plugin->setPath(pluginsDir.absoluteFilePath(fileName));
                     plugin->setEnabled(settings.value("enabled", true).toBool());
                     plugin->initialize(m_mainWindow);
+                    connect(plugin->object(), SIGNAL(newDocument(DocumentBase*)), m_mainWindow, SLOT(onNewDocument(DocumentBase*)));
                     m_pluginLoaders[plugin->name().toLower()] = loader;
                 }
                 else

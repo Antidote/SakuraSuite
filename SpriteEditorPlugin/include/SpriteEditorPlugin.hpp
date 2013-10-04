@@ -58,6 +58,7 @@ public:
     void doUpdate();
     MainWindowBase* mainWindow() const;
 signals:
+    void newDocument(DocumentBase *);
     void enabledChanged();
 public slots:
 

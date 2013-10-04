@@ -10,14 +10,15 @@ class QMainWindow;
 class MainWindowBase
 {
 public:
-    virtual QMenu*       fileMenu()  const=0;
-    virtual QMenu*       editMenu()  const=0;
-    virtual QMenu*       helpMenu()  const=0;
-    virtual QMenu*       viewMenu()  const=0;
-    virtual QMenuBar*    menuBar()   const=0;
-    virtual QStatusBar*  statusBar() const=0;
-    virtual QToolBar*    toolBar()   const=0;
-    virtual QMainWindow* mainWindow()=0;
+    virtual QMenu*       fileMenu()       const=0;
+    virtual QMenu*       newDocumentMenu()const=0;
+    virtual QMenu*       editMenu()       const=0;
+    virtual QMenu*       helpMenu()       const=0;
+    virtual QMenu*       viewMenu()       const=0;
+    virtual QMenuBar*    menuBar()        const=0;
+    virtual QStatusBar*  statusBar()      const=0;
+    virtual QToolBar*    toolBar()        const=0;
+    virtual QMainWindow* mainWindow()     const=0;
 };
 
 #endif // MAINWINDOWBASE_HPP

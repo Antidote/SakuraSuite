@@ -34,11 +34,13 @@
 
 SkywardSwordPlugin* SkywardSwordPlugin::m_instance = NULL;
 SkywardSwordPlugin::SkywardSwordPlugin()
-    : m_enabled(true),
+    : m_actionNewDocument(new QAction("Skyward Sword Document", this)),
+      m_enabled(true),
       m_icon(QIcon(":/icon/Bomb64x64.png")),
       m_settingsDialog(NULL),
       m_updater(new Updater(this))
 {
+    m_actionNewDocument->setIcon(m_icon);
     m_instance = this;
 }
 
@@ -48,13 +50,13 @@ SkywardSwordPlugin::~SkywardSwordPlugin()
         delete m_updater;
     if (m_settingsDialog)
         delete m_settingsDialog;
-    if (settings())
-        delete settings();
 }
 
 void SkywardSwordPlugin::initialize(MainWindowBase *mainWindow)
 {
     m_mainWindow = mainWindow;
+    m_mainWindow->newDocumentMenu()->addAction(m_actionNewDocument);
+    connect(m_actionNewDocument, SIGNAL(triggered()), this, SLOT(onNewDocument()));
 
     m_settingsDialog = new SettingsDialog(qApp->topLevelWidgets()[0]);
     connect(m_updater, SIGNAL(done()), this, SLOT(onUpdaterDone()));
@@ -258,6 +260,11 @@ SkywardSwordPlugin* SkywardSwordPlugin::instance()
 SettingsManager* SkywardSwordPlugin::settings()
 {
     return SettingsManager::instance();
+}
+
+void SkywardSwordPlugin::onNewDocument()
+{
+    emit newDocument(new SkywardSwordGameDocument(this));
 }
 
 void SkywardSwordPlugin::onUpdaterDone()

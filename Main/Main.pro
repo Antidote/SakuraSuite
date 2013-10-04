@@ -3,7 +3,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG  += embed_manifest_exe
 
-TARGET = wiiking2editor
+TARGET = sakurasuite
 TEMPLATE = app
 INCLUDEPATH += \
     include \
@@ -13,7 +13,7 @@ INCLUDEPATH += \
 UI_DIR = ui
 
 CONFIG(release, release|debug){
-    DEFINES -= WK2_DEBUG
+    DEFINES -= SS_DEBUG
     # We don't want the objects, or MOC sources
     # in the project directory, so tell qmake
     # where to put them
@@ -22,7 +22,7 @@ CONFIG(release, release|debug){
 }
 
 CONFIG(debug, debug|release){
-    DEFINES += WK2_DEBUG
+    DEFINES += SS_DEBUG
     # We don't want the objects, or MOC sources
     # in the project directory, so tell qmake
     # where to put them

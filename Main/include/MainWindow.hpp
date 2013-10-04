@@ -65,14 +65,18 @@ public:
     bool isInternalBuild();
     bool isPreviewBuild();
 
-    QMenu* fileMenu() const;
-    QMenu* editMenu() const;
-    QMenu* helpMenu() const;
-    QMenu* viewMenu() const;
-    QMenuBar* menuBar() const;
-    QStatusBar* statusBar() const;
-    QToolBar* toolBar() const;
-    QMainWindow* mainWindow();
+    QMenu* fileMenu()        const;
+    QMenu* newDocumentMenu() const;
+    QMenu* editMenu()        const;
+    QMenu* helpMenu()        const;
+    QMenu* viewMenu()        const;
+    QMenuBar* menuBar()      const;
+    QStatusBar* statusBar()  const;
+    QToolBar* toolBar()      const;
+    QMainWindow* mainWindow()const;
+
+public slots:
+    void onNewDocument(DocumentBase* document);
 protected slots:
     void onDocumentChanged(int row);
     void onClose();
@@ -144,7 +148,8 @@ private:
     QTimer                   m_lockTimer;
     bool                     m_cancelClose;
     WiiKeyManager*           m_keyManager;
-#if defined(WK2_PREVIEW) || defined(WK2_INTERNAL)
+    int                      m_untitledDocs;
+#if defined(SS_PREVIEW) || defined(SS_INTERNAL)
     QHBoxLayout*             m_previewLayout;
     QLabel*                  m_previewLabel;
 #endif
