@@ -57,6 +57,8 @@ public:
     bool hasUpdater() const;
     void doUpdate();
     MainWindowBase* mainWindow() const;
+
+    static SpriteEditorPlugin* instance();
 signals:
     void newDocument(DocumentBase *);
     void enabledChanged();
@@ -67,6 +69,8 @@ private:
     QString m_path;
     QIcon m_icon;
     MainWindowBase* m_mainWindow;
+
+    static SpriteEditorPlugin* m_instance;
 };
 
 #endif // SPRITEEDITORPLUGIN_HPP

@@ -28,7 +28,8 @@ SOURCES += \
     src/Common.cpp \
     src/TriforceWidget.cpp \
     src/CopyWidget.cpp \
-    src/SkywardSwordTabWidget.cpp
+    src/SkywardSwordTabWidget.cpp \
+    src/UpdateDialog.cpp
 
 INCLUDEPATH += \
     include \
@@ -75,7 +76,8 @@ HEADERS +=\
     include/Constants.hpp \
     include/TriforceWidget.hpp \
     include/CopyWidget.hpp \
-    include/SkywardSwordTabWidget.hpp
+    include/SkywardSwordTabWidget.hpp \
+    include/UpdateDialog.hpp
 
 RESOURCES += \
     resources/resources.qrc
@@ -88,6 +90,7 @@ FORMS += \
     ui/SettingsDialog.ui \
     ui/PlaytimeWidget.ui \
     ui/CopyWidget.ui \
-    ui/SkywardSwordTabWidget.ui
+    ui/SkywardSwordTabWidget.ui \
+    ui/UpdateDialog.ui
 
 win32:RC_FILE += resources/resource.rc

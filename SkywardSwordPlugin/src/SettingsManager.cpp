@@ -21,12 +21,11 @@
 #include <QApplication>
 
 SettingsManager* SettingsManager::m_instance = NULL;
-const ushort     SettingsManager::JAPANESE_NAME[4] = {0x30ea, 0x30f3, 0x30af, 0};
 
 SettingsManager::SettingsManager()
     : QObject(NULL)
 {
-    m_defaultNameList = QStringList() << "Link" << QString::fromUtf16(JAPANESE_NAME) << "Link";
+    m_defaultNameList = QStringList() << "Link" << QString::fromUtf8("リンク") << "Link";
     m_defaultRegion   = NTSCU;
 
     QSettings settings;

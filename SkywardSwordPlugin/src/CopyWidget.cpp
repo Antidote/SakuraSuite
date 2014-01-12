@@ -60,3 +60,9 @@ void CopyWidget::showEvent(QShowEvent* e)
     ui->quest2CheckBox->setChecked(false);
     ui->quest3CheckBox->setChecked(false);
 }
+
+void CopyWidget::focusOutEvent(QFocusEvent* fe)
+{
+    this->close();
+    QWidget::focusOutEvent(fe);
+}

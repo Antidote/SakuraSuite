@@ -292,7 +292,7 @@ bool MainWindow::isInternalBuild()
 
 bool MainWindow::isPreviewBuild()
 {
-#ifdef WK2_PREVIEW
+#ifdef SS_PREVIEW
     return true;
 #else
     return false;
@@ -367,7 +367,6 @@ void MainWindow::onNewDocument(DocumentBase* document)
     ui->documentList->setCurrentItem(item);
     m_currentFile = document;
     updateWindowTitle();
-
 }
 
 void MainWindow::closeEvent(QCloseEvent* e)

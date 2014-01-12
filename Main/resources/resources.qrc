@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/about">
         <file>Bomb64x64.png</file>
+        <file>donate.gif</file>
     </qresource>
 </RCC>

@@ -366,7 +366,7 @@ void SkywardSwordGameDocument::onCopy(SkywardSwordEditorForm* source)
 
     m_copyWidget->setQuestEnabled((CopyWidget::Quest)index, false);
     m_copyWidget->move(QCursor().pos());
-    m_copyWidget->exec();
+    m_copyWidget->show();
 
     if (m_copyWidget->result() == QDialog::Accepted)
     {
@@ -450,6 +450,10 @@ bool SkywardSwordGameDocument::loadData(zelda::io::BinaryReader reader)
         }
         m_skipData = (char*)reader.readBytes(0x80);
         return true;
+    }
+    catch (zelda::error::Exception e)
+    {
+        // TODO: Add logger
     }
     catch (...)
     {

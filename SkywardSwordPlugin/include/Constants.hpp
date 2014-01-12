@@ -21,7 +21,7 @@
 
 // Only ONE of these may be defined
 //#define SS_PREVIEW
-#define SS_INTERNAL
+//#define SS_INTERNAL
 
 #if defined(SS_PREVIEW) && defined(SS_INTERNAL)
 #error "You can only define either SS_PREVIEW or SS_INTERNAL"
@@ -81,7 +81,7 @@ namespace Settings
 #ifdef SS_INTERNAL
 const QString SKYWARDSWORD_UPDATE_URL_DEFAULT = "http://localhost/update/skywardswordplugin/latest.update";
 #else
-const QString SKYWARDSWORD_UPDATE_URL_DEFAULT = "http://update.wiiking2.com/skywardswordplugin/latest.update";
+const QString SKYWARDSWORD_UPDATE_URL_DEFAULT = "http://wiiking2.com/update/skywardswordplugin/latest.update";
 #endif
 
 const QString SKYWARDSWORD_UPDATE_URL         = "updateUrl";

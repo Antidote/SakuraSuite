@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui xml opengl
+QT       += core gui xml
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = spriteeditorplugin
@@ -50,15 +50,29 @@ CONFIG(debug, debug|release){
 }
 
 
-SOURCES += src/SpriteEditorPlugin.cpp \
+SOURCES += \
+    src/SpriteEditorPlugin.cpp \
     src/SpriteDocument.cpp \
-    src/SpriteCanvas.cpp
+    src/SpriteInfo.cpp \
+    src/SpriteEditorFrame.cpp \
+    src/SpriteTree.cpp \
+    SpriteCanvas.cpp
 
-HEADERS += include/SpriteEditorPlugin.hpp\
-        include/spriteeditorplugin_global.hpp \
+HEADERS += \
+    include/SpriteEditorPlugin.hpp\
+    include/spriteeditorplugin_global.hpp \
     include/SpriteDocument.hpp \
-    include/SpriteCanvas.hpp
+    include/SpriteInfo.hpp \
+    include/SpritePart.hpp \
+    include/SpriteEditorFrame.hpp \
+    include/SpriteTree.hpp \
+    SpriteCanvas.hpp
 
 OTHER_FILES += \
     spriteeditor.json
+
+FORMS += \
+    ui/SpriteInfo.ui \
+    ui/SpriteEditorFrame.ui \
+    ui/SpriteTree.ui
 

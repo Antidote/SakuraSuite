@@ -22,6 +22,7 @@
 #include <QNetworkRequest>
 #include <QStringList>
 #include <QByteArray>
+#include <QDebug>
 
 Updater::Updater(QObject* parent)
     : QObject(parent)
@@ -199,6 +200,7 @@ void Updater::onNetworkFinished(QNetworkReply* nr)
     }
     else if (nr->error() == QNetworkReply::NoError)
     {
+        qDebug() << "Content Type: " << nr->header(QNetworkRequest::ContentTypeHeader);
         qApp->restoreOverrideCursor();
         QStringList data = QString(nr->readAll()).split("\n");
         parse(data);

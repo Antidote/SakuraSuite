@@ -16,10 +16,12 @@
 #include "SpriteEditorPlugin.hpp"
 #include "SpriteDocument.hpp"
 
+SpriteEditorPlugin* SpriteEditorPlugin::m_instance = NULL;
 
 SpriteEditorPlugin::SpriteEditorPlugin()
     : m_enabled(true)
 {
+    m_instance = this;
 }
 
 SpriteEditorPlugin::~SpriteEditorPlugin()
@@ -122,9 +124,14 @@ void SpriteEditorPlugin::doUpdate()
 
 }
 
-MainWindowBase*SpriteEditorPlugin::mainWindow() const
+MainWindowBase* SpriteEditorPlugin::mainWindow() const
 {
     return m_mainWindow;
+}
+
+SpriteEditorPlugin* SpriteEditorPlugin::instance()
+{
+    return m_instance;
 }
 
 Updater* SpriteEditorPlugin::updater()

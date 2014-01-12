@@ -144,11 +144,11 @@ void PluginsDialog::onReloadPlugin()
 
     if (m_pluginsManager->reloadByName(ui->treeWidget->currentItem()->text(0)))
     {
-        this->setStatusTip("Reloaded plugin");
+        this->setStatusTip(tr("Reloaded plugin"));
     }
     else
     {
-        this->setStatusTip("Failed to reload plugin");
+        this->setStatusTip(tr("Failed to reload plugin"));
     }
 
     updatePluginData();

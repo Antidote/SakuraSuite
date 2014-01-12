@@ -42,6 +42,7 @@ public:
 
 protected:
     void showEvent(QShowEvent* e);
+    void focusOutEvent(QFocusEvent *fe);
 private:
     Ui::CopyWidget *ui;
 };

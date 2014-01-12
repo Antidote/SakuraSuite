@@ -59,7 +59,6 @@ private:
     bool        m_updateCheckOnStart;
 
     static SettingsManager* m_instance;
-    static const ushort JAPANESE_NAME[4];
 };
 
 #endif // SETTINGSMANAGER_H
