@@ -28,19 +28,6 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="6">
-    <spacer name="horizontalSpacer_3">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>40</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
    <item row="2" column="0" colspan="6">
     <widget class="QTabWidget" name="tabWidget">
      <property name="sizePolicy">
@@ -53,7 +40,7 @@
       <enum>QTabWidget::Rounded</enum>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <property name="documentMode">
       <bool>true</bool>
@@ -66,16 +53,7 @@
        <string>&amp;Player</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_6">
-       <property name="leftMargin">
-        <number>4</number>
-       </property>
-       <property name="topMargin">
-        <number>4</number>
-       </property>
-       <property name="rightMargin">
-        <number>4</number>
-       </property>
-       <property name="bottomMargin">
+       <property name="margin">
         <number>4</number>
        </property>
        <property name="spacing">
@@ -712,16 +690,7 @@
             <bool>false</bool>
            </property>
            <layout class="QGridLayout" name="gridLayout">
-            <property name="leftMargin">
-             <number>2</number>
-            </property>
-            <property name="topMargin">
-             <number>2</number>
-            </property>
-            <property name="rightMargin">
-             <number>2</number>
-            </property>
-            <property name="bottomMargin">
+            <property name="margin">
              <number>2</number>
             </property>
             <property name="spacing">
@@ -828,16 +797,7 @@
             <string>Bow</string>
            </property>
            <layout class="QGridLayout" name="gridLayout_8">
-            <property name="leftMargin">
-             <number>2</number>
-            </property>
-            <property name="topMargin">
-             <number>2</number>
-            </property>
-            <property name="rightMargin">
-             <number>2</number>
-            </property>
-            <property name="bottomMargin">
+            <property name="margin">
              <number>2</number>
             </property>
             <property name="spacing">
@@ -921,16 +881,7 @@
           <string>Bug Net</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_2">
-          <property name="leftMargin">
-           <number>2</number>
-          </property>
-          <property name="topMargin">
-           <number>2</number>
-          </property>
-          <property name="rightMargin">
-           <number>2</number>
-          </property>
-          <property name="bottomMargin">
+          <property name="margin">
            <number>2</number>
           </property>
           <property name="spacing">
@@ -991,16 +942,7 @@
           <string>Slingshot</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_3">
-          <property name="leftMargin">
-           <number>2</number>
-          </property>
-          <property name="topMargin">
-           <number>2</number>
-          </property>
-          <property name="rightMargin">
-           <number>2</number>
-          </property>
-          <property name="bottomMargin">
+          <property name="margin">
            <number>2</number>
           </property>
           <property name="spacing">
@@ -1163,16 +1105,7 @@
           <string>Misc</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_4">
-          <property name="leftMargin">
-           <number>2</number>
-          </property>
-          <property name="topMargin">
-           <number>2</number>
-          </property>
-          <property name="rightMargin">
-           <number>2</number>
-          </property>
-          <property name="bottomMargin">
+          <property name="margin">
            <number>2</number>
           </property>
           <property name="spacing">
@@ -1400,16 +1333,7 @@
           <string>Swords</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_10">
-          <property name="leftMargin">
-           <number>2</number>
-          </property>
-          <property name="topMargin">
-           <number>2</number>
-          </property>
-          <property name="rightMargin">
-           <number>2</number>
-          </property>
-          <property name="bottomMargin">
+          <property name="margin">
            <number>2</number>
           </property>
           <property name="spacing">
@@ -1563,6 +1487,19 @@
          </property>
         </spacer>
        </item>
+       <item row="0" column="4">
+        <spacer name="horizontalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="questItemTab">
@@ -1576,16 +1513,7 @@
           <string>Quest Items</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_13">
-          <property name="leftMargin">
-           <number>2</number>
-          </property>
-          <property name="topMargin">
-           <number>2</number>
-          </property>
-          <property name="rightMargin">
-           <number>2</number>
-          </property>
-          <property name="bottomMargin">
+          <property name="margin">
            <number>2</number>
           </property>
           <property name="spacing">
@@ -2734,6 +2662,19 @@
           </item>
          </layout>
         </widget>
+       </item>
+       <item row="0" column="3">
+        <spacer name="horizontalSpacer_4">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>
