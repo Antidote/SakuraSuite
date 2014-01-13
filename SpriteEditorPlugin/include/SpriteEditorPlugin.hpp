@@ -21,6 +21,8 @@
 #include <QIcon>
 #include "PluginInterface.hpp"
 
+class QAction;
+
 class SPRITEEDITORPLUGIN_EXPORT SpriteEditorPlugin : public QObject, public PluginInterface
 {
     Q_OBJECT
@@ -63,8 +65,9 @@ signals:
     void newDocument(DocumentBase *);
     void enabledChanged();
 public slots:
-
+    void onNewDocument();
 private:
+    QAction* m_newDocumentAction;
     bool m_enabled;
     QString m_path;
     QIcon m_icon;

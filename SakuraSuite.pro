@@ -16,3 +16,5 @@ SUBDIRS += \
     SkywardSwordPlugin \ 
     SpriteEditorPlugin
 
+TRANSLATIONS += \
+    en_ES.ts

@@ -52,6 +52,7 @@ void SettingsDialog::loadSettings()
 {
     // Region Settings
     SettingsManager* settings = SettingsManager::instance();
+    ui->settingsTab->setCurrentIndex(0);
     switch(settings->defaultRegion())
     {
         case SettingsManager::NTSCU: ui->ntscURB->setChecked(true); break;

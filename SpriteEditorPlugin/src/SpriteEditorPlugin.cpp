@@ -15,23 +15,30 @@
 
 #include "SpriteEditorPlugin.hpp"
 #include "SpriteDocument.hpp"
+#include "MainWindowBase.hpp"
+#include <QAction>
+#include <QMenu>
 
 SpriteEditorPlugin* SpriteEditorPlugin::m_instance = NULL;
 
 SpriteEditorPlugin::SpriteEditorPlugin()
-    : m_enabled(true)
+    : m_enabled(true),
+      m_newDocumentAction(new QAction("Sprite Container Document", this))
 {
     m_instance = this;
 }
 
 SpriteEditorPlugin::~SpriteEditorPlugin()
 {
-
+    m_mainWindow->newDocumentMenu()->removeAction(m_newDocumentAction);
+    delete m_newDocumentAction;
+    m_newDocumentAction = NULL;
 }
 
 void SpriteEditorPlugin::initialize(MainWindowBase *mainWindow)
 {
     m_mainWindow = mainWindow;
+    m_mainWindow->newDocumentMenu()->addAction(m_newDocumentAction);
 }
 
 QString SpriteEditorPlugin::filter() const

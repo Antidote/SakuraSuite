@@ -64,6 +64,8 @@ signals:
     void enabledChanged();
 public slots:
 
+private slots:
+    void onNewDocument();
 private:
     QAction* m_actionNewDocument;
     bool m_enabled;

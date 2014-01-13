@@ -55,7 +55,6 @@ MainWindow::MainWindow(QWidget *parent) :
   #endif
 {
     ui->setupUi(this);
-    setWindowIcon(QIcon(":/about/SakuraSuite.png"));
 
 #ifndef DEBUG
     // lock Application
@@ -69,7 +68,6 @@ MainWindow::MainWindow(QWidget *parent) :
     // lets load the plugins
     m_pluginsManager->loadPlugins();
 
-    ui->actionExportWiiSave->setVisible(false);
     m_preferencesDialog = new PreferencesDialog(m_keyManager, this);
     connect(&m_lockTimer, SIGNAL(timeout()), SLOT(onLockTimeout()));
 
@@ -116,10 +114,15 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionPreferences, SIGNAL(triggered()), m_preferencesDialog, SLOT(exec()));
     // Hide the toolbar if it has no actions
     ui->mainToolBar->setVisible((ui->mainToolBar->actions().count() > 0));
+
+    QSettings settings;
+    if (settings.value(Constants::Settings::SAKURASUITE_CHECK_ON_START, false).toBool())
+        onCheckUpdate();
 }
 
 MainWindow::~MainWindow()
 {
+    QFile(Constants::SAKURASUITE_LOCK_FILE).remove();
 #if defined(SS_PREVIEW) || defined(SS_INTERNAL)
     if (m_previewLayout)
     {
@@ -134,7 +137,6 @@ MainWindow::~MainWindow()
     }
 #endif
 
-    QFile(Constants::SAKURASUITE_LOCK_FILE).remove();
     QSettings settings;
     settings.setValue("mainWindowGeometry", saveGeometry());
     settings.setValue("mainWindowState", saveState());
@@ -371,6 +373,7 @@ void MainWindow::onNewDocument(DocumentBase* document)
     ui->documentList->addItem(item);
     ui->documentList->setCurrentItem(item);
     m_currentFile = document;
+    connect(document, SIGNAL(modified()), this, SLOT(updateWindowTitle()));
     updateWindowTitle();
 }
 
@@ -430,6 +433,7 @@ void MainWindow::openFile(const QString& currentFile)
         msgBox.exec();
         return;
     }
+
     PluginInterface* loader = m_pluginsManager->preferredPlugin(filePath);
     if (!loader)
     {
@@ -610,28 +614,36 @@ void MainWindow::onSaveAs()
     if (!m_currentFile)
         return;
     QString MRD = mostRecentDirectory();
-    QString file = QFileDialog::getSaveFileName(this, "Save file as...", MRD, m_fileFilters.join(";;").trimmed());
+    QString file = QFileDialog::getSaveFileName(this, "Save file as...", MRD, m_currentFile->loadedBy()->filter());
 
     if (file.isEmpty())
         return;
 
-    cleanPath(file);
-    if (cleanPath(m_currentFile->filePath()) != file)
+    file = cleanPath(file);
+    QListWidgetItem* item = ui->documentList->currentItem();
+    QString currentPath = cleanPath(item->data(FILEPATH).toString());
+    bool success = false;
+
+    if (currentPath != file && m_currentFile->save(file))
     {
-        m_documents.remove(cleanPath(m_currentFile->filePath()));
-        m_currentFile->save(file);
+        m_documents.remove(currentPath);
         file = cleanPath(m_currentFile->filePath());
         m_documents[file] = m_currentFile;
-        QListWidgetItem* item = ui->documentList->currentItem();
         item->setData(FILENAME, cleanPath(m_currentFile->fileName()));
         item->setData(FILEPATH, file);
         item->setText(item->data(FILENAME).toString());
+        updateMRU(file);
+        success = true;
     }
-    else
+    else if (m_currentFile->save())
     {
-        m_currentFile->save();
+        success = true;
     }
 
+    if (success)
+        statusBar()->showMessage(tr("Save successful"), 2000);
+    else
+        statusBar()->showMessage(tr("Save failed"), 2000);
     updateWindowTitle();
 }
 
@@ -748,6 +760,7 @@ void MainWindow::updateWindowTitle()
         ui->documentList->currentItem()->setText(ui->documentList->currentItem()->data(FILENAME).toString());
     }
 
+    ui->actionSave->setEnabled(m_currentFile->isDirty());
     setWindowTitle(Constants::SAKURASUITE_TITLE_FILE.arg(filename).arg(m_currentFile->isDirty() ? Constants::SAKURASUITE_TITLE_DIRTY : ""));
 }
 
@@ -777,15 +790,15 @@ void MainWindow::onUpdateError(Updater::ErrorType et)
         case Updater::UnableToConnect:
             m_updateMBox.setWindowTitle(Constants::SAKURASUITE_UPDATE_CONTACT_ERROR);
             m_updateMBox.setText(Constants::SAKURASUITE_UPDATE_CONTACT_ERROR_MSG);
-            break;
+        break;
         case Updater::ParseError:
             m_updateMBox.setWindowTitle(Constants::SAKURASUITE_UPDATE_PARSE_ERROR);
             m_updateMBox.setText(Constants::SAKURASUITE_UPDATE_PARSE_ERROR_MSG.arg(m_updater->errorString()));
-            break;
+        break;
         case Updater::NoPlatform:
             m_updateMBox.setWindowTitle(Constants::SAKURASUITE_UPDATE_PLATFORM);
             m_updateMBox.setText(Constants::SAKURASUITE_UPDATE_PLATFORM_MSG);
-            break;
+        break;
     }
     m_updateMBox.exec();
 }
@@ -817,8 +830,6 @@ void MainWindow::onLockTimeout()
 
 void MainWindow::showEvent(QShowEvent* se)
 {
-    QMainWindow::showEvent(se);
-
     if (m_pluginsManager->plugins().count() <= 0)
     {
         QMessageBox mbox;
@@ -826,13 +837,11 @@ void MainWindow::showEvent(QShowEvent* se)
         mbox.setText(Constants::SAKURASUITE_NO_PLUGINS_ERROR_MSG);
         mbox.setStandardButtons(QMessageBox::Ok);
         mbox.exec();
-        exit(1);
+        QTimer::singleShot(10, qApp, SLOT(quit()));
         return;
     }
 
-    QSettings settings;
-    if (settings.value(Constants::Settings::SAKURASUITE_CHECK_ON_START, false).toBool())
-        onCheckUpdate();
+    QMainWindow::showEvent(se);
 }
 
 // Checklock returns true if lock exists
@@ -1005,8 +1014,8 @@ void MainWindow::onStyleChanged()
         else
             qApp->setStyle(a->text());
         QSettings().setValue(Constants::Settings::SAKURASUITE_CURRENT_STYLE, (style.contains("default") ?
-                                                                               QSettings().value(Constants::Settings::SAKURASUITE_DEFAULT_STYLE).toString()
-                                                                             : style));
+                                                                                  QSettings().value(Constants::Settings::SAKURASUITE_DEFAULT_STYLE).toString()
+                                                                                : style));
     }
 }
 

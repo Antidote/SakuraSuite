@@ -10,7 +10,6 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = pluginframework
 TEMPLATE = lib
 CONFIG += staticlib
-DESTDIR = $$PWD
 
 CONFIG(release, release|debug) {
     DEFINES -= WK2_DEBUG

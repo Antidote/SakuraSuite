@@ -14,7 +14,7 @@
 // along with Sakura Suite.  If not, see <http://www.gnu.org/licenses/>
 
 #include "OoTSavePlugin.hpp"
-#include "DocumentBase.hpp"
+#include "GameDocument.hpp"
 
 #include <MainWindowBase.hpp>
 #include <QAction>
@@ -27,6 +27,7 @@ OoTSavePlugin::OoTSavePlugin()
       m_icon(QIcon(":/icons/Ocarina64x64.png"))
 {
     m_actionNewDocument->setIcon(m_icon);
+    connect(m_actionNewDocument, SIGNAL(triggered()), this, SLOT(onNewDocument()));
 }
 
 OoTSavePlugin::~OoTSavePlugin()
@@ -58,7 +59,7 @@ QString OoTSavePlugin::name() const
 
 QString OoTSavePlugin::author() const
 {
-    return "Phillip Stephens";
+    return "Phillip \"Antidote\" Stephens";
 }
 
 QString OoTSavePlugin::version() const
@@ -134,6 +135,11 @@ void OoTSavePlugin::doUpdate()
 MainWindowBase*OoTSavePlugin::mainWindow() const
 {
     return m_mainWindow;
+}
+
+void OoTSavePlugin::onNewDocument()
+{
+    emit newDocument(new GameDocument(this));
 }
 
 Updater* OoTSavePlugin::updater()

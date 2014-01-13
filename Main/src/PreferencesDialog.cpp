@@ -67,6 +67,7 @@ PreferencesDialog::~PreferencesDialog()
 void PreferencesDialog::showEvent(QShowEvent* se)
 {
     QDialog::showEvent(se);
+    ui->settingsTabView->setCurrentIndex(0);
     QSettings settings;
 
     MainWindow* mainWindow = qobject_cast<MainWindow*>(parent());

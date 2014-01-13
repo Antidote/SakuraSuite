@@ -164,10 +164,23 @@ void PluginsManager::loadPlugins()
         pluginsDir.cdUp();
     }
 #endif
-    pluginsDir.cd("plugins");
 
     QMessageBox mbox(m_mainWindow);
-    mbox.setWindowTitle("Error reloading plugin...");
+    mbox.setWindowTitle("Error loading plugins...");
+    // If we are unable to cd into the plugins directory, we should try the applications directory
+    // in the users home path
+    if (!pluginsDir.cd("plugins"))
+    {
+        pluginsDir = QDir(QDir::homePath() + "/.sakurasuite");
+        if (!pluginsDir.cd("plugins"))
+        {
+            mbox.setText("Unable to acquire plugin directory");
+            mbox.exec();
+            return;
+        }
+        qDebug() << pluginsDir.absolutePath();
+
+    }
 
     foreach (QString fileName, pluginsDir.entryList(QDir::Files)) {
         QPluginLoader* loader = new QPluginLoader(pluginsDir.absoluteFilePath(fileName));
@@ -231,13 +244,8 @@ void PluginsManager::onEnabledChanged()
         settings.beginGroup(plugin->name());
         settings.setValue("enabled", plugin->enabled());
         if (!plugin->enabled())
-        {
-
             parent->removeFileFilter(plugin->filter());
-        }
         else
-        {
             parent->addFileFilter(plugin->filter());
-        }
     }
 }

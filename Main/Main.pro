@@ -32,12 +32,9 @@ CONFIG(debug, debug|release){
 
 win32:RC_FILE = resources/mainicon.rc
 
-DESTDIR = ../
-LIBS += -L../PluginFramework -lpluginframework \
-        -L../Updater -lupdater
-
-TRANSLATIONS += \
-    lang/en_ES.ts
+DESTDIR = $$OUT_PWD/../
+LIBS += -L$$OUT_PWD/../PluginFramework -lpluginframework \
+        -L$$OUT_PWD/../Updater -lupdater
 
 SOURCES += \
     src/MainWindow.cpp \

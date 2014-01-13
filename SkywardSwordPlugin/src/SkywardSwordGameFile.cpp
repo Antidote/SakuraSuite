@@ -65,7 +65,7 @@ SkywardSwordGameDocument::SkywardSwordGameDocument(const PluginInterface *loader
             memset(data, 0, 0x53C0);
             SkywardSwordEditorForm* sw = new SkywardSwordEditorForm(this, data);
             sw->setNew(true);
-            tw->addTab(sw, QIcon(QString(":/icon/Game%1").arg(i+1)), tr("&%1 New Game").arg(i + 1));
+            tw->addTab(sw, QIcon(QString(":/icons/Game%1").arg(i+1)), tr("&%1 New Game").arg(i + 1));
             connect(sw, SIGNAL(modified()), this, SLOT(onModified()));
         }
         setDirty(true);
@@ -342,7 +342,7 @@ void SkywardSwordGameDocument::onModified()
     for (int i = 0; i < tw->count(); i++)
     {
         SkywardSwordEditorForm* sw = qobject_cast<SkywardSwordEditorForm*>(tw->widget(i));
-        tw->setTabIcon(i, QIcon(QString(":/icon/Game%1").arg(i + 1)));
+        tw->setTabIcon(i, QIcon(QString(":/icons/Game%1").arg(i + 1)));
         if (!sw->isNew())
             tw->setTabText(i, QString("&%1 %2").arg(i+1).arg(sw->playerName()));
         else

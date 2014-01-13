@@ -11,7 +11,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = ootsaveplugin
 TEMPLATE = lib
 CONFIG += plugin
-DESTDIR = ../plugins
+DESTDIR = $$OUT_PWD/../plugins
 UI_DIR = ui
 
 CONFIG(release, release|debug) {
@@ -43,7 +43,7 @@ SOURCES += \
 INCLUDEPATH += \
     ../PluginFramework/include
 
-LIBS += -L../PluginFramework -lpluginframework
+LIBS += -L$$OUT_PWD/../PluginFramework -lpluginframework
 
 HEADERS +=\
     OoTSavePlugin.hpp \

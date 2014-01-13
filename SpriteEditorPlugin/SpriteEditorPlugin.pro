@@ -19,17 +19,17 @@ INCLUDEPATH += \
     ../libzelda/include \
     ../Updater/include
 
-DESTDIR = ../plugins
+DESTDIR = $$OUT_PWD/../plugins
 UI_DIR = ui
 
 QMAKE_CXXFLAGS = -std=c++0x
 
 LIBS += \
-    -L../PluginFramework -lpluginframework \
-    -L../Updater -lupdater
+    -L$$OUT_PWD/../PluginFramework -lpluginframework \
+    -L$$OUT_PWD/../Updater -lupdater
 
 CONFIG(release, release|debug){
-    LIBS += -L../libzelda/lib -lzelda
+    LIBS += -L$$OUT_PWD/../libzelda/lib -lzelda
     DEFINES -= SS_DEBUG
     # We don't want the objects, or MOC sources
     # in the project directory, so tell qmake
@@ -40,7 +40,7 @@ CONFIG(release, release|debug){
 
 
 CONFIG(debug, debug|release){
-    LIBS += -L../libzelda/lib -lzelda-d
+    LIBS += -L$$OUT_PWD/../libzelda/lib -lzelda-d
     DEFINES += SS_DEBUG
     # We don't want the objects, or MOC sources
     # in the project directory, so tell qmake

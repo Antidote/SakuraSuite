@@ -85,7 +85,7 @@ QString SkywardSwordPlugin::name() const
 
 QString SkywardSwordPlugin::author() const
 {
-    return "Phillip Stephens";
+    return "Phillip \"Antidote\" Stephens";
 }
 
 QString SkywardSwordPlugin::version() const
