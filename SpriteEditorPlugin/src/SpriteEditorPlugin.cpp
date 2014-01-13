@@ -139,7 +139,7 @@ Updater* SpriteEditorPlugin::updater()
     return NULL;
 }
 
-QDialog* SpriteEditorPlugin::settingsDialog()
+PluginSettingsDialog* SpriteEditorPlugin::settingsDialog()
 {
     return NULL;
 }

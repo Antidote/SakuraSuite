@@ -1,4 +1,4 @@
-// This file is part of Sakura Suite.
+﻿// This file is part of Sakura Suite.
 //
 // Sakura Suite is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -55,6 +55,7 @@ MainWindow::MainWindow(QWidget *parent) :
   #endif
 {
     ui->setupUi(this);
+    setWindowIcon(QIcon(":/about/SakuraSuite.png"));
 
 #ifndef DEBUG
     // lock Application
@@ -64,6 +65,9 @@ MainWindow::MainWindow(QWidget *parent) :
         return;
     }
 #endif
+
+    // lets load the plugins
+    m_pluginsManager->loadPlugins();
 
     ui->actionExportWiiSave->setVisible(false);
     m_preferencesDialog = new PreferencesDialog(m_keyManager, this);
@@ -78,12 +82,8 @@ MainWindow::MainWindow(QWidget *parent) :
     m_lockTimer.setInterval(58*1000);
     m_lockTimer.start();
 
-    setWindowIcon(QIcon(":/icon/Bomb64x64.png"));
     m_defaultWindowGeometry = this->saveGeometry();
     m_defaultWindowState = this->saveState();
-
-    // lets load the plugins
-    m_pluginsManager->loadPlugins();
 
     // Setup "Styles" menu
     setupStyleActions();
@@ -115,7 +115,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->actionPreferences, SIGNAL(triggered()), m_preferencesDialog, SLOT(exec()));
     // Hide the toolbar if it has no actions
-    ui->mainToolBar->setVisible((ui->mainToolBar->actions().count() > 0 ? true : false));
+    ui->mainToolBar->setVisible((ui->mainToolBar->actions().count() > 0));
 }
 
 MainWindow::~MainWindow()
@@ -342,6 +342,11 @@ QToolBar* MainWindow::toolBar() const
 QMainWindow* MainWindow::mainWindow() const
 {
     return (QMainWindow*)this;
+}
+
+PluginsManager* MainWindow::pluginsManager() const
+{
+    return m_pluginsManager;
 }
 
 void MainWindow::onNewDocument(DocumentBase* document)

@@ -6,6 +6,7 @@ class QMenu;
 class QStatusBar;
 class QToolBar;
 class QMainWindow;
+class PluginsManager;
 
 class MainWindowBase
 {
@@ -19,6 +20,7 @@ public:
     virtual QStatusBar*  statusBar()      const=0;
     virtual QToolBar*    toolBar()        const=0;
     virtual QMainWindow* mainWindow()     const=0;
+    virtual PluginsManager* pluginsManager()const=0;
 };
 
 #endif // MAINWINDOWBASE_HPP

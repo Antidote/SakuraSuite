@@ -1,8 +1,12 @@
-#include "PreferencesDialog.hpp"
+﻿#include "PreferencesDialog.hpp"
 #include "ui_PreferencesDialog.h"
 #include "Constants.hpp"
 #include "WiiKeyManager.hpp"
+#include "PluginsManager.hpp"
+#include "PluginInterface.hpp"
+#include "MainWindow.hpp"
 
+#include <PluginSettingsDialog.hpp>
 #include <QSettings>
 #include <QFile>
 #include <QDateTime>
@@ -11,6 +15,7 @@
 #include <QMessageBox>
 #include <QUrl>
 #include <QFileDialog>
+#include <QDebug>
 
 class HexValidator : public QValidator
 {
@@ -41,6 +46,10 @@ PreferencesDialog::PreferencesDialog(WiiKeyManager* keyManager, QWidget *parent)
     m_keyManager(keyManager)
 {
     ui->setupUi(this);
+    MainWindow* mainWindow = qobject_cast<MainWindow*>(parent);
+    if (mainWindow)
+        ui->tabWidget->setTabIcon(0, mainWindow->windowIcon());
+
     // Key Settings
     ui->ngIDLineEdit->setValidator(new HexValidator(this));
     ui->ngKeyIDLineEdit->setValidator(new HexValidator(this));
@@ -59,6 +68,26 @@ void PreferencesDialog::showEvent(QShowEvent* se)
 {
     QDialog::showEvent(se);
     QSettings settings;
+
+    MainWindow* mainWindow = qobject_cast<MainWindow*>(parent());
+    if (mainWindow)
+    {
+        ui->tabWidget->setTabIcon(0, mainWindow->windowIcon());
+        foreach (PluginInterface* plugin, mainWindow->pluginsManager()->plugins())
+        {
+            qDebug() << "Attempting to add tab " << plugin->name();
+            if (plugin->settingsDialog() != NULL && plugin->settingsDialog()->centralWidget() != NULL)
+            {
+                ui->tabWidget->addTab(plugin->settingsDialog()->centralWidget(), plugin->icon(), plugin->name());
+                ui->tabWidget->widget(ui->tabWidget->count() -1)->setContentsMargins(9, 9, 9, 9);
+                plugin->settingsDialog()->loadSettings();
+                connect(this, SIGNAL(accepted()), plugin->settingsDialog(), SLOT(accept()));
+                connect(this, SIGNAL(rejected()), plugin->settingsDialog(), SLOT(reject()));
+                connect(this, SIGNAL(accepted()), plugin->settingsDialog(), SLOT(restoreOwnership()));
+                connect(this, SIGNAL(rejected()), plugin->settingsDialog(), SLOT(restoreOwnership()));
+            }
+        }
+    }
 
     m_currentStyle = settings.value(Constants::Settings::SAKURASUITE_CURRENT_STYLE).toString();
     m_defaultStyle = settings.value(Constants::Settings::SAKURASUITE_DEFAULT_STYLE).toString();
@@ -168,13 +197,14 @@ void PreferencesDialog::accept()
     }
 
     QDialog::accept();
+    removePluginTabs();
 }
 
 void PreferencesDialog::reject()
 {
     qApp->setStyle(m_currentStyle);
-
     QDialog::reject();
+    removePluginTabs();
 }
 
 void PreferencesDialog::onCurrentIndexChanged(QString style)
@@ -302,4 +332,14 @@ void PreferencesDialog::updateKeys()
     ui->ngSigPt2LineEdit->setText(m_keyManager->ngSig().mid(30).toHex());
     ui->ngPrivLineEdit->setText(m_keyManager->ngPriv().toHex());
     ui->macAddrLineEdit->setText(m_keyManager->macAddr().toHex());
+}
+
+void PreferencesDialog::removePluginTabs()
+{/*
+    for (int i = 1; i < ui->tabWidget->count(); i++)
+    {
+        qDebug() << "Removing tab: " << ui->tabWidget->tabText(i);
+        ui->tabWidget->removeTab(i);
+    }
+*/
 }

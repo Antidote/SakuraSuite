@@ -24,6 +24,7 @@ class DocumentBase;
 class WiiKeyManagerBase;
 class QDialog;
 class MainWindowBase;
+class PluginSettingsDialog;
 
 class PluginInterface
 {
@@ -47,7 +48,7 @@ public:
 
     virtual DocumentBase* loadFile(const QString& file) const=0;
 
-    virtual QDialog* settingsDialog()=0;
+    virtual PluginSettingsDialog* settingsDialog()=0;
     virtual Updater* updater()=0;
     virtual QObject* object()=0;
 
@@ -60,5 +61,5 @@ protected:
     virtual void newDocument(DocumentBase*)=0;
 };
 
-Q_DECLARE_INTERFACE(PluginInterface, "org.wiiking2.PluginInterface/1.1a")
+Q_DECLARE_INTERFACE(PluginInterface, "org.wiiking2.PluginInterface/1.2a")
 #endif // PLUGIN_HPP

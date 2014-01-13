@@ -1,4 +1,4 @@
-// This file is part of Sakura Suite.
+﻿// This file is part of Sakura Suite.
 //
 // Sakura Suite is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,11 +17,13 @@
 #include "SettingsManager.hpp"
 #include "Constants.hpp"
 #include "ui_SettingsDialog.h"
+#include <QShowEvent>
 
 #include <QSettings>
+#include <QDebug>
 
 SettingsDialog::SettingsDialog(QWidget *parent) :
-    QDialog(parent),
+    PluginSettingsDialog(parent),
     ui(new Ui::SettingsDialog)
 {
     ui->setupUi(this);
@@ -30,6 +32,42 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
 SettingsDialog::~SettingsDialog()
 {
     delete ui;
+}
+
+QWidget* SettingsDialog::centralWidget() const
+{
+    return ui->settingsTab;
+}
+
+void SettingsDialog::restoreOwnership()
+{
+    if (ui->settingsTab->parent() != this)
+    {
+        ui->settingsTab->setParent(this);
+        ui->gridLayout->addWidget(ui->settingsTab, 0, 0, 2, 2);
+    }
+}
+
+void SettingsDialog::loadSettings()
+{
+    // Region Settings
+    SettingsManager* settings = SettingsManager::instance();
+    switch(settings->defaultRegion())
+    {
+        case SettingsManager::NTSCU: ui->ntscURB->setChecked(true); break;
+        case SettingsManager::NTSCJ: ui->ntscJRB->setChecked(true); break;
+        case SettingsManager::PAL:   ui->palRB  ->setChecked(true); break;
+    }
+
+    ui->ntscUNameLE      ->setText(settings->defaultPlayerNameForRegion(SettingsManager::NTSCU));
+    ui->ntscUNameLE      ->setModified(false);
+    ui->ntscJNameLE      ->setText(settings->defaultPlayerNameForRegion(SettingsManager::NTSCJ));
+    ui->ntscJNameLE      ->setModified(false);
+    ui->palNameLE        ->setText(settings->defaultPlayerNameForRegion(SettingsManager::PAL  ));
+    ui->palNameLE        ->setModified(false);
+    ui->updateUrlLineEdit->setText(settings->updateUrl());
+    ui->updateUrlLineEdit->setModified(false);
+    ui->checkOnStart     ->setChecked(settings->updateCheckOnStart());
 }
 
 void SettingsDialog::accept()
@@ -59,15 +97,10 @@ void SettingsDialog::onTextChanged(QString text)
     if (sender() == ui->updateUrlLineEdit)
     {
         if (text.isEmpty() || !text.contains(http))
-        {
             ui->updateUrlLineEdit->setProperty("valid", false);
-            ui->statusLabel->setText("Invalid url");
-        }
         else
-        {
             ui->updateUrlLineEdit->setProperty("valid", true);
-            ui->statusLabel->clear();
-        }
+
         style()->polish(ui->updateUrlLineEdit);
 
         // If the text matches what is currently stored
@@ -81,22 +114,5 @@ void SettingsDialog::showEvent(QShowEvent* se)
 {
     QDialog::showEvent(se);
 
-    // Region Settings
-    SettingsManager* settings = SettingsManager::instance();
-    switch(settings->defaultRegion())
-    {
-        case SettingsManager::NTSCU: ui->ntscURB->setChecked(true); break;
-        case SettingsManager::NTSCJ: ui->ntscJRB->setChecked(true); break;
-        case SettingsManager::PAL:   ui->palRB  ->setChecked(true); break;
-    }
-
-    ui->ntscUNameLE      ->setText(settings->defaultPlayerNameForRegion(SettingsManager::NTSCU));
-    ui->ntscUNameLE      ->setModified(false);
-    ui->ntscJNameLE      ->setText(settings->defaultPlayerNameForRegion(SettingsManager::NTSCJ));
-    ui->ntscJNameLE      ->setModified(false);
-    ui->palNameLE        ->setText(settings->defaultPlayerNameForRegion(SettingsManager::PAL  ));
-    ui->palNameLE        ->setModified(false);
-    ui->updateUrlLineEdit->setText(settings->updateUrl());
-    ui->updateUrlLineEdit->setModified(false);
-    ui->checkOnStart     ->setChecked(settings->updateCheckOnStart());
+    loadSettings();
 }

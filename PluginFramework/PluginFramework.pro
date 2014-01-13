@@ -32,7 +32,8 @@ CONFIG(debug, debug|release) {
 
 SOURCES += \
     src/DocumentBase.cpp \
-    src/GameDocument.cpp
+    src/GameDocument.cpp \
+    src/PluginSettingsDialog.cpp
 
 INCLUDEPATH += include
 
@@ -41,6 +42,7 @@ HEADERS += \
     include/DocumentBase.hpp \
     include/GameDocument.hpp \
     include/WiiKeyManagerBase.hpp \
-    include/MainWindowBase.hpp
+    include/MainWindowBase.hpp \
+    include/PluginSettingsDialog.hpp
 
 

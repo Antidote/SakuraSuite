@@ -56,7 +56,7 @@ public:
 
     DocumentBase* loadFile(const QString& file) const;
 
-    QDialog* settingsDialog();
+    PluginSettingsDialog* settingsDialog();
     Updater* updater();
     QObject* object();
 

@@ -33,7 +33,7 @@
      </property>
      <property name="icon">
       <iconset resource="../resources/resources.qrc">
-       <normaloff>:/icon/Game2</normaloff>:/icon/Game2</iconset>
+       <normaloff>:/icons/Game2</normaloff>:/icons/Game2</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -50,7 +50,7 @@
      </property>
      <property name="icon">
       <iconset resource="../resources/resources.qrc">
-       <normaloff>:/icon/Game3</normaloff>:/icon/Game3</iconset>
+       <normaloff>:/icons/Game3</normaloff>:/icons/Game3</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -67,7 +67,7 @@
      </property>
      <property name="icon">
       <iconset resource="../resources/resources.qrc">
-       <normaloff>:/icon/Game1</normaloff>:/icon/Game1</iconset>
+       <normaloff>:/icons/Game1</normaloff>:/icons/Game1</iconset>
      </property>
      <property name="iconSize">
       <size>

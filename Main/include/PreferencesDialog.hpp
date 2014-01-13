@@ -32,6 +32,7 @@ private slots:
 
 private:
     void updateKeys();
+    void removePluginTabs();
     Ui::PreferencesDialog *ui;
     QString    m_currentStyle;
     bool       m_currentChanged;

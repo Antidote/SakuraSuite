@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/icon">
+    <qresource prefix="/icons">
         <file>Ocarina64x64.png</file>
     </qresource>
 </RCC>

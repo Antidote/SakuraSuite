@@ -1,4 +1,4 @@
-// This file is part of Sakura Suite.
+﻿// This file is part of Sakura Suite.
 //
 // Sakura Suite is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -34,8 +34,8 @@ BEGIN
             VALUE "FileDescription", "Sakura Suite"
             VALUE "FileVersion", "0.1.1.0"
             VALUE "LegalCopyright", "Copyright (C) 2013 Wiiking2.com"
-            VALUE "InternalName", "wiiking2editor"
-            VALUE "OriginalFilename", "wiiking2editor.exe"
+            VALUE "InternalName", "sakurasuite"
+            VALUE "OriginalFilename", "sakurasuite.exe"
             VALUE "ProductName", "Sakura Suite"
             VALUE "ProductVersion", "0.1.1.0 Pre2"
         END

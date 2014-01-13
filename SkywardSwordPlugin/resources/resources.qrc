@@ -102,7 +102,7 @@
         <file alias="Piece">Triforce/Triforce_piece.png</file>
         <file alias="Glow">Triforce/Triforce_piece_glow.png</file>
     </qresource>
-    <qresource prefix="/icon">
+    <qresource prefix="/icons">
         <file>Bomb64x64.png</file>
         <file alias="Game1">Icons/game1Icon.png</file>
         <file alias="Game2">Icons/game2Icon.png</file>

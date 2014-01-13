@@ -1,4 +1,4 @@
-// This file is part of Sakura Suite.
+﻿// This file is part of Sakura Suite.
 //
 // Sakura Suite is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,12 +17,13 @@
 #define SETTINGSDIALOG_HPP
 
 #include <QDialog>
+#include <PluginSettingsDialog.hpp>
 
 namespace Ui {
 class SettingsDialog;
 }
 
-class SettingsDialog : public QDialog
+class SettingsDialog : public PluginSettingsDialog
 {
     Q_OBJECT
 
@@ -30,6 +31,9 @@ public:
     explicit SettingsDialog(QWidget *parent = 0);
     ~SettingsDialog();
 
+    QWidget* centralWidget() const;
+    void restoreOwnership();
+    void loadSettings();
 public slots:
     void accept();
     void onTextChanged(QString text);

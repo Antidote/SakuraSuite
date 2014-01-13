@@ -18,6 +18,7 @@
 #include "PluginInterface.hpp"
 #include "PluginsManager.hpp"
 #include "Constants.hpp"
+#include <PluginSettingsDialog.hpp>
 #include <Updater.hpp>
 #include <QMessageBox>
 

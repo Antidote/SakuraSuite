@@ -56,7 +56,13 @@ SOURCES += \
     src/SpriteInfo.cpp \
     src/SpriteEditorFrame.cpp \
     src/SpriteTree.cpp \
-    SpriteCanvas.cpp
+    src/SpriteCanvas.cpp \
+    src/SSprite.cpp \
+    src/SSpriteFile.cpp \
+    src/SSpriteFileReader.cpp \
+    src/SSpriteFileWriter.cpp \
+    src/SSpriteFrame.cpp \
+    src/SSpritePart.cpp
 
 HEADERS += \
     include/SpriteEditorPlugin.hpp\
@@ -66,7 +72,13 @@ HEADERS += \
     include/SpritePart.hpp \
     include/SpriteEditorFrame.hpp \
     include/SpriteTree.hpp \
-    SpriteCanvas.hpp
+    include/SpriteCanvas.hpp \
+    include/SSprite.hpp \
+    include/SSpriteFile.hpp \
+    include/SSpriteFileReader.hpp \
+    include/SSpriteFileWriter.hpp \
+    include/SSpriteFrame.hpp \
+    include/SSpritePart.hpp
 
 OTHER_FILES += \
     spriteeditor.json

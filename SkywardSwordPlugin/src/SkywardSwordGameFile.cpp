@@ -1,4 +1,4 @@
-// This file is part of Sakura Suite.
+﻿// This file is part of Sakura Suite.
 //
 // Sakura Suite is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -444,9 +444,9 @@ bool SkywardSwordGameDocument::loadData(zelda::io::BinaryReader reader)
             connect(sw, SIGNAL(modified()), this, SLOT(onModified()));
             connect(sw, SIGNAL(copy(SkywardSwordEditorForm*)), this, SLOT(onCopy(SkywardSwordEditorForm*)));
             if (!sw->isNew())
-                tw->addTab(sw, QIcon(QString(":/icon/Game%1").arg(i+1)), QString("&%1 %2").arg(i+1).arg(sw->playerName()));
+                tw->addTab(sw, QIcon(QString(":/icons/Game%1").arg(i+1)), QString("&%1 %2").arg(i+1).arg(sw->playerName()));
             else
-                tw->addTab(sw, QIcon(QString(":/icon/Game%1").arg(i+1)), tr("&%1 New Game").arg(i + 1));
+                tw->addTab(sw, QIcon(QString(":/icons/Game%1").arg(i+1)), tr("&%1 New Game").arg(i + 1));
         }
         m_skipData = (char*)reader.readBytes(0x80);
         return true;

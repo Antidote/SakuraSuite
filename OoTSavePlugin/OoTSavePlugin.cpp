@@ -1,4 +1,4 @@
-// This file is part of Sakura Suite.
+﻿// This file is part of Sakura Suite.
 //
 // Sakura Suite is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
 OoTSavePlugin::OoTSavePlugin()
     : m_actionNewDocument(new QAction("Ocarina of Time Document", this)),
       m_enabled(true),
-      m_icon(QIcon(":/icon/Ocarina64x64.png"))
+      m_icon(QIcon(":/icons/Ocarina64x64.png"))
 {
     m_actionNewDocument->setIcon(m_icon);
 }
@@ -141,7 +141,7 @@ Updater* OoTSavePlugin::updater()
     return NULL;
 }
 
-QDialog* OoTSavePlugin::settingsDialog()
+PluginSettingsDialog* OoTSavePlugin::settingsDialog()
 {
     return NULL;
 }

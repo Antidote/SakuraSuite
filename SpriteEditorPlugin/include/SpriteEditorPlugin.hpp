@@ -49,7 +49,7 @@ public:
     DocumentBase* loadFile(const QString& file) const;
     bool canLoad(const QString& filename);
 
-    QDialog* settingsDialog();
+    PluginSettingsDialog* settingsDialog();
     Updater* updater();
     QObject* object();
 

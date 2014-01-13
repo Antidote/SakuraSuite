@@ -74,7 +74,7 @@ public:
     QStatusBar* statusBar()  const;
     QToolBar* toolBar()      const;
     QMainWindow* mainWindow()const;
-
+    PluginsManager* pluginsManager() const;
 public slots:
     void onNewDocument(DocumentBase* document);
 protected slots:
@@ -133,12 +133,12 @@ private:
     Ui::MainWindow *ui;
     DocumentBase*                m_currentFile;
 
+    PluginsManager*          m_pluginsManager;
     QFileSystemWatcher       m_fileSystemWatcher;
     QList<QAction*>          m_recentFileActions;
     QAction*                 m_recentFileSeparator;
     QMap<QString, DocumentBase*> m_documents;
     QStringList              m_fileFilters;
-    PluginsManager*          m_pluginsManager;
     QByteArray               m_defaultWindowGeometry;
     QByteArray               m_defaultWindowState;
     AboutDialog*             m_aboutDialog;

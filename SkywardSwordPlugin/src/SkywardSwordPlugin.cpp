@@ -1,4 +1,4 @@
-// This file is part of Sakura Suite.
+﻿// This file is part of Sakura Suite.
 //
 // Sakura Suite is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ SkywardSwordPlugin* SkywardSwordPlugin::m_instance = NULL;
 SkywardSwordPlugin::SkywardSwordPlugin()
     : m_actionNewDocument(new QAction("Skyward Sword Document", this)),
       m_enabled(true),
-      m_icon(QIcon(":/icon/Bomb64x64.png")),
+      m_icon(QIcon(":/icons/Bomb64x64.png")),
       m_settingsDialog(NULL),
       m_updater(new Updater(this))
 {
@@ -237,7 +237,7 @@ Updater* SkywardSwordPlugin::updater()
     return m_updater;
 }
 
-QDialog* SkywardSwordPlugin::settingsDialog()
+PluginSettingsDialog* SkywardSwordPlugin::settingsDialog()
 {
     return m_settingsDialog;
 }
