@@ -17,4 +17,4 @@ SUBDIRS += \
     SpriteEditorPlugin
 
 TRANSLATIONS += \
-    en_EN.ts
+    en_US.ts
