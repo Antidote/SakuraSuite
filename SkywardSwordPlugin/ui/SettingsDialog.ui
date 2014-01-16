@@ -14,13 +14,22 @@
    <string>Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item row="0" column="0" colspan="2">
     <widget class="QTabWidget" name="settingsTab">
      <property name="currentIndex">
-      <number>1</number>
+      <number>2</number>
      </property>
      <property name="iconSize">
       <size>
@@ -46,7 +55,16 @@
           <string>Names</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_3">
-          <property name="margin">
+          <property name="leftMargin">
+           <number>2</number>
+          </property>
+          <property name="topMargin">
+           <number>2</number>
+          </property>
+          <property name="rightMargin">
+           <number>2</number>
+          </property>
+          <property name="bottomMargin">
            <number>2</number>
           </property>
           <item row="2" column="0">
@@ -121,7 +139,7 @@
      </widget>
      <widget class="QWidget" name="regionTab">
       <attribute name="icon">
-       <iconset resource="../../Main/resources/resources.qrc">
+       <iconset resource="../resources/resources.qrc">
         <normaloff>:/icons/flags/_unknown.png</normaloff>:/icons/flags/_unknown.png</iconset>
       </attribute>
       <attribute name="title">
@@ -200,12 +218,11 @@
      </widget>
      <widget class="QWidget" name="tab_3">
       <attribute name="icon">
-       <iconset theme="system-software-update">
-        <normaloff/>
-       </iconset>
+       <iconset resource="../resources/resources.qrc">
+        <normaloff>:/Bags/BombBagLarge</normaloff>:/Bags/BombBagLarge</iconset>
       </attribute>
       <attribute name="title">
-       <string>Page</string>
+       <string>Update</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_8">
        <item row="0" column="0">
@@ -276,7 +293,6 @@
   </layout>
  </widget>
  <resources>
-  <include location="../../Main/resources/resources.qrc"/>
   <include location="../resources/resources.qrc"/>
  </resources>
  <connections>

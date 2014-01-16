@@ -73,10 +73,8 @@ void PreferencesDialog::showEvent(QShowEvent* se)
     MainWindow* mainWindow = qobject_cast<MainWindow*>(parent());
     if (mainWindow)
     {
-        ui->tabWidget->setTabIcon(0, mainWindow->windowIcon());
         foreach (PluginInterface* plugin, mainWindow->pluginsManager()->plugins())
         {
-            qDebug() << "Attempting to add tab " << plugin->name();
             if (plugin->settingsDialog() != NULL && plugin->settingsDialog()->centralWidget() != NULL)
             {
                 ui->tabWidget->addTab(plugin->settingsDialog()->centralWidget(), plugin->icon(), plugin->name());
@@ -198,14 +196,12 @@ void PreferencesDialog::accept()
     }
 
     QDialog::accept();
-    removePluginTabs();
 }
 
 void PreferencesDialog::reject()
 {
     qApp->setStyle(m_currentStyle);
     QDialog::reject();
-    removePluginTabs();
 }
 
 void PreferencesDialog::onCurrentIndexChanged(QString style)
@@ -333,14 +329,4 @@ void PreferencesDialog::updateKeys()
     ui->ngSigPt2LineEdit->setText(m_keyManager->ngSig().mid(30).toHex());
     ui->ngPrivLineEdit->setText(m_keyManager->ngPriv().toHex());
     ui->macAddrLineEdit->setText(m_keyManager->macAddr().toHex());
-}
-
-void PreferencesDialog::removePluginTabs()
-{/*
-    for (int i = 1; i < ui->tabWidget->count(); i++)
-    {
-        qDebug() << "Removing tab: " << ui->tabWidget->tabText(i);
-        ui->tabWidget->removeTab(i);
-    }
-*/
 }

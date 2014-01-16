@@ -148,12 +148,16 @@ MainWindow::~MainWindow()
         file = NULL;
     }
 
-    m_keyManager->saveKeys();
+    delete m_preferencesDialog;
+    m_preferencesDialog = NULL;
     delete m_keyManager;
+    m_keyManager = NULL;
     delete m_pluginsManager;
     m_pluginsManager = NULL;
     delete ui;
+    ui = NULL;
 }
+
 void MainWindow::initUpdater()
 {
     connect(m_updater, SIGNAL(done()), this, SLOT(onUpdateDone()));
@@ -360,7 +364,7 @@ void MainWindow::onNewDocument(DocumentBase* document)
     if (gd && gd->supportsWiiSave())
         gd->setKeyManager(m_keyManager);
 
-    QString filePath = QString("/tmp/Untitled %1 Document %2").arg(document->loadedBy()->name()).arg(++m_untitledDocs);
+    QString filePath = QString("%1/Untitled %2 Document %3").arg(QDir::tempPath()).arg(document->loadedBy()->name()).arg(++m_untitledDocs);
     m_documents[cleanPath(filePath)] = document;
     PluginInterface* loader = document->loadedBy();
     QListWidgetItem* item = new QListWidgetItem();

@@ -46,10 +46,11 @@ SkywardSwordPlugin::SkywardSwordPlugin()
 
 SkywardSwordPlugin::~SkywardSwordPlugin()
 {
-    if (m_updater)
-        delete m_updater;
-    if (m_settingsDialog)
-        delete m_settingsDialog;
+    m_mainWindow->newDocumentMenu()->removeAction(m_actionNewDocument);
+    delete m_updater;
+    m_updater = NULL;
+    delete m_settingsDialog;
+    m_settingsDialog = NULL;
 }
 
 void SkywardSwordPlugin::initialize(MainWindowBase *mainWindow)
@@ -58,7 +59,7 @@ void SkywardSwordPlugin::initialize(MainWindowBase *mainWindow)
     m_mainWindow->newDocumentMenu()->addAction(m_actionNewDocument);
     connect(m_actionNewDocument, SIGNAL(triggered()), this, SLOT(onNewDocument()));
 
-    m_settingsDialog = new SettingsDialog(qApp->topLevelWidgets()[0]);
+    m_settingsDialog = new SettingsDialog((QWidget*)m_mainWindow->mainWindow());
     connect(m_updater, SIGNAL(done()), this, SLOT(onUpdaterDone()));
     connect(m_updater, SIGNAL(error(Updater::ErrorType)), this, SLOT(onUpdaterError(Updater::ErrorType)));
     connect(m_updater, SIGNAL(noUpdate()), this, SLOT(onNoUpdate()));

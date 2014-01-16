@@ -18,8 +18,8 @@
 IDI_ICON1  ICON DISCARDABLE "mainicon.ico"
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,1,1,0
- PRODUCTVERSION 0,1,1,0
+ FILEVERSION 1,0,0,0
+ PRODUCTVERSION 1,0,0,0
  FILEFLAGS 0x0L
  FILEFLAGSMASK 0x3fL
  FILEOS 0x00040004L
@@ -32,12 +32,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "Wiiking2.com"
             VALUE "FileDescription", "Sakura Suite"
-            VALUE "FileVersion", "0.1.1.0"
+            VALUE "FileVersion", "1.0.0"
             VALUE "LegalCopyright", "Copyright (C) 2013 Wiiking2.com"
             VALUE "InternalName", "sakurasuite"
             VALUE "OriginalFilename", "sakurasuite.exe"
             VALUE "ProductName", "Sakura Suite"
-            VALUE "ProductVersion", "0.1.1.0 Pre2"
+            VALUE "ProductVersion", "1.0.0"
         END
     END
     BLOCK "VarFileInfo"

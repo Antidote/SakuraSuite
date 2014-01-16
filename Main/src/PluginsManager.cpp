@@ -32,13 +32,16 @@ PluginsManager::~PluginsManager()
 {
     foreach (QPluginLoader* loader, m_pluginLoaders.values())
     {
-        loader->unload();
+        if (loader->isLoaded())
+            loader->unload();
+
         delete loader;
         loader = NULL;
     }
 
     m_pluginLoaders.clear();
     m_plugins.clear();
+    delete m_pluginsDialog;
 }
 
 void PluginsManager::dialog()
@@ -104,6 +107,7 @@ bool PluginsManager::reloadByName(const QString& name)
             }
             else
             {
+                loader->unload();
                 mbox.setText(tr("Error loading %1<br />%2")
                              .arg(pluginPath)
                              .arg(loader->errorString()));
@@ -182,7 +186,8 @@ void PluginsManager::loadPlugins()
 
     }
 
-    foreach (QString fileName, pluginsDir.entryList(QDir::Files)) {
+    foreach (QString fileName, pluginsDir.entryList(QDir::Files))
+    {
         QPluginLoader* loader = new QPluginLoader(pluginsDir.absoluteFilePath(fileName));
         QObject *object = loader->instance();
 

@@ -54,7 +54,7 @@ const QString SAKURASUITE_TITLE                     = tr("Sakura Suite");
 // But the only way to set the window title to what you want is to
 // use setWindowTitle
 const QString SAKURASUITE_TITLE_FILE                = tr("%1%2 - Sakura Suite");
-const QString SAKURASUITE_TITLE_DIRTY               = tr("*");
+const QString SAKURASUITE_TITLE_DIRTY               = QString("*");
 const QString SAKURASUITE_APP_NAME                  = tr("sakurasuite");
 const QString SAKURASUITE_UPDATE_CHECKING           = tr("Checking for updates please wait...");
 const QString SAKURASUITE_UPDATE_CHECKING_MSG       = tr("%1 is checking for updates, please wait.")

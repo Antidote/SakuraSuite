@@ -107,6 +107,7 @@
         <file alias="Game1">Icons/game1Icon.png</file>
         <file alias="Game2">Icons/game2Icon.png</file>
         <file alias="Game3">Icons/game3Icon.png</file>
+        <file>flags/_unknown.png</file>
     </qresource>
     <qresource prefix="/BannerData">
         <file alias="E/subtitle.bin">BannerData/E/subtitle.bin</file>

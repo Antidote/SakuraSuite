@@ -22,8 +22,8 @@
 SpriteEditorPlugin* SpriteEditorPlugin::m_instance = NULL;
 
 SpriteEditorPlugin::SpriteEditorPlugin()
-    : m_enabled(true),
-      m_newDocumentAction(new QAction("Sprite Container Document", this))
+    : m_newDocumentAction(new QAction("Sprite Container Document", this)),
+    m_enabled(true)
 {
     m_instance = this;
 }
@@ -159,6 +159,11 @@ QObject* SpriteEditorPlugin::object()
 QIcon SpriteEditorPlugin::icon() const
 {
     return m_icon;
+}
+
+void SpriteEditorPlugin::onNewDocument()
+{
+
 }
 
 #if QT_VERSION < 0x050000

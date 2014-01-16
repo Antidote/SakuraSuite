@@ -10,6 +10,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = updater
 TEMPLATE = lib
 CONFIG += staticlib
+DESTDIR += ./
 
 CONFIG(release, release|debug) {
     DEFINES -= WK2_DEBUG

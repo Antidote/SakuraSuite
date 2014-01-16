@@ -1,12 +1,10 @@
 <RCC>
     <qresource prefix="/about">
-        <file>Bomb64x64.png</file>
         <file>donate.gif</file>
         <file>SakuraSuite.png</file>
         <file>SakuraSuite64x64.png</file>
     </qresource>
     <qresource prefix="/icons">
         <file>Wii.png</file>
-        <file>flags/_unknown.png</file>
     </qresource>
 </RCC>

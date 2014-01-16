@@ -22,27 +22,34 @@
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
+    try
+    {
+        QApplication a(argc, argv);
 #ifdef Q_OS_WIN
-    // This is unnecessary on any platform but Windows
-    QSettings::setDefaultFormat(QSettings::IniFormat);
+        // This is unnecessary on any platform but Windows
+        QSettings::setDefaultFormat(QSettings::IniFormat);
 #endif
-    if (!QDir(QDir::homePath() + ".sakurasuite").exists())
-        QDir(QDir::homePath()).mkdir(".sakurasuite");
+        if (!QDir(QDir::homePath() + ".sakurasuite").exists())
+            QDir(QDir::homePath()).mkdir(".sakurasuite");
 
-    a.setLibraryPaths(QStringList() << a.libraryPaths() << "plugins");
-    a.setOrganizationName("org.wiiking2.com");
-    a.setOrganizationDomain("http://wiiking2.com");
-    a.setApplicationName(Constants::SAKURASUITE_APP_NAME);
-    a.setApplicationVersion(Constants::SAKURASUITE_APP_VERSION);
-    a.setWindowIcon(QIcon(":/about/SakuraSuite.png"));
+        a.setLibraryPaths(QStringList() << a.libraryPaths() << "plugins");
+        a.setOrganizationName("org.wiiking2.com");
+        a.setOrganizationDomain("http://wiiking2.com");
+        a.setApplicationName(Constants::SAKURASUITE_APP_NAME);
+        a.setApplicationVersion(Constants::SAKURASUITE_APP_VERSION);
+        a.setWindowIcon(QIcon(":/about/SakuraSuite.png"));
 
-    QTranslator appTranslator;
-    appTranslator.load(a.applicationDirPath() + QDir::separator() + "lang" + QDir::separator() + QLocale::system().name());
-    a.installTranslator(&appTranslator);
-    MainWindow w;
+        QTranslator appTranslator;
+        appTranslator.load(a.applicationDirPath() + QDir::separator() + "lang" + QDir::separator() + QLocale::system().name());
+        a.installTranslator(&appTranslator);
+        MainWindow w;
 
-    w.show();
+        w.show();
 
-    return a.exec();
+        return a.exec();
+    }
+    catch(...)
+    {
+        return 1;
+    }
 }
