@@ -29,9 +29,9 @@
 namespace Constants
 {
 #define tr QObject::tr
-const int     SAKURASUITE_MAJOR                    = 0;
-const int     SAKURASUITE_MINOR                    = 1;
-const int     SAKURASUITE_PATCH                    = 2;
+const int     SAKURASUITE_MAJOR                    = 1;
+const int     SAKURASUITE_MINOR                    = 0;
+const int     SAKURASUITE_PATCH                    = 0;
 const int     SAKURASUITE_VERSION                  = (SAKURASUITE_MAJOR << 16) | (SAKURASUITE_MINOR << 8) | SAKURASUITE_PATCH;
 const QString SAKURASUITE_VERSION_STR              = QString("%1.%2.%3")
                                                   .arg(SAKURASUITE_MAJOR)
