@@ -8,13 +8,9 @@ SkywardSwordPlugin.depends += libzelda \
         Updater
 
 SUBDIRS += \
-    libzelda \
     Updater \
     PluginFramework \
     Main \
-    OoTSavePlugin \
-    SkywardSwordPlugin \ 
-    SpriteEditorPlugin
 
 TRANSLATIONS += \
     en_US.ts

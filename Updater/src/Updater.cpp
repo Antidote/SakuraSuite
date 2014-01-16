@@ -56,7 +56,7 @@ QString Updater::md5Sum() const
     return m_md5Sum;
 }
 
-void Updater::checkForUpdate(QString url, QString currentVersionString, int currentVersion)
+void Updater::checkForUpdate(QString url, QString currentVersionString, uint currentVersion)
 {
     m_currentVersion = currentVersion;
     qApp->setOverrideCursor(Qt::WaitCursor);
@@ -82,7 +82,7 @@ void Updater::parse(QStringList data)
             return;
         }
 
-        int serverVersion = versionString.split("=")[1].toInt(NULL, 16);
+        uint serverVersion = versionString.split("=")[1].toInt(NULL, 16);
         if (serverVersion <= m_currentVersion)
         {
             emit noUpdate();
