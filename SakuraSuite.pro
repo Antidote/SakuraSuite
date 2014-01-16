@@ -10,7 +10,7 @@ SkywardSwordPlugin.depends += libzelda \
 SUBDIRS += \
     Updater \
     PluginFramework \
-    Main \
+    Main
 
 TRANSLATIONS += \
     en_US.ts
