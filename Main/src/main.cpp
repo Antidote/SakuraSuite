@@ -15,8 +15,11 @@
 
 #include "MainWindow.hpp"
 #include <QApplication>
+#ifdef Q_OS_WIN
 #include <QCommandLineParser>
 #include <QCommandLineOption>
+#endif
+
 #include "Constants.hpp"
 #include <QTranslator>
 #include <QDir>
@@ -27,14 +30,6 @@ int main(int argc, char *argv[])
 {
     try
     {
-        QCommandLineParser parser;
-        QCommandLineOption iconThemeOption("icon-theme", "Set applications icon theme", "icon-theme");
-        parser.addOption(iconThemeOption);
-        parser.setApplicationDescription(QString("%1 v%2")
-                                         .arg(Constants::SAKURASUITE_TITLE)
-                                         .arg(Constants::SAKURASUITE_APP_VERSION));
-        QCommandLineOption helpOption = parser.addHelpOption();
-
         QApplication a(argc, argv);
         a.setLibraryPaths(QStringList() << a.libraryPaths() << "plugins");
         a.setOrganizationName("org.wiiking2.com");
@@ -43,11 +38,20 @@ int main(int argc, char *argv[])
         a.setApplicationVersion(Constants::SAKURASUITE_APP_VERSION);
         a.setWindowIcon(QIcon(":/about/SakuraSuite.png"));
 
+        if (!QDir(QDir::homePath() + ".sakurasuite").exists())
+            QDir(QDir::homePath()).mkdir(".sakurasuite");
+
 #ifdef Q_OS_WIN
+        QCommandLineParser parser;
+        QCommandLineOption iconThemeOption("icon-theme", "Set applications icon theme", "icon-theme");
+        parser.addOption(iconThemeOption);
+        parser.setApplicationDescription(QString("%1 v%2")
+                                         .arg(Constants::SAKURASUITE_TITLE)
+                                         .arg(Constants::SAKURASUITE_APP_VERSION));
+        QCommandLineOption helpOption = parser.addHelpOption();
         // This is unnecessary on any platform but Windows
         QSettings::setDefaultFormat(QSettings::IniFormat);
         iconThemeOption.setDefaultValue("oxygen");
-#endif
         parser.process(a);
 
         if (parser.isSet(helpOption))
@@ -56,10 +60,7 @@ int main(int argc, char *argv[])
             helpMessage.setWindowTitle("Help...");
             QString helpString = parser.helpText().toUtf8();
             QString path =  a.applicationDirPath() + QDir::separator();
-#ifdef Q_OS_WIN
-            path = path.replace("/", "\\");
-#endif
-            helpMessage.setText(helpString.remove(path));
+            helpMessage.setText(helpString.remove(path.replace("/", "\\")));
             helpMessage.exec();
             parser.showHelp();
         }
@@ -69,8 +70,7 @@ int main(int argc, char *argv[])
         else
             QIcon::setThemeName(iconThemeOption.defaultValues().first());
 
-        if (!QDir(QDir::homePath() + ".sakurasuite").exists())
-            QDir(QDir::homePath()).mkdir(".sakurasuite");
+#endif
 
         QTranslator appTranslator;
         appTranslator.load(a.applicationDirPath() + QDir::separator() + "lang" + QDir::separator() + QLocale::system().name());

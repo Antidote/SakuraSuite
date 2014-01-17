@@ -11,3 +11,6 @@ SUBDIRS += \
 
 TRANSLATIONS += \
     en_US.ts
+
+OTHER_FILES += \
+    .travis.yml
