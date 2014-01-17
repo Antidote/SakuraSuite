@@ -80,6 +80,10 @@ MainWindow::MainWindow(QWidget *parent) :
     m_lockTimer.setInterval(58*1000);
     m_lockTimer.start();
 
+    // Center window
+    resize(QSize(std::min(700, QApplication::desktop()->width() / 2), QApplication::desktop()->height() / 2));
+    move(QApplication::desktop()->availableGeometry().center() - rect().center());
+
     m_defaultWindowGeometry = this->saveGeometry();
     m_defaultWindowState = this->saveState();
 

@@ -1,3 +1,9 @@
 [submodule "libzelda"]
 	path = libzelda
 	url = https://github.com/Antidote/libzelda.git
+[submodule "Updater"]
+	path = Updater
+	url = https://github.com/Antidote/Updater.git
+[submodule "PluginFramework"]
+	path = PluginFramework
+	url = https://github.com/Antidote/PluginFramework.git

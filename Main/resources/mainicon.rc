@@ -17,9 +17,17 @@
 
 IDI_ICON1  ICON DISCARDABLE "mainicon.ico"
 
+// Only ONE of these may be defined
+//#define SS_PREVIEW
+//#define SS_INTERNAL
+
+#if !defined(SS_DEBUG) && !defined(SS_INTERNAL) && !defined(SS_PREVIEW)
+
+#warning Set version in release mode
+
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,0,0,0
- PRODUCTVERSION 1,0,0,0
+ FILEVERSION SETBEFORERELEASE // 0,0,0,0
+ PRODUCTVERSION SETBEFORERELEASE // 0,0,0,0
  FILEFLAGS 0x0L
  FILEFLAGSMASK 0x3fL
  FILEOS 0x00040004L
@@ -32,12 +40,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "Wiiking2.com"
             VALUE "FileDescription", "Sakura Suite"
-            VALUE "FileVersion", "1.0.0"
+            VALUE "FileVersion", "1.0.0" SETBEFORERELEASE
             VALUE "LegalCopyright", "Copyright (C) 2013 Wiiking2.com"
             VALUE "InternalName", "sakurasuite"
             VALUE "OriginalFilename", "sakurasuite.exe"
             VALUE "ProductName", "Sakura Suite"
-            VALUE "ProductVersion", "1.0.0"
+            VALUE "ProductVersion", "1.0.0" SETBEFORERELEASE
         END
     END
     BLOCK "VarFileInfo"
@@ -45,3 +53,5 @@ BEGIN
         VALUE "Translation", 0x0, 1200
     END
 END
+
+#endif

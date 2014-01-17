@@ -7,4 +7,7 @@
     <qresource prefix="/icons">
         <file>Wii.png</file>
     </qresource>
+    <qresource prefix="/mainwindow">
+        <file>SakuraSuiteGray.png</file>
+    </qresource>
 </RCC>

@@ -7,8 +7,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>765</width>
-    <height>681</height>
+    <width>797</width>
+    <height>630</height>
    </rect>
   </property>
   <property name="acceptDrops">
@@ -49,9 +49,17 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>498</width>
-         <height>588</height>
+         <width>530</width>
+         <height>553</height>
         </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">#scrollAreaWidgetContents
+{
+	background-image: url(:/mainwindow/SakuraSuiteGray.png);
+	background-position: bottom right;
+	background-repeat: none;
+}</string>
        </property>
        <layout class="QGridLayout" name="gridLayout_3">
         <property name="leftMargin">
@@ -80,8 +88,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>765</width>
-     <height>25</height>
+     <width>797</width>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
