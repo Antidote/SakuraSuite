@@ -77,7 +77,7 @@ bool PluginsManager::reloadByName(const QString& name)
     if (!loader)
         return false;
     QMessageBox mbox(m_mainWindow);
-    mbox.setWindowTitle("Error reloading plugin...");
+    mbox.setWindowTitle(tr("Error reloading plugin..."));
 
     if(loader->unload())
     {
@@ -170,15 +170,15 @@ void PluginsManager::loadPlugins()
 #endif
 
     QMessageBox mbox(m_mainWindow);
-    mbox.setWindowTitle("Error loading plugins...");
+    mbox.setWindowTitle(tr("Error loading plugins..."));
     // If we are unable to cd into the plugins directory, we should try the applications directory
     // in the users home path
     if (!pluginsDir.cd("plugins"))
     {
-        pluginsDir = QDir(QDir::homePath() + "/.sakurasuite");
+        pluginsDir = QDir(Constants::SAKURASUITE_HOME_PATH);
         if (!pluginsDir.cd("plugins"))
         {
-            mbox.setText("Unable to acquire plugin directory");
+            mbox.setText(tr("Unable to acquire plugin directory"));
             mbox.exec();
             return;
         }
@@ -186,7 +186,7 @@ void PluginsManager::loadPlugins()
 
     }
 
-    foreach (QString fileName, pluginsDir.entryList(QDir::Files))
+    foreach (QString fileName, pluginsDir.entryList(QStringList() << Constants::SAKURASUITE_PLUGIN_EXTENSION, QDir::Files))
     {
         QPluginLoader* loader = new QPluginLoader(pluginsDir.absoluteFilePath(fileName));
         QObject *object = loader->instance();

@@ -17,7 +17,8 @@ CONFIG(release, release|debug){
     # We don't want the objects, or MOC sources
     # in the project directory, so tell qmake
     # where to put them
-    OBJECTS_DIR = obj/release
+    unix:OBJECTS_DIR = obj/release.unix
+    win32:OBJECTS_DIR = obj/release.win32
     MOC_DIR = moc/release
 }
 
@@ -26,7 +27,8 @@ CONFIG(debug, debug|release){
     # We don't want the objects, or MOC sources
     # in the project directory, so tell qmake
     # where to put them
-    OBJECTS_DIR = obj/debug
+    unix:OBJECTS_DIR = obj/debug.unix
+    win32:OBJECTS_DIR = obj/debug.win32
     MOC_DIR = moc/debug
 }
 

@@ -114,7 +114,15 @@ const QString SAKURASUITE_UPDATE_PLATFORM_MSG       = tr("The updater currently 
                                                       "We appologize for the inconvenience."
                                                       "<br />"
                                                       "If you think this is in error, please contact a developer with your platform.");
+#ifdef Q_OS_WIN
+const QString SAKURASUITE_PLUGIN_EXTENSION         = QString("*.dll");
+#elif defined(Q_OS_LINUX)
+const QString SAKURASUITE_PLUGIN_EXTENSION         = QString("*.so");
+#elif defined(Q_OS_MAC)
+const QString SAKURASUITE_PLUGIN_EXTENSION         = QString("*.dylib");
+#endif
 
+const QString SAKURASUITE_HOME_PATH                = QString(QDir::homePath() + "/.sakurasuite");
 
 namespace Settings
 {
