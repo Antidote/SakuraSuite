@@ -101,13 +101,16 @@ void PreferencesDialog::showEvent(QShowEvent* se)
     this->setUpdatesEnabled(false);
     foreach(QString style, QStyleFactory::keys())
     {
-        ui->currentStyleCombo->addItem(style);
-        ui->defaultStyleCombo->addItem(style);
-        if (!QString::compare(style, m_currentStyle, Qt::CaseInsensitive))
-            ui->currentStyleCombo->setCurrentIndex(index);
-        if (!QString::compare(style, m_defaultStyle, Qt::CaseInsensitive))
-            ui->defaultStyleCombo->setCurrentIndex(index);
-        index++;
+        if (ui->currentStyleCombo->findText(style, Qt::MatchExactly) == -1)
+        {
+            ui->currentStyleCombo->addItem(style);
+            ui->defaultStyleCombo->addItem(style);
+            if (!QString::compare(style, m_currentStyle, Qt::CaseInsensitive))
+                ui->currentStyleCombo->setCurrentIndex(index);
+            if (!QString::compare(style, m_defaultStyle, Qt::CaseInsensitive))
+                ui->defaultStyleCombo->setCurrentIndex(index);
+            index++;
+        }
     }
 
     ui->updateUrlLineEdit->setText(settings.value(Constants::Settings::SAKURASUITE_UPDATE_URL, Constants::Settings::SAKURASUITE_UPDATE_URL_DEFAULT).toString());
