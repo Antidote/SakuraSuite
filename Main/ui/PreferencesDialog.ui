@@ -8,7 +8,7 @@
     <x>0</x>
     <y>0</y>
     <width>671</width>
-    <height>369</height>
+    <height>399</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,16 @@
    </iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout_4">
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item row="1" column="3">
@@ -35,7 +44,7 @@
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+      <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
      </property>
     </widget>
    </item>
@@ -65,7 +74,16 @@
        <string>Main</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_6">
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <item row="0" column="0">
@@ -82,6 +100,66 @@
          <property name="documentMode">
           <bool>true</bool>
          </property>
+         <widget class="QWidget" name="engineTab">
+          <attribute name="title">
+           <string>Engine</string>
+          </attribute>
+          <layout class="QGridLayout" name="gridLayout_7">
+           <item row="0" column="2">
+            <widget class="QToolButton" name="exectuableDirButton">
+             <property name="text">
+              <string>...</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLineEdit" name="executableLineEdit"/>
+           </item>
+           <item row="1" column="2">
+            <widget class="QToolButton" name="dataDirButton">
+             <property name="text">
+              <string>...</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QLineEdit" name="dataLineEdit"/>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="executableLabel">
+             <property name="text">
+              <string>Executable:</string>
+             </property>
+             <property name="buddy">
+              <cstring>executableLineEdit</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="dataLabel">
+             <property name="text">
+              <string>Data:</string>
+             </property>
+             <property name="buddy">
+              <cstring>dataLineEdit</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0" colspan="3">
+            <spacer name="verticalSpacer_4">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
          <widget class="QWidget" name="wiiKeysTab">
           <attribute name="icon">
            <iconset resource="../resources/resources.qrc">
@@ -182,7 +260,16 @@
                  <string>NG Signature</string>
                 </property>
                 <layout class="QGridLayout" name="gridLayout_5">
-                 <property name="margin">
+                 <property name="leftMargin">
+                  <number>2</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>2</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>2</number>
+                 </property>
+                 <property name="bottomMargin">
                   <number>2</number>
                  </property>
                  <property name="spacing">
@@ -400,14 +487,14 @@
      </widget>
     </widget>
    </item>
-   <item row="1" column="0" colspan="2">
+   <item row="1" column="0">
     <widget class="QCheckBox" name="singleInstanceCheckBox">
      <property name="text">
       <string>Single Instance</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="2">
+   <item row="1" column="1" colspan="2">
     <widget class="QLabel" name="statusLabel">
      <property name="text">
       <string/>
@@ -427,8 +514,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>474</x>
-     <y>477</y>
+     <x>670</x>
+     <y>398</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -443,8 +530,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>474</x>
-     <y>477</y>
+     <x>670</x>
+     <y>398</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
@@ -459,8 +546,8 @@
    <slot>onCurrentIndexChanged(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>166</x>
-     <y>47</y>
+     <x>108</x>
+     <y>128</y>
     </hint>
     <hint type="destinationlabel">
      <x>168</x>
@@ -475,8 +562,8 @@
    <slot>onCurrentIndexChanged(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>228</x>
-     <y>76</y>
+     <x>108</x>
+     <y>128</y>
     </hint>
     <hint type="destinationlabel">
      <x>107</x>
@@ -491,8 +578,8 @@
    <slot>onTextChanged(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>245</x>
-     <y>401</y>
+     <x>108</x>
+     <y>128</y>
     </hint>
     <hint type="destinationlabel">
      <x>125</x>
@@ -507,8 +594,8 @@
    <slot>onSingleInstanceToggled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>572</x>
-     <y>427</y>
+     <x>130</x>
+     <y>394</y>
     </hint>
     <hint type="destinationlabel">
      <x>243</x>
@@ -523,8 +610,8 @@
    <slot>onLoadMac()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>342</x>
-     <y>319</y>
+     <x>108</x>
+     <y>128</y>
     </hint>
     <hint type="destinationlabel">
      <x>583</x>
@@ -539,12 +626,92 @@
    <slot>onLoadKeys()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>438</x>
-     <y>312</y>
+     <x>108</x>
+     <y>128</y>
     </hint>
     <hint type="destinationlabel">
      <x>589</x>
      <y>290</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>exectuableDirButton</sender>
+   <signal>clicked()</signal>
+   <receiver>PreferencesDialog</receiver>
+   <slot>onDirButtonClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>653</x>
+     <y>112</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>599</x>
+     <y>-3</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>dataDirButton</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>PreferencesDialog</receiver>
+   <slot>onDirButtonClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>644</x>
+     <y>142</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>628</x>
+     <y>-7</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>executableLineEdit</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>PreferencesDialog</receiver>
+   <slot>onTextChanged(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>468</x>
+     <y>105</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>389</x>
+     <y>-3</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>dataLineEdit</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>PreferencesDialog</receiver>
+   <slot>onTextChanged(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>428</x>
+     <y>136</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>404</x>
+     <y>-8</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>okCancelButtonBox</sender>
+   <signal>clicked(QAbstractButton*)</signal>
+   <receiver>PreferencesDialog</receiver>
+   <slot>onButtonClicked(QAbstractButton*)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>441</x>
+     <y>394</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>397</y>
     </hint>
    </hints>
   </connection>
@@ -555,5 +722,7 @@
   <slot>onSingleInstanceToggled(bool)</slot>
   <slot>onLoadMac()</slot>
   <slot>onLoadKeys()</slot>
+  <slot>onDirButtonClicked()</slot>
+  <slot>onButtonClicked(QAbstractButton*)</slot>
  </slots>
 </ui>

@@ -9,6 +9,7 @@ class PreferencesDialog;
 
 class WiiKeyManager;
 
+class QAbstractButton;
 class PreferencesDialog : public QDialog
 {
     Q_OBJECT
@@ -27,10 +28,13 @@ private slots:
     void onCurrentIndexChanged(QString style);
     void onTextChanged(QString text);
     void onSingleInstanceToggled(bool checked);
+    void onDirButtonClicked();
+    void onButtonClicked(QAbstractButton* button);
     void onLoadKeys();
     void onLoadMac();
 
 private:
+    void saveSettings();
     void updateKeys();
     Ui::PreferencesDialog *ui;
     QString    m_currentStyle;

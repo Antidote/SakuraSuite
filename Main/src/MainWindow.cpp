@@ -45,10 +45,12 @@ MainWindow::MainWindow(QWidget *parent) :
     m_pluginsManager(new PluginsManager(this)),
     m_aboutDialog(NULL),
     m_updater(new Updater(this)),
+    m_preferencesDialog(NULL),
     m_updateMBox(this),
     m_cancelClose(false),
     m_keyManager(new WiiKeyManager),
-    m_untitledDocs(0)
+    m_untitledDocs(0),
+    m_haveLock(false)
   #ifdef WK2_PREVIEW
   ,m_previewLayout(NULL),
     m_previewLabel(NULL)
@@ -126,7 +128,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-    QFile(Constants::SAKURASUITE_LOCK_FILE).remove();
+    if (m_haveLock)
+        // We were able to acquire the lock, we need to remove it.
+        QFile(Constants::SAKURASUITE_LOCK_FILE).remove();
+
 #if defined(SS_PREVIEW) || defined(SS_INTERNAL)
     if (m_previewLayout)
     {
@@ -357,6 +362,16 @@ QMainWindow* MainWindow::mainWindow() const
 PluginsManager* MainWindow::pluginsManager() const
 {
     return m_pluginsManager;
+}
+
+QDir MainWindow::engineDataPath() const
+{
+    return QDir(QSettings().value(Constants::Settings::SAKURASUITE_ENGINE_DATA_PATH).toString());
+}
+
+QUrl MainWindow::engineExecutable() const
+{
+    return QSettings().value(Constants::Settings::SAKURASUITE_ENGINE_EXECUTABLE).toUrl();
 }
 
 void MainWindow::onNewDocument(DocumentBase* document)
@@ -878,6 +893,7 @@ bool MainWindow::checkLock()
                 // instance either crashed, or didn't have a chance
                 // to clean up after itself, we can safely ignore it.
                 qWarning() << "Found stale lock, ignoring";
+                m_haveLock = true;
                 return false;
             }
         }
@@ -893,9 +909,11 @@ bool MainWindow::checkLock()
         lock.open(QFile::WriteOnly);
         lock.write(QString(QDateTime::currentDateTime().toString() + "\n").toLatin1());
         lock.close();
+        m_haveLock = true;
         return false;
     }
 
+    m_haveLock = true;
     return false;
 }
 

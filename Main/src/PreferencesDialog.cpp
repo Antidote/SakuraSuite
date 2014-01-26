@@ -88,6 +88,9 @@ void PreferencesDialog::showEvent(QShowEvent* se)
         }
     }
 
+    ui->dataLineEdit->setText(settings.value(Constants::Settings::SAKURASUITE_ENGINE_DATA_PATH).toString());
+    ui->executableLineEdit->setText(settings.value(Constants::Settings::SAKURASUITE_ENGINE_EXECUTABLE).toString());
+
     m_currentStyle = settings.value(Constants::Settings::SAKURASUITE_CURRENT_STYLE).toString();
     m_defaultStyle = settings.value(Constants::Settings::SAKURASUITE_DEFAULT_STYLE).toString();
 
@@ -109,8 +112,8 @@ void PreferencesDialog::showEvent(QShowEvent* se)
                 ui->currentStyleCombo->setCurrentIndex(index);
             if (!QString::compare(style, m_defaultStyle, Qt::CaseInsensitive))
                 ui->defaultStyleCombo->setCurrentIndex(index);
-            index++;
         }
+        index++;
     }
 
     ui->updateUrlLineEdit->setText(settings.value(Constants::Settings::SAKURASUITE_UPDATE_URL, Constants::Settings::SAKURASUITE_UPDATE_URL_DEFAULT).toString());
@@ -120,6 +123,181 @@ void PreferencesDialog::showEvent(QShowEvent* se)
 }
 
 void PreferencesDialog::accept()
+{
+    qDebug() << "accept";
+
+    saveSettings();
+
+    QDialog::accept();
+}
+
+void PreferencesDialog::reject()
+{
+    qApp->setStyle(m_currentStyle);
+    QDialog::reject();
+}
+
+void PreferencesDialog::onCurrentIndexChanged(QString style)
+{
+    if (!this->updatesEnabled())
+        return;
+
+    if (sender() == ui->currentStyleCombo)
+    {
+        m_currentChanged = true;
+        qApp->setStyle(style);
+    }
+    else if (sender() == ui->defaultStyleCombo)
+    {
+        m_defaultChanged = true;
+    }
+}
+
+void PreferencesDialog::onTextChanged(QString text)
+{
+    QRegExp http("^(http|https)://", Qt::CaseInsensitive);
+    if (sender() == ui->updateUrlLineEdit)
+    {
+        if (text.isEmpty() || !text.contains(http))
+        {
+            ui->updateUrlLineEdit->setProperty("valid", false);
+            ui->statusLabel->setText("Invalid url");
+        }
+        else
+        {
+            ui->updateUrlLineEdit->setProperty("valid", true);
+            ui->statusLabel->clear();
+        }
+        style()->polish(ui->updateUrlLineEdit);
+
+        // If the text matches what is currently stored
+        // Set the line edit is unmodified
+        if (text == QSettings().value(Constants::Settings::SAKURASUITE_UPDATE_URL, Constants::Settings::SAKURASUITE_UPDATE_URL).toString())
+            ui->updateUrlLineEdit->setModified(false);
+    }
+    else if (sender() == ui->executableLineEdit)
+    {
+        if (!QFileInfo(ui->executableLineEdit->text()).exists())
+            ui->executableLineEdit->setProperty("valid", false);
+        else
+            ui->executableLineEdit->setProperty("valid", true);
+
+        style()->polish(ui->executableLineEdit);
+    }
+    else if (sender() == ui->dataLineEdit)
+    {
+        if (!QDir().exists(ui->dataLineEdit->text()))
+            ui->dataLineEdit->setProperty("valid", false);
+        else
+            ui->dataLineEdit->setProperty("valid", true);
+
+        style()->polish(ui->dataLineEdit);
+    }
+}
+
+void PreferencesDialog::onSingleInstanceToggled(bool checked)
+{
+    m_singleInstance = checked;
+}
+
+void PreferencesDialog::onDirButtonClicked()
+{
+    if (sender() == ui->exectuableDirButton)
+    {
+        QString executable = QFileDialog::getOpenFileName(this, tr("Executable..."));
+        if (QFileInfo(executable).exists())
+            ui->executableLineEdit->setText(executable);
+    }
+    else if (sender() == ui->dataDirButton)
+    {
+        QString dataDir = QFileDialog::getExistingDirectory(this, tr("Data Path..."));
+        if (QDir().exists(dataDir))
+            ui->dataLineEdit->setText(dataDir);
+    }
+
+}
+
+void PreferencesDialog::onButtonClicked(QAbstractButton* button)
+{
+    if (button == ui->okCancelButtonBox->button(QDialogButtonBox::Apply))
+    {
+        saveSettings();
+        ui->statusLabel->setText("Settings applied");
+    }
+}
+
+void PreferencesDialog::onLoadKeys()
+{
+    QFileInfo finfo(qApp->applicationDirPath() + "/keys.bin");
+    if (!finfo.exists())
+    {
+        QString fileName = QFileDialog::getOpenFileName(this, "Load Keys", qApp->applicationDirPath(), "BootMii keys.bin (*.bin)");
+
+        if (!fileName.isEmpty())
+        {
+
+            if (m_keyManager->open(fileName, true))
+                updateKeys();
+        }
+    }
+}
+
+void PreferencesDialog::onLoadMac()
+{
+    QFileInfo finfo(qApp->applicationDirPath() + "/mac.txt");
+    if (!finfo.exists())
+    {
+        QString fileName = QFileDialog::getOpenFileName(this, "Load Keys", qApp->applicationDirPath(), "Mac address (*.txt *.bin)");
+
+        if (!fileName.isEmpty())
+        {
+            QFile file(fileName);
+            if (file.open(QFile::ReadOnly))
+            {
+                QByteArray array = file.readLine(12+5);
+                QByteArray mac;
+                if (array.contains(':'))
+                {
+                    char* str = (char*)QString(array).toStdString().c_str();
+                    int* tmp = new int[6];
+                    sscanf(str, "%x:%x:%x:%x:%x:%x", &tmp[0], &tmp[1], &tmp[2], &tmp[3], &tmp[4], &tmp[5]);
+
+                    mac.push_back((char)tmp[0]);
+                    mac.push_back((char)tmp[1]);
+                    mac.push_back((char)tmp[2]);
+                    mac.push_back((char)tmp[3]);
+                    mac.push_back((char)tmp[4]);
+                    mac.push_back((char)tmp[5]);
+                    delete[] tmp;
+
+                    file.close();
+                    m_keyManager->setMacAddr(mac);
+                    this->hide();
+                    this->show();
+                    return;
+                }
+                else
+                {
+                    QByteArray macArray = QByteArray::fromHex(array);
+                    if (macArray.size() == 6)
+                    {
+                        file.close();
+                        m_keyManager->setMacAddr(macArray);
+                        updateKeys();
+                    }
+                    else
+                    {
+                        file.close();
+                        return;
+                    }
+                    return;
+                }
+            }
+        }
+    }
+}
+
+void PreferencesDialog::saveSettings()
 {
     QSettings settings;
 
@@ -198,130 +376,11 @@ void PreferencesDialog::accept()
         }
     }
 
-    QDialog::accept();
-}
+    if (ui->dataLineEdit->property("valid").toBool())
+        settings.setValue(Constants::Settings::SAKURASUITE_ENGINE_DATA_PATH, ui->dataLineEdit->text());
 
-void PreferencesDialog::reject()
-{
-    qApp->setStyle(m_currentStyle);
-    QDialog::reject();
-}
-
-void PreferencesDialog::onCurrentIndexChanged(QString style)
-{
-    if (!this->updatesEnabled())
-        return;
-
-    if (sender() == ui->currentStyleCombo)
-    {
-        m_currentChanged = true;
-        qApp->setStyle(style);
-    }
-    else if (sender() == ui->defaultStyleCombo)
-    {
-        m_defaultChanged = true;
-    }
-}
-
-void PreferencesDialog::onTextChanged(QString text)
-{
-    QRegExp http("^(http|https)://", Qt::CaseInsensitive);
-    if (sender() == ui->updateUrlLineEdit)
-    {
-        if (text.isEmpty() || !text.contains(http))
-        {
-            ui->updateUrlLineEdit->setProperty("valid", false);
-            ui->statusLabel->setText("Invalid url");
-        }
-        else
-        {
-            ui->updateUrlLineEdit->setProperty("valid", true);
-            ui->statusLabel->clear();
-        }
-        style()->unpolish(ui->updateUrlLineEdit);
-        style()->polish(ui->updateUrlLineEdit);
-
-        // If the text matches what is currently stored
-        // Set the line edit is unmodified
-        if (text == QSettings().value(Constants::Settings::SAKURASUITE_UPDATE_URL, Constants::Settings::SAKURASUITE_UPDATE_URL).toString())
-            ui->updateUrlLineEdit->setModified(false);
-    }
-}
-
-void PreferencesDialog::onSingleInstanceToggled(bool checked)
-{
-    m_singleInstance = checked;
-}
-
-void PreferencesDialog::onLoadKeys()
-{
-    QFileInfo finfo(qApp->applicationDirPath() + "/keys.bin");
-    if (!finfo.exists())
-    {
-        QString fileName = QFileDialog::getOpenFileName(this, "Load Keys", qApp->applicationDirPath(), "BootMii keys.bin (*.bin)");
-
-        if (!fileName.isEmpty())
-        {
-
-            if (m_keyManager->open(fileName, true))
-                updateKeys();
-        }
-    }
-}
-
-void PreferencesDialog::onLoadMac()
-{
-    QFileInfo finfo(qApp->applicationDirPath() + "/mac.txt");
-    if (!finfo.exists())
-    {
-        QString fileName = QFileDialog::getOpenFileName(this, "Load Keys", qApp->applicationDirPath(), "Mac address (*.txt *.bin)");
-
-        if (!fileName.isEmpty())
-        {
-            QFile file(fileName);
-            if (file.open(QFile::ReadOnly))
-            {
-                QByteArray array = file.readLine(12+5);
-                QByteArray mac;
-                if (array.contains(':'))
-                {
-                    char* str = (char*)QString(array).toStdString().c_str();
-                    int* tmp = new int[6];
-                    sscanf(str, "%x:%x:%x:%x:%x:%x", &tmp[0], &tmp[1], &tmp[2], &tmp[3], &tmp[4], &tmp[5]);
-
-                    mac.push_back((char)tmp[0]);
-                    mac.push_back((char)tmp[1]);
-                    mac.push_back((char)tmp[2]);
-                    mac.push_back((char)tmp[3]);
-                    mac.push_back((char)tmp[4]);
-                    mac.push_back((char)tmp[5]);
-                    delete[] tmp;
-
-                    file.close();
-                    m_keyManager->setMacAddr(mac);
-                    this->hide();
-                    this->show();
-                    return;
-                }
-                else
-                {
-                    QByteArray macArray = QByteArray::fromHex(array);
-                    if (macArray.size() == 6)
-                    {
-                        file.close();
-                        m_keyManager->setMacAddr(macArray);
-                        updateKeys();
-                    }
-                    else
-                    {
-                        file.close();
-                        return;
-                    }
-                    return;
-                }
-            }
-        }
-    }
+    if (ui->executableLineEdit->property("valid").toBool())
+        settings.setValue(Constants::Settings::SAKURASUITE_ENGINE_EXECUTABLE, ui->executableLineEdit->text());
 }
 
 void PreferencesDialog::updateKeys()

@@ -137,6 +137,8 @@ const QString SAKURASUITE_RECENT_DIRECTORY       = QString("recentDirectory");
 const QString SAKURASUITE_DEFAULT_STYLE          = QString("defaultStyle");
 const QString SAKURASUITE_CURRENT_STYLE          = QString("currentStyle");
 const QString SAKURASUITE_CHECK_ON_START         = QString("checkForUpdatesOnStart");
+const QString SAKURASUITE_ENGINE_DATA_PATH       = QString("engineDataPath");
+const QString SAKURASUITE_ENGINE_EXECUTABLE      = QString("engineExecutable");
 }
 
 #undef tr

@@ -189,11 +189,9 @@ void PluginsManager::loadPlugins()
     foreach (QString fileName, pluginsDir.entryList(QStringList() << Constants::SAKURASUITE_PLUGIN_EXTENSION, QDir::Files))
     {
         QPluginLoader* loader = new QPluginLoader(pluginsDir.absoluteFilePath(fileName));
-        QObject *object = loader->instance();
-
-        if (object)
+        if (loader->instance())
         {
-            PluginInterface* plugin = qobject_cast<PluginInterface *>(object);
+            PluginInterface* plugin = qobject_cast<PluginInterface *>(loader->instance());
             if (plugin)
             {
                 if (!this->plugin(plugin->name()))
