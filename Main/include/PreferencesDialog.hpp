@@ -36,6 +36,7 @@ private slots:
 private:
     void saveSettings();
     void updateKeys();
+    void restoreParents();
     Ui::PreferencesDialog *ui;
     QString    m_currentStyle;
     bool       m_currentChanged;

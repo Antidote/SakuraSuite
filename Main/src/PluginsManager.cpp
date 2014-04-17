@@ -76,14 +76,12 @@ bool PluginsManager::reloadByName(const QString& name)
 
     if (!loader)
         return false;
-    QMessageBox mbox(m_mainWindow);
-    mbox.setWindowTitle(tr("Error reloading plugin..."));
 
     if(loader->unload())
     {
-
         delete loader;
         loader = NULL;
+        QThread::msleep(1000);
         loader = new QPluginLoader(pluginPath);
 
         m_pluginLoaders[name.toLower()] = loader;
@@ -100,6 +98,7 @@ bool PluginsManager::reloadByName(const QString& name)
                 QSettings settings;
                 settings.beginGroup(newPlugin->name());
                 newPlugin->setEnabled(settings.value("enabled", true).toBool());
+                qDebug() << newPlugin->author();
                 newPlugin->initialize(m_mainWindow);
                 connect(newPlugin->object(), SIGNAL(newDocument(DocumentBase*)), m_mainWindow, SLOT(onNewDocument(DocumentBase*)));
                 m_plugins.append(newPlugin);
@@ -108,29 +107,26 @@ bool PluginsManager::reloadByName(const QString& name)
             else
             {
                 loader->unload();
-                mbox.setText(tr("Error loading %1<br />%2")
-                             .arg(pluginPath)
-                             .arg(loader->errorString()));
-                mbox.exec();
+                m_mainWindow->error(tr("Error loading %1: %2")
+                                    .arg(pluginPath)
+                                    .arg(loader->errorString()));
                 return false;
             }
         }
         else
         {
-            mbox.setText(tr("Error loading %1<br />%2")
-                         .arg(pluginPath)
-                         .arg(loader->errorString()));
-            mbox.exec();
+            m_mainWindow->error(tr("Error loading %1: %2")
+                                .arg(pluginPath)
+                                .arg(loader->errorString()));
             return false;
         }
     }
 
     m_pluginLoaders[name.toLower()] = loader;
     m_plugins.append(plugin);
-    mbox.setText(tr("Error loading %1<br />%2")
-                 .arg(pluginPath)
-                 .arg(loader->errorString()));
-    mbox.exec();
+    m_mainWindow->error(tr("Error loading %1: %2")
+                        .arg(pluginPath)
+                        .arg(loader->errorString()));
 
     return false;
 }
@@ -169,8 +165,6 @@ void PluginsManager::loadPlugins()
     }
 #endif
 
-    QMessageBox mbox(m_mainWindow);
-    mbox.setWindowTitle(tr("Error loading plugins..."));
     // If we are unable to cd into the plugins directory, we should try the applications directory
     // in the users home path
     if (!pluginsDir.cd("plugins"))
@@ -178,8 +172,7 @@ void PluginsManager::loadPlugins()
         pluginsDir = QDir(Constants::SAKURASUITE_HOME_PATH);
         if (!pluginsDir.cd("plugins"))
         {
-            mbox.setText(tr("Unable to acquire plugin directory"));
-            mbox.exec();
+            m_mainWindow->error(tr("Unable to acquire plugin directory"));
             return;
         }
         qDebug() << pluginsDir.absolutePath();
@@ -210,26 +203,28 @@ void PluginsManager::loadPlugins()
                 }
                 else
                 {
+                    m_mainWindow->error(tr("Error loading %1: %2")
+                                        .arg(fileName)
+                                        .arg(loader->errorString()));
                     loader->unload();
                     delete loader;
                 }
             }
             else
             {
-                mbox.setText(tr("Error loading %1<br />%2")
-                             .arg(fileName)
-                             .arg(loader->errorString()));
-                mbox.exec();
+                loader->unload();
+                m_mainWindow->error(tr("Error loading %1: %2")
+                                    .arg(fileName)
+                                    .arg(loader->errorString()));
                 delete loader;
                 loader = NULL;
             }
         }
         else
         {
-            mbox.setText(tr("Error loading %1<br />%2")
-                         .arg(fileName)
-                         .arg(loader->errorString()));
-            mbox.exec();
+            m_mainWindow->error(tr("Error loading %1: %2")
+                                .arg(fileName)
+                                .arg(loader->errorString()));
             delete loader;
             loader = NULL;
         }

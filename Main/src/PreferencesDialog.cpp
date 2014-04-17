@@ -16,6 +16,7 @@
 #include <QUrl>
 #include <QFileDialog>
 #include <QDebug>
+#include <QShowEvent>
 
 class HexValidator : public QValidator
 {
@@ -127,6 +128,7 @@ void PreferencesDialog::accept()
     qDebug() << "accept";
 
     saveSettings();
+    restoreParents();
 
     QDialog::accept();
 }
@@ -134,6 +136,7 @@ void PreferencesDialog::accept()
 void PreferencesDialog::reject()
 {
     qApp->setStyle(m_currentStyle);
+    restoreParents();
     QDialog::reject();
 }
 
@@ -374,6 +377,9 @@ void PreferencesDialog::saveSettings()
             file.write(QString(QDateTime::currentDateTime().toString() + "\n").toLatin1());
             file.resize(file.pos());
         }
+    } else if (!m_singleInstance)
+    {
+        QFile(Constants::SAKURASUITE_LOCK_FILE).remove();
     }
 
     if (ui->dataLineEdit->property("valid").toBool())
@@ -391,4 +397,17 @@ void PreferencesDialog::updateKeys()
     ui->ngSigPt2LineEdit->setText(m_keyManager->ngSig().mid(30).toHex());
     ui->ngPrivLineEdit->setText(m_keyManager->ngPriv().toHex());
     ui->macAddrLineEdit->setText(m_keyManager->macAddr().toHex());
+}
+
+void PreferencesDialog::restoreParents()
+{
+    MainWindow* mainWindow = qobject_cast<MainWindow*>(parent());
+    if (mainWindow)
+    {
+        foreach (PluginInterface* plugin, mainWindow->pluginsManager()->plugins())
+        {
+            if (plugin->settingsDialog())
+                plugin->settingsDialog()->restoreOwnership();
+        }
+    }
 }

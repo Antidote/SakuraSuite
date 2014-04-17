@@ -35,6 +35,7 @@ class PluginsManager;
 class AboutDialog;
 class PreferencesDialog;
 class WiiKeyManager;
+class ApplicationLog;
 
 namespace Ui {
 class MainWindow;
@@ -77,8 +78,16 @@ public:
     PluginsManager* pluginsManager()  const;
     QDir            engineDataPath()  const;
     QUrl            engineExecutable()const;
+    QDir            homePath()        const;
+    void            message(const QString& message);
+    void            warning(const QString& warning);
+    void            error  (const QString& error);
+    void            fatal  (const QString& fatal);
+
 public slots:
     void onNewDocument(DocumentBase* document);
+    // Lock file
+    void onLockTimeout();
 protected slots:
     void onDocumentChanged(int row);
     void onClose();
@@ -110,8 +119,6 @@ protected slots:
     void onUpdateWarning(QString message);
     void onNoUpdate();
 
-    // Lock file
-    void onLockTimeout();
 protected:
     void showEvent(QShowEvent* se);
     void closeEvent(QCloseEvent* e);
@@ -135,6 +142,7 @@ private:
     Ui::MainWindow *ui;
     DocumentBase*                m_currentFile;
 
+    ApplicationLog*          m_applicationLog;
     PluginsManager*          m_pluginsManager;
     QFileSystemWatcher       m_fileSystemWatcher;
     QList<QAction*>          m_recentFileActions;

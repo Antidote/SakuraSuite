@@ -19,6 +19,7 @@
 #include "AboutDialog.hpp"
 #include "PreferencesDialog.hpp"
 #include "WiiKeyManager.hpp"
+#include "ApplicationLog.hpp"
 // Updater Includes
 #include <Updater.hpp>
 
@@ -42,6 +43,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     m_currentFile(NULL),
+    m_applicationLog(new ApplicationLog(this)),
     m_pluginsManager(new PluginsManager(this)),
     m_aboutDialog(NULL),
     m_updater(new Updater(this)),
@@ -57,8 +59,10 @@ MainWindow::MainWindow(QWidget *parent) :
   #endif
 {
     ui->setupUi(this);
+    connect(ui->actionLog, SIGNAL(triggered()), m_applicationLog, SLOT(exec()));
+    fatal("test");
 
-#ifndef DEBUG
+#ifndef SS_DEBUG
     // lock Application
     if (checkLock())
     {
@@ -131,6 +135,7 @@ MainWindow::~MainWindow()
     if (m_haveLock)
         // We were able to acquire the lock, we need to remove it.
         QFile(Constants::SAKURASUITE_LOCK_FILE).remove();
+
 
 #if defined(SS_PREVIEW) || defined(SS_INTERNAL)
     if (m_previewLayout)
@@ -372,6 +377,33 @@ QDir MainWindow::engineDataPath() const
 QUrl MainWindow::engineExecutable() const
 {
     return QSettings().value(Constants::Settings::SAKURASUITE_ENGINE_EXECUTABLE).toUrl();
+}
+
+QDir MainWindow::homePath() const
+{
+    return QDir(Constants::SAKURASUITE_HOME_PATH);
+}
+
+void MainWindow::message(const QString& message)
+{
+    m_applicationLog->message(message);
+}
+
+void MainWindow::warning(const QString& warning)
+{
+    m_applicationLog->warning(warning);
+}
+
+void MainWindow::error(const QString& error)
+{
+    m_applicationLog->error(error);
+}
+
+void MainWindow::fatal(const QString& fatal)
+{
+    m_applicationLog->fatal(fatal);
+    m_applicationLog->exec();
+    QTimer::singleShot(10, qApp, SLOT(quit()));
 }
 
 void MainWindow::onNewDocument(DocumentBase* document)
@@ -853,6 +885,7 @@ void MainWindow::onLockTimeout()
 
 void MainWindow::showEvent(QShowEvent* se)
 {
+#ifndef SS_DEBUG
     if (m_pluginsManager->plugins().count() <= 0)
     {
         QMessageBox mbox;
@@ -863,6 +896,7 @@ void MainWindow::showEvent(QShowEvent* se)
         QTimer::singleShot(10, qApp, SLOT(quit()));
         return;
     }
+#endif
 
     QMainWindow::showEvent(se);
 }

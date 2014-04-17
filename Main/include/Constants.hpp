@@ -51,7 +51,7 @@ const QString SAKURASUITE_APP_VERSION               = QString(SAKURASUITE_VERSIO
 const QString SAKURASUITE_APP_VERSION               = QString(SAKURASUITE_VERSION_STR);
 #endif
 
-const QString SAKURASUITE_LOCK_FILE                 = QString(QDir::temp().absolutePath() + "/ss.lck");
+const QString SAKURASUITE_LOCK_FILE                 = QString(QDir::temp().absolutePath() + "/sakura_suite_singleton_lock.lck");
 const QString SAKURASUITE_TITLE                     = tr("Sakura Suite");
 // Work around for Qt's retarded method of setWindowFilePath
 // It doesn't work if you set a custom window title

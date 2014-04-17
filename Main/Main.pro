@@ -9,7 +9,7 @@ INCLUDEPATH += \
     include \
     ../PluginFramework/include \
     ../Updater/include
-
+QMAKE_CXXFLAGS += -std=c++11
 UI_DIR = ui
 
 CONFIG(release, release|debug){
@@ -45,7 +45,8 @@ SOURCES += \
     src/main.cpp \
     src/AboutDialog.cpp \
     src/PreferencesDialog.cpp \
-    src/WiiKeyManager.cpp
+    src/WiiKeyManager.cpp \
+    src/ApplicationLog.cpp
 
 HEADERS += \
     include/Constants.hpp \
@@ -54,13 +55,15 @@ HEADERS += \
     include/PluginsManager.hpp \
     include/AboutDialog.hpp \
     include/PreferencesDialog.hpp \
-    include/WiiKeyManager.hpp
+    include/WiiKeyManager.hpp \
+    include/ApplicationLog.hpp
 
 FORMS += \
     ui/MainWindow.ui \
     ui/PluginsDialog.ui \
     ui/AboutDialog.ui \
-    ui/PreferencesDialog.ui
+    ui/PreferencesDialog.ui \
+    ui/ApplicationLog.ui
 
 RESOURCES += \
     resources/resources.qrc
