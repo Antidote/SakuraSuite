@@ -3,11 +3,12 @@
 
 #include <WiiKeyManagerBase.hpp>
 #include <QObject>
+#include <MainWindow.hpp>
 
 class WiiKeyManager : public WiiKeyManagerBase
 {
 public:
-    WiiKeyManager();
+    WiiKeyManager(MainWindow* mainWindow);
     ~WiiKeyManager();
     bool open(const QString& filepath, bool clear = false);
     bool loadKeys();
@@ -34,6 +35,7 @@ private:
     quint32 m_ngId;
     quint32 m_ngKeyId;
     bool    m_open;
+    MainWindow* m_mainWindow;
 };
 
 #endif // WIIKEYMANAGER_HPP

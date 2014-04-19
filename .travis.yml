@@ -1,10 +1,12 @@
 before_install:
     - sudo add-apt-repository --yes ppa:ubuntu-sdk-team/ppa
+    - sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test
     - sudo apt-get update -qq
+    - sudo apt-get install g++-4.8 c++-4.8
     - sudo apt-get install -qq qt5-qmake qtbase5-dev qtdeclarative5-dev libqt5webkit5-dev libsqlite3-dev
 script:
     - qmake -qt=qt5 "CONFIG+=SS_INTERNAL" SakuraSuite.pro
     - make
 
 notifications:
-    irc: "irc.wiiking.com#wiiking2"
+    irc: "irc.wiiking2.com#wiiking2"

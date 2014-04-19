@@ -79,10 +79,6 @@ public:
     QDir            engineDataPath()  const;
     QUrl            engineExecutable()const;
     QDir            homePath()        const;
-    void            message(const QString& message);
-    void            warning(const QString& warning);
-    void            error  (const QString& error);
-    void            fatal  (const QString& fatal);
 
 public slots:
     void onNewDocument(DocumentBase* document);
@@ -127,6 +123,7 @@ protected:
 private:
     void loadWiiKeys();
     bool checkLock();
+    void createLock();
     void initUpdater();
     void restoreDefaultGeometry();
     void injectPreviewLabel();

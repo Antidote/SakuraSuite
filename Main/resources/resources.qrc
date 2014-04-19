@@ -6,6 +6,9 @@
     </qresource>
     <qresource prefix="/icons">
         <file>Wii.png</file>
+        <file>exclamation-diamond.png</file>
+        <file>exclamation-red.png</file>
+        <file>information-white.png</file>
     </qresource>
     <qresource prefix="/mainwindow">
         <file>SakuraSuiteGray.png</file>

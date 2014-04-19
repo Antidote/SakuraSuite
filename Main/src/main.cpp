@@ -15,6 +15,7 @@
 
 #include "MainWindow.hpp"
 #include <QApplication>
+#include <ApplicationLog.hpp>
 #ifdef Q_OS_WIN
 #include <QCommandLineParser>
 #include <QCommandLineOption>
@@ -25,12 +26,35 @@
 #include <QDir>
 #include <QLocale>
 #include <QDebug>
+#include <QProcess>
+
+void messageHander(QtMsgType type, const QMessageLogContext& context, const QString &msg)
+{
+    QString formattedMsg = QString("[%1(%2) %3]: %4").arg(context.file).arg(context.line).arg(context.function).arg(msg);
+    switch(type)
+    {
+        case QtDebugMsg:
+            ApplicationLog::instance()->debug(formattedMsg);
+            break;
+        case QtWarningMsg:
+            ApplicationLog::instance()->warning(formattedMsg);
+            break;
+        case QtCriticalMsg:
+            ApplicationLog::instance()->error(formattedMsg);
+            break;
+        case QtFatalMsg:
+            ApplicationLog::instance()->fatal(formattedMsg);
+            break;
+    }
+}
 
 int main(int argc, char *argv[])
 {
     try
     {
         QApplication a(argc, argv);
+        qInstallMessageHandler(messageHander);
+        qDebug() << "Starting...";
         a.setLibraryPaths(QStringList() << a.libraryPaths() << "plugins");
         a.setOrganizationName("org.wiiking2.com");
         a.setOrganizationDomain("http://wiiking2.com");
@@ -72,9 +96,11 @@ int main(int argc, char *argv[])
 
 #endif
 
+        qDebug() << "Initializing translator...";
         QTranslator appTranslator;
         appTranslator.load(a.applicationDirPath() + QDir::separator() + "lang" + QDir::separator() + QLocale::system().name());
         a.installTranslator(&appTranslator);
+        qDebug() << "Creating MainWindow...";
         MainWindow w;
 
         w.show();

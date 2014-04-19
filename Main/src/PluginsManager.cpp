@@ -102,31 +102,28 @@ bool PluginsManager::reloadByName(const QString& name)
                 newPlugin->initialize(m_mainWindow);
                 connect(newPlugin->object(), SIGNAL(newDocument(DocumentBase*)), m_mainWindow, SLOT(onNewDocument(DocumentBase*)));
                 m_plugins.append(newPlugin);
+                qDebug() << "Loaded plugin " << plugin->name();
                 return true;
             }
             else
             {
                 loader->unload();
-                m_mainWindow->error(tr("Error loading %1: %2")
-                                    .arg(pluginPath)
-                                    .arg(loader->errorString()));
+                qWarning() << tr("Error loading %1: %2").arg(pluginPath).arg(loader->errorString());
                 return false;
             }
         }
         else
         {
-            m_mainWindow->error(tr("Error loading %1: %2")
-                                .arg(pluginPath)
-                                .arg(loader->errorString()));
+            qWarning() << tr("Error loading %1: %2").arg(pluginPath).arg(loader->errorString());
+
             return false;
         }
     }
 
     m_pluginLoaders[name.toLower()] = loader;
     m_plugins.append(plugin);
-    m_mainWindow->error(tr("Error loading %1: %2")
-                        .arg(pluginPath)
-                        .arg(loader->errorString()));
+    qWarning() << tr("Error loading %1: %2").arg(pluginPath).arg(loader->errorString());
+
 
     return false;
 }
@@ -172,11 +169,9 @@ void PluginsManager::loadPlugins()
         pluginsDir = QDir(Constants::SAKURASUITE_HOME_PATH);
         if (!pluginsDir.cd("plugins"))
         {
-            m_mainWindow->error(tr("Unable to acquire plugin directory"));
+            qCritical() << "Unable to acquire plugin directory";
             return;
         }
-        qDebug() << pluginsDir.absolutePath();
-
     }
 
     foreach (QString fileName, pluginsDir.entryList(QStringList() << Constants::SAKURASUITE_PLUGIN_EXTENSION, QDir::Files))
@@ -200,12 +195,13 @@ void PluginsManager::loadPlugins()
                     plugin->initialize(m_mainWindow);
                     connect(plugin->object(), SIGNAL(newDocument(DocumentBase*)), m_mainWindow, SLOT(onNewDocument(DocumentBase*)));
                     m_pluginLoaders[plugin->name().toLower()] = loader;
+                    qDebug() << "Loaded plugin " << plugin->name();
                 }
                 else
                 {
-                    m_mainWindow->error(tr("Error loading %1: %2")
+                    qWarning() << tr("Error loading %1: Plugin with name '%2' already exists")
                                         .arg(fileName)
-                                        .arg(loader->errorString()));
+                                        .arg(plugin->name());
                     loader->unload();
                     delete loader;
                 }
@@ -213,18 +209,14 @@ void PluginsManager::loadPlugins()
             else
             {
                 loader->unload();
-                m_mainWindow->error(tr("Error loading %1: %2")
-                                    .arg(fileName)
-                                    .arg(loader->errorString()));
+                qWarning() << tr("Error loading %1: PluginInterface cast failed").arg(fileName);
                 delete loader;
                 loader = NULL;
             }
         }
         else
         {
-            m_mainWindow->error(tr("Error loading %1: %2")
-                                .arg(fileName)
-                                .arg(loader->errorString()));
+            qWarning() << tr("Error loading %1: %2").arg(fileName).arg(loader->errorString());
             delete loader;
             loader = NULL;
         }

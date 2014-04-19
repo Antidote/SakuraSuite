@@ -14,13 +14,25 @@
    <string>Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
+   <item row="1" column="1">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Close</set>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QPushButton" name="saveLogPushButton">
+     <property name="text">
+      <string>&amp;Save</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" colspan="2">
     <widget class="QTreeWidget" name="treeWidget">
-     <column>
-      <property name="text">
-       <string>Level</string>
-      </property>
-     </column>
      <column>
       <property name="text">
        <string>Message</string>
@@ -31,16 +43,6 @@
        <string>DateTime</string>
       </property>
      </column>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Close</set>
-     </property>
     </widget>
    </item>
   </layout>
@@ -70,8 +72,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
+     <x>325</x>
+     <y>254</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
@@ -79,5 +81,24 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>saveLogPushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>ApplicationLog</receiver>
+   <slot>onButtonPressed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>73</x>
+     <y>248</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>81</x>
+     <y>258</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
+ <slots>
+  <slot>onButtonPressed()</slot>
+ </slots>
 </ui>

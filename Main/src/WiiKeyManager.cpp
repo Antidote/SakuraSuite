@@ -6,12 +6,13 @@
 #include <QStringList>
 #include <QDebug>
 
-WiiKeyManager::WiiKeyManager()
+WiiKeyManager::WiiKeyManager(MainWindow* mainWindow)
     : m_ngPriv(NULL),
       m_ngSig(NULL),
       m_macAddr(NULL),
       m_ngId(0),
-      m_ngKeyId(0)
+      m_ngKeyId(0),
+      m_mainWindow(mainWindow)
 {
 }
 
@@ -94,8 +95,13 @@ bool WiiKeyManager::open(const QString& filepath, bool clear)
         }
         fclose(f);
 
+        qDebug() << "Keys loaded";
         m_open = true;
         return true;
+    }
+    else
+    {
+        qWarning() << "File not found" << filepath;
     }
     m_open = false;
     return false;
@@ -116,17 +122,17 @@ bool WiiKeyManager::loadKeys()
     {
         m_ngId = tmp.toHex().toInt(&ok, 16);
         if(ok)
-            qDebug() << "Found NGID Successfully: " << tmp.toHex();
+             qDebug() << "Found NGID Successfully:" << tmp.toHex();
         else
         {
             m_ngId = 0;
-            qDebug() << "NGID Malformed";
+            qWarning() << "NGID Malformed";
         }
     }
     else
     {
         m_ngId = 0;
-        qDebug() << "NGID Not found";
+        qWarning() << "NGID Not found";
     }
 
     tmp = QByteArray::fromHex(settings.value("NGKeyID").toByteArray());
@@ -134,57 +140,57 @@ bool WiiKeyManager::loadKeys()
     {
         m_ngKeyId = tmp.toHex().toInt(&ok, 16);
         if(ok)
-            qDebug() << "Found NGKeyID Successfully: " << tmp.toHex();
+            qDebug() << "Found NGKeyID Successfully:" << tmp.toHex();
         else
         {
             m_ngKeyId = 0;
-            qDebug() << "NGKeyID Malformed";
+            qWarning() << "NGKeyID Not found";
         }
     }
     else
     {
         m_ngKeyId = 0;
-        qDebug() << "NGKeyID Not found";
+        qWarning() << "NGKeyID Not found";
     }
     tmp = QByteArray::fromHex(settings.value("NGPriv").toByteArray());
     if (tmp.size() == 30 && !tmp.isEmpty())
     {
         setNGPriv(tmp);
-        qDebug() << "Found NGPriv Successfully: " << tmp.toHex();
+        qDebug() << "Found NGPriv Successfully:" << tmp.toHex();
     }
     else
     {
         if (m_ngPriv)
             delete[] m_ngPriv;
         m_ngPriv = NULL;
-        qDebug() << "NGPriv Not found";
+        qWarning() << "NGPriv Not found";
     }
 
     tmp = QByteArray::fromHex(settings.value("NGSig").toByteArray());
     if (tmp.size() == 60 && !tmp.isEmpty())
     {
         setNGSig(tmp);
-        qDebug() << "Found NGSig Successfully: " << tmp.toHex();
+        qDebug() << "Found NGSig Successfully:" << tmp.toHex();
     }
     else
     {
         if (m_ngSig)
             delete[] m_ngSig;
         m_ngSig = NULL;
-        qDebug() << "NGSig Not found";
+        qWarning() << "NGSig Not found";
     }
     tmp = QByteArray::fromHex(settings.value("WiiMAC").toByteArray());
     if (tmp.size() == 6 && !tmp.isEmpty())
     {
         setMacAddr(tmp);
-        qDebug() << "Found WiiMac Successfully: " << tmp.toHex();
+        qDebug() << "Found WiiMAC Successfully:" << tmp.toHex();
     }
     else
     {
         if (m_macAddr)
             delete[] m_macAddr;
         m_macAddr = NULL;
-        qDebug() << "WiiMAC Not found";
+        qWarning() << "WiiMAC Not found";
     }
 
     if (m_ngId > 0 && m_ngKeyId > 0 && m_ngPriv != NULL && m_ngSig != NULL && m_macAddr != NULL)

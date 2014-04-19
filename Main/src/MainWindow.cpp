@@ -43,14 +43,14 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     m_currentFile(NULL),
-    m_applicationLog(new ApplicationLog(this)),
+    m_applicationLog(ApplicationLog::instance()),
     m_pluginsManager(new PluginsManager(this)),
     m_aboutDialog(NULL),
     m_updater(new Updater(this)),
     m_preferencesDialog(NULL),
     m_updateMBox(this),
     m_cancelClose(false),
-    m_keyManager(new WiiKeyManager),
+    m_keyManager(new WiiKeyManager(this)),
     m_untitledDocs(0),
     m_haveLock(false)
   #ifdef WK2_PREVIEW
@@ -59,13 +59,16 @@ MainWindow::MainWindow(QWidget *parent) :
   #endif
 {
     ui->setupUi(this);
+    qDebug() << "MainWindow initialized";
+    m_applicationLog->setParent(this, Qt::Dialog);
     connect(ui->actionLog, SIGNAL(triggered()), m_applicationLog, SLOT(exec()));
-    fatal("test");
 
 #ifndef SS_DEBUG
+    qDebug() << "Checking for lock";
     // lock Application
     if (checkLock())
     {
+        qCritical() << "Couldn't obtain lock";
         qApp->quit();
         return;
     }
@@ -170,6 +173,7 @@ MainWindow::~MainWindow()
     m_pluginsManager = NULL;
     delete ui;
     ui = NULL;
+    delete m_applicationLog;
 }
 
 void MainWindow::initUpdater()
@@ -220,6 +224,10 @@ void MainWindow::initDocumentList()
     ui->documentList->addAction(separator);
     ui->documentList->addAction(ui->actionSave);
     ui->documentList->addAction(ui->actionSaveAs);
+    separator = new QAction(this);
+    separator->setSeparator(true);
+    ui->documentList->addAction(separator);
+    ui->documentList->addAction(ui->actionExportWiiSave);
     separator = new QAction(this);
     separator->setSeparator(true);
     ui->documentList->addAction(separator);
@@ -384,28 +392,6 @@ QDir MainWindow::homePath() const
     return QDir(Constants::SAKURASUITE_HOME_PATH);
 }
 
-void MainWindow::message(const QString& message)
-{
-    m_applicationLog->message(message);
-}
-
-void MainWindow::warning(const QString& warning)
-{
-    m_applicationLog->warning(warning);
-}
-
-void MainWindow::error(const QString& error)
-{
-    m_applicationLog->error(error);
-}
-
-void MainWindow::fatal(const QString& fatal)
-{
-    m_applicationLog->fatal(fatal);
-    m_applicationLog->exec();
-    QTimer::singleShot(10, qApp, SLOT(quit()));
-}
-
 void MainWindow::onNewDocument(DocumentBase* document)
 {
     if (!document)
@@ -413,7 +399,10 @@ void MainWindow::onNewDocument(DocumentBase* document)
 
     GameDocument* gd = qobject_cast<GameDocument*>(document);
     if (gd && gd->supportsWiiSave())
+    {
         gd->setKeyManager(m_keyManager);
+        ui->actionExportWiiSave->setEnabled(gd->supportsWiiSave());
+    }
 
     QString filePath = QString("%1/Untitled %2 Document %3").arg(QDir::tempPath()).arg(document->loadedBy()->name()).arg(++m_untitledDocs);
     m_documents[cleanPath(filePath)] = document;
@@ -469,8 +458,12 @@ void MainWindow::loadWiiKeys()
     if (!m_keyManager->loadKeys())
     {
         qWarning() << "Unable to load keys from registry, attempting to load from file";
-        if (!m_keyManager->open(qApp->applicationDirPath() + "/keys.bin"))
-            qWarning() << "Unable to load keys from file";
+        if (!m_keyManager->open(qApp->applicationDirPath() + QDir::separator() +  "keys.bin"))
+        {
+            qWarning() << "Unable to load keys from file in application directory, trying appdata directory";
+            if (!m_keyManager->open(Constants::SAKURASUITE_HOME_PATH + QDir::separator() + "keys.bin"))
+                qWarning() << "Unable to load keys";
+        }
     }
 }
 
@@ -516,9 +509,12 @@ void MainWindow::openFile(const QString& currentFile)
     // If the document is a game document, check for WiiSave support;
     // If the document supports wiisaves give the instance of the key manager
     // this way we can have one global instance that Main maintains.
-    GameDocument* gd = qobject_cast<GameDocument*>(file);
+    GameDocument* gd = static_cast<GameDocument*>(file);
     if (gd && gd->supportsWiiSave())
+    {
         gd->setKeyManager(m_keyManager);
+        ui->actionExportWiiSave->setEnabled(gd->supportsWiiSave());
+    }
 
     QListWidgetItem* item = new QListWidgetItem();
     item->setData(FILENAME, m_documents[filePath]->fileName());
@@ -563,7 +559,7 @@ void MainWindow::onDocumentChanged(int row)
     if (!m_currentFile)
         return;
 
-    GameDocument* gd = qobject_cast<GameDocument*>(m_currentFile);
+    GameDocument* gd = static_cast<GameDocument*>(m_currentFile);
     ui->actionExportWiiSave->setEnabled((gd && gd->supportsWiiSave()));
 
     if (oldFile)
@@ -902,6 +898,8 @@ void MainWindow::showEvent(QShowEvent* se)
 }
 
 // Checklock returns true if lock exists
+
+
 bool MainWindow::checkLock()
 {
     // The lock file is pretty simple
@@ -926,8 +924,8 @@ bool MainWindow::checkLock()
                 // We have a stale lock, which means the old
                 // instance either crashed, or didn't have a chance
                 // to clean up after itself, we can safely ignore it.
-                qWarning() << "Found stale lock, ignoring";
-                m_haveLock = true;
+                qDebug() << "Found stale lock, ignoring";
+                createLock();
                 return false;
             }
         }
@@ -939,16 +937,21 @@ bool MainWindow::checkLock()
     }
     else if (QSettings().value("singleInstance", false).toBool())
     {
-        QFile lock(Constants::SAKURASUITE_LOCK_FILE);
-        lock.open(QFile::WriteOnly);
-        lock.write(QString(QDateTime::currentDateTime().toString() + "\n").toLatin1());
-        lock.close();
-        m_haveLock = true;
+        createLock();
         return false;
     }
 
     m_haveLock = true;
     return false;
+}
+
+void MainWindow::createLock()
+{
+    QFile lock(Constants::SAKURASUITE_LOCK_FILE);
+    lock.open(QFile::WriteOnly);
+    lock.write(QString(QDateTime::currentDateTime().toString() + "\n").toLatin1());
+    lock.close();
+    m_haveLock = true;
 }
 
 void MainWindow::onPlugins()
@@ -1040,7 +1043,7 @@ void MainWindow::onExportWiiSave()
     }
 
 
-    GameDocument* gd = qobject_cast<GameDocument*>(m_currentFile);
+    GameDocument* gd = static_cast<GameDocument*>(m_currentFile);
 
     if (!gd || !gd->supportsWiiSave())
         return;

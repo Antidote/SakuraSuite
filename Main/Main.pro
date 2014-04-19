@@ -46,7 +46,8 @@ SOURCES += \
     src/AboutDialog.cpp \
     src/PreferencesDialog.cpp \
     src/WiiKeyManager.cpp \
-    src/ApplicationLog.cpp
+    src/ApplicationLog.cpp \
+    src/OutputStreamMonitor.cpp
 
 HEADERS += \
     include/Constants.hpp \
@@ -56,7 +57,8 @@ HEADERS += \
     include/AboutDialog.hpp \
     include/PreferencesDialog.hpp \
     include/WiiKeyManager.hpp \
-    include/ApplicationLog.hpp
+    include/ApplicationLog.hpp \
+    include/OutputStreamMonitor.hpp
 
 FORMS += \
     ui/MainWindow.ui \
