@@ -83,6 +83,8 @@ void PluginsDialog::onItemSelectionChanged()
         return;
     }
 
+    qDebug() << ui->treeWidget->currentItem()->text(0);
+
     PluginInterface* plugin = m_pluginsManager->plugin(ui->treeWidget->currentItem()->text(0));
     if (!plugin)
         return;

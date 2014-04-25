@@ -109,7 +109,7 @@ void PreferencesDialog::showEvent(QShowEvent* se)
         {
             ui->currentStyleCombo->addItem(style);
             ui->defaultStyleCombo->addItem(style);
-            if (!QString::compare(style, m_currentStyle, Qt::CaseInsensitive))
+            if (!QString::compare(style, (m_currentStyle.isEmpty() ? m_defaultStyle : m_currentStyle), Qt::CaseInsensitive))
                 ui->currentStyleCombo->setCurrentIndex(index);
             if (!QString::compare(style, m_defaultStyle, Qt::CaseInsensitive))
                 ui->defaultStyleCombo->setCurrentIndex(index);
@@ -365,6 +365,7 @@ void PreferencesDialog::saveSettings()
         m_keyManager->setMacAddr(macAddr);
     }
 
+    m_keyManager->saveKeys();
     settings.setValue(Constants::Settings::SAKURASUITE_CHECK_ON_START, ui->checkOnStart->isChecked());
     settings.setValue("singleInstance", m_singleInstance);
 

@@ -397,7 +397,7 @@ void MainWindow::onNewDocument(DocumentBase* document)
     if (!document)
         return;
 
-    GameDocument* gd = qobject_cast<GameDocument*>(document);
+    GameDocument* gd = dynamic_cast<GameDocument*>(document);
     if (gd && gd->supportsWiiSave())
     {
         gd->setKeyManager(m_keyManager);
@@ -644,10 +644,13 @@ void MainWindow::onSave()
         m_fileSystemWatcher.removePath(cleanPath(m_currentFile->filePath()));
 
 
-    GameDocument* gd = qobject_cast<GameDocument*>(m_currentFile);
+    GameDocument* gd = dynamic_cast<GameDocument*>(m_currentFile);
 
     if (m_currentFile->fileName().isEmpty() || (gd && gd->isWiiSave()))
+    {
         onSaveAs();
+        return;
+    }
 
     if (m_currentFile->save())
         statusBar()->showMessage(tr("Save successful"), 2000);

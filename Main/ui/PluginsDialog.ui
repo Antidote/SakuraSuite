@@ -242,7 +242,7 @@
   </connection>
   <connection>
    <sender>treeWidget</sender>
-   <signal>itemSelectionChanged()</signal>
+   <signal>currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)</signal>
    <receiver>PluginsDialog</receiver>
    <slot>onItemSelectionChanged()</slot>
    <hints>
