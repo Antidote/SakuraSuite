@@ -1,4 +1,5 @@
 #include "OutputStreamMonitor.hpp"
+#include <stdio.h>
 
 OutputStreamMonitor::OutputStreamMonitor(std::ostream& stream)
     : m_stream(stream)
@@ -20,6 +21,7 @@ std::basic_streambuf<char>::int_type OutputStreamMonitor::overflow(std::basic_st
     if (v == '\n')
     {
         emit messageRecieved(QString::fromStdString(m_string));
+        fprintf(stdout, "%s", m_string.c_str());
         m_string = "";
         m_string.clear();
     }
