@@ -509,7 +509,7 @@ void MainWindow::openFile(const QString& currentFile)
     // If the document is a game document, check for WiiSave support;
     // If the document supports wiisaves give the instance of the key manager
     // this way we can have one global instance that Main maintains.
-    GameDocument* gd = qobject_cast<GameDocument*>(file);
+    GameDocument* gd = dynamic_cast<GameDocument*>(file);
     if (gd && gd->supportsWiiSave())
     {
         gd->setKeyManager(m_keyManager);
