@@ -33,9 +33,9 @@ namespace Constants
 #warning Set version in release mode
 #endif
 
-const uint    SAKURASUITE_MAJOR                    = 1;
-const uint    SAKURASUITE_MINOR                    = 1;
-const uint    SAKURASUITE_PATCH                    = 0;
+const uint    SAKURASUITE_MAJOR                    = -1;
+const uint    SAKURASUITE_MINOR                    = -1;
+const uint    SAKURASUITE_PATCH                    = -1;
 const uint    SAKURASUITE_VERSION                  = (SAKURASUITE_MAJOR << 16) | (SAKURASUITE_MINOR << 8) | SAKURASUITE_PATCH;
 const QString SAKURASUITE_VERSION_STR              = QString("%1.%2.%3")
                                                   .arg(SAKURASUITE_MAJOR)
