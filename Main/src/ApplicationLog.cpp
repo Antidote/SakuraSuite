@@ -63,9 +63,9 @@ void ApplicationLog::saveLog(const QString& logFilename)
         stream << Constants::SAKURASUITE_APP_NAME << " ";
 #ifdef Q_OS_LINUX
         stream << "Linux ";
-#elif Q_OS_MAC
+#elif defined(Q_OS_MAC)
         stream << "Mac ";
-#elif Q_OS_WIN
+#elif defined(Q_OS_WIN)
         stream << "Windows ";
 #endif
         stream << QSysInfo::WordSize << "bit\n";
