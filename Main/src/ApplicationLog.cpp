@@ -1,4 +1,4 @@
-#include "include/ApplicationLog.hpp"
+#include "ApplicationLog.hpp"
 #include "ui_ApplicationLog.h"
 #include <QAbstractButton>
 #include <QDebug>
